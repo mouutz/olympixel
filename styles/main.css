@@ -2,6 +2,7 @@ html, body {
     padding:0px;
     margin:0px;
     height:100vh;
+    overflow: hidden;
 }
 
 #renderCanvas {
@@ -19,22 +20,5 @@ h1 {
     justify-content: center;
     align-items: center;
 }
-@import url(https://fonts.googleapis.com/css?family=Montserrat);
-
-html, body{
-  height: 100%;
-  font-weight: 800;
-  margin: 0;
-  padding: 0;
-}
-
-
-
-
-
-@keyframes stroke-offset{
-	100% {stroke-dashoffset: -35%;}
-}
-  
 
 
