@@ -23,6 +23,9 @@ export const createScene = async function (engine) {
     mesh.checkCollisions = true;
   });
 
+
+  
+
   return scene;
 };
 
@@ -47,5 +50,22 @@ export const createCamera = async function (scene, canvas, hero) {
   camera.ellipsoid = new BABYLON.Vector3(1, 1, 1);
   camera.ellipsoidOffset = new BABYLON.Vector3(0, 0, 0);
 
+
   return camera;
 };
+
+export const createMinimap = function (scene,canvas,hero) {
+    var camera = new BABYLON.ArcRotateCamera("topDownCam", 0, Math.PI / 2, 10, hero.position, scene);
+    camera.attachControl(canvas, true);
+
+    // La caméra reste au-dessus du héros, mais ne change pas de rotation
+    scene.onBeforeRenderObservable.add(() => {
+        camera.setPosition(new BABYLON.Vector3(hero.position.x, 80, hero.position.z));
+    });
+
+    //position de la camera à l'ecran
+    camera.viewport = new BABYLON.Viewport(0.02, 0.81, 0.18, 0.18);
+
+    return camera;
+
+}
