@@ -1,4 +1,4 @@
-import { createScene, createCamera } from "./scene.js";
+import { createScene, createCamera, createMinimap } from "./scene.js";
 import { Player } from "./player.js";
 
 var canvas = document.getElementById("renderCanvas");
@@ -22,6 +22,10 @@ const hero = heroPlayer.hero;
 -----------------------------*/
 
 var camera = await createCamera(scene, canvas, hero);
+var minimap = await createMinimap(scene,canvas, hero);
+
+scene.activeCameras.push(camera);
+scene.activeCameras.push(minimap);
 
 /* ---------------------------
 ----Gestion entrée clavier----
@@ -96,7 +100,11 @@ const playerMoove = function () {
 };
 
 createScene().then(function (createdScene) {
-  // Débogueur désactivé pour l'instant
+  // Débogueur
+  createdScene.debugLayer.show({
+    overlay: true,
+    globalRoot: document.getElementById("debugLayer"),
+  });
 });
 
 window.addEventListener("resize", function () {
