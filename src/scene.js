@@ -54,18 +54,20 @@ export const createCamera = async function (scene, canvas, hero) {
   return camera;
 };
 
-export const createMinimap = function (scene,canvas,hero) {
-    var camera = new BABYLON.ArcRotateCamera("topDownCam", 0, Math.PI / 2, 10, hero.position, scene);
-    camera.attachControl(canvas, true);
 
-    // La caméra reste au-dessus du héros, mais ne change pas de rotation
-    scene.onBeforeRenderObservable.add(() => {
-        camera.setPosition(new BABYLON.Vector3(hero.position.x, 80, hero.position.z));
-    });
+export const createMinimap = function (scene, canvas, hero, minX, maxX, minZ, maxZ) {
+  var camera = new BABYLON.ArcRotateCamera("topDownCam", 0, Math.PI / 2, 10, hero.position, scene);
+  camera.attachControl(canvas, true);
 
-    //position de la camera à l'ecran
-    camera.viewport = new BABYLON.Viewport(0.02, 0.81, 0.18, 0.18);
+  // Mettre à jour la position de la caméra en fonction des limites de la carte
+  scene.onBeforeRenderObservable.add(() => {
+      var x = Math.max(minX, Math.min(hero.position.x, maxX));
+      var z = Math.max(minZ, Math.min(hero.position.z, maxZ));
 
-    return camera;
+      camera.setPosition(new BABYLON.Vector3(x, 80, z));
+  });
 
+  camera.viewport = new BABYLON.Viewport(0.02, 0.81, 0.18, 0.18);
+  console.log(camera.position);
+  return camera;
 }

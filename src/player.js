@@ -8,7 +8,7 @@ export class Player {
    //Creation hero
    hero = this.createHero();
    //Vitesse du hero
-   speed = 0.5;
+   speed = 0.3;
  
    createHero() {
      // Création du personnage (héros)

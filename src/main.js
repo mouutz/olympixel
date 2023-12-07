@@ -10,6 +10,41 @@ var engine = new BABYLON.Engine(canvas, true);
 
 var scene = await createScene(engine);
 
+/* -----------------------------------------------
+---------murs invisibles autour de la carte-------
+-------------------------------------------------*/
+
+let minX = Number.POSITIVE_INFINITY;
+let maxX = Number.NEGATIVE_INFINITY;
+let minZ = Number.POSITIVE_INFINITY;
+let maxZ = Number.NEGATIVE_INFINITY;
+
+scene.meshes.forEach(mesh => {
+    let boundingBox = mesh.getBoundingInfo().boundingBox;
+    minX = Math.min(minX, boundingBox.minimumWorld.x);
+    maxX = Math.max(maxX, boundingBox.maximumWorld.x);
+    minZ = Math.min(minZ, boundingBox.minimumWorld.z);
+    maxZ = Math.max(maxZ, boundingBox.maximumWorld.z);
+});
+
+let width = maxX - minX;
+let depth = maxZ - minZ;
+
+function createWall(position, size) {
+  var wall = BABYLON.MeshBuilder.CreateBox("wall", size, scene);
+  wall.position = position;
+  wall.isVisible = false;
+  wall.checkCollisions = true;
+  return wall;
+}
+
+createWall(new BABYLON.Vector3(minX+33, 0, -16), {width: 1, height: 50, depth: depth});
+createWall(new BABYLON.Vector3(maxX, 0, -16), {width: 1, height: 50, depth: depth});
+createWall(new BABYLON.Vector3(0, 0, minZ), {width: width, height: 50, depth: 1});
+createWall(new BABYLON.Vector3(0, 0, maxZ), {width: width, height: 50, depth: 2.5});
+
+
+
 /* ---------------------------
 ---------Creation joueur-------
 -----------------------------*/
@@ -22,7 +57,7 @@ const hero = heroPlayer.hero;
 -----------------------------*/
 
 var camera = await createCamera(scene, canvas, hero);
-var minimap = await createMinimap(scene,canvas, hero);
+var minimap = await createMinimap(scene, canvas, hero, minX, maxX, minZ, maxZ);
 
 scene.activeCameras.push(camera);
 scene.activeCameras.push(minimap);
@@ -101,10 +136,10 @@ const playerMoove = function () {
 
 createScene().then(function (createdScene) {
   // Débogueur
-  createdScene.debugLayer.show({
+  /*createdScene.debugLayer.show({
     overlay: true,
     globalRoot: document.getElementById("debugLayer"),
-  });
+  });*/
 });
 
 window.addEventListener("resize", function () {
