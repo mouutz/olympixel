@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { createScene, createCamera, createMinimap, setHauteur } from "./scene.js";
-=======
-import { createScene, createCamera, createMinimap } from "./scene.js";
->>>>>>> f1482c7ac3c1abca128313aee207e2ca012a36aa
 import { Player } from "./player.js";
 
 var canvas = document.getElementById("renderCanvas");
