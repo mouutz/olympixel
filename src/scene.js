@@ -29,6 +29,13 @@ export const createScene = async function (engine) {
   return scene;
 };
 
+
+let hauteur = 30;
+
+export const setHauteur = function (y) {
+  hauteur = y;
+}
+
 //Fonction pour creer la camera
 export const createCamera = async function (scene, canvas, hero) {
   // Configuration de la caméra
@@ -60,11 +67,11 @@ export const createMinimap = function (scene,canvas,hero) {
 
     // La caméra reste au-dessus du héros, mais ne change pas de rotation
     scene.onBeforeRenderObservable.add(() => {
-        camera.setPosition(new BABYLON.Vector3(hero.position.x, 80, hero.position.z));
+        camera.setPosition(new BABYLON.Vector3(hero.position.x, hauteur, hero.position.z));
     });
 
     //position de la camera à l'ecran
-    camera.viewport = new BABYLON.Viewport(0.02, 0.81, 0.18, 0.18);
+    camera.viewport = new BABYLON.Viewport(0.02, 0.81, 0.15, 0.15);
 
     return camera;
 

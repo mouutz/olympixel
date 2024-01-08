@@ -1,4 +1,4 @@
-import { createScene, createCamera, createMinimap } from "./scene.js";
+import { createScene, createCamera, createMinimap, setHauteur } from "./scene.js";
 import { Player } from "./player.js";
 
 var canvas = document.getElementById("renderCanvas");
@@ -27,6 +27,12 @@ var minimap = await createMinimap(scene,canvas, hero);
 scene.activeCameras.push(camera);
 scene.activeCameras.push(minimap);
 
+const viewportNormal = new BABYLON.Viewport(0.02, 0.81, 0.15, 0.15);
+const viewportAgrandi = new BABYLON.Viewport(0.1, 0.1, 0.8, 0.8); 
+
+let minimapAgrandie = false;
+
+
 /* ---------------------------
 ----Gestion entrée clavier----
 -----------------------------*/
@@ -49,16 +55,17 @@ scene.actionManager.registerAction(
   })
 );
 
+
+
 /* ---------------------------
 ---------Loop principale-------
 -----------------------------*/
 
 engine.runRenderLoop(function () {
-  if (scene.activeCamera) {
-    scene.render();
-  }
-
+ 
+  handleMinimap();
   playerMoove();
+
 });
 
 /* ---------------------------
@@ -106,3 +113,29 @@ createScene().then(function (createdScene) {
 window.addEventListener("resize", function () {
   engine.resize();
 });
+
+
+/* ---------------------------
+--------Agrandir Minimap-------
+-----------------------------*/
+
+const handleMinimap = function () {
+  if (scene.activeCamera) {
+    scene.render();
+  }
+
+  if (inputMap["m"] || inputMap["M"]) {
+    if (!minimapAgrandie) {
+        minimap.viewport = viewportAgrandi;
+        minimapAgrandie = true;
+        setHauteur(300)
+    } else {
+        minimap.viewport = viewportNormal;
+        minimapAgrandie = false;
+        setHauteur(60)
+    }
+
+    inputMap["m"] = false;
+    inputMap["M"] = false;
+}
+}
