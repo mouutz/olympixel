@@ -30,7 +30,7 @@ export const createScene = async function (engine) {
 };
 
 
-let hauteur = 30;
+let hauteur = 50;
 let isMinimapAgrandi = false;
 
 export const setHauteur = function (y) {

@@ -57,8 +57,10 @@ const hero = heroPlayer.hero;
 -----------------------------*/
 
 var camera = await createCamera(scene, canvas, hero);
+camera.layerMask = 0x0FFFFFFF;
 
 var minimap = await createMinimap(scene,canvas, hero);
+minimap.layerMask = 0x10000000 | 0x0FFFFFFF;
 
 scene.activeCameras.push(camera);
 scene.activeCameras.push(minimap);
@@ -156,8 +158,44 @@ window.addEventListener("resize", function () {
 
 
 /* ---------------------------
---------Agrandir Minimap-------
+--------Marqueur du Joueur-------
 -----------------------------*/
+
+const createPlayerMarker = function () {
+// Création de l'anneau
+var anneau = BABYLON.MeshBuilder.CreateTorus("anneau", {
+  diameter: 8,   
+  thickness: 3, 
+  tessellation: 32
+}, scene);
+
+// Matériau rouge pour l'anneau
+var materialRouge = new BABYLON.StandardMaterial("matRouge", scene);
+materialRouge.diffuseColor = new BABYLON.Color3(1, 0, 0);
+materialRouge.specularColor = new BABYLON.Color3(0, 0, 0);
+anneau.material = materialRouge;
+//no relfection on the material 
+anneau.material.reflectionTexture = null;
+
+    // Mettre à jour la position de l'anneau pour qu'il suive le héros
+    scene.onBeforeRenderObservable.add(() => {
+      anneau.position.x = hero.position.x;
+      anneau.position.z = hero.position.z;
+      // La hauteur (y) peut rester constante ou être ajustée si nécessaire
+  });
+
+// Positionner l'anneau
+anneau.position = new BABYLON.Vector3(hero.position.x, hero.position.y + 0.1, hero.position.z);
+anneau.layerMask = 0x10000000;
+}
+
+const removePlayerMarker = function () {
+  var anneau = scene.getMeshByName("anneau");
+  if (anneau) {
+      anneau.dispose();  // Supprime le mesh de la scène
+  }
+}
+
 
 const handleMinimap = function () {
   if (scene.activeCamera) {
@@ -170,14 +208,17 @@ const handleMinimap = function () {
         minimapAgrandie = true;
         setHauteur(300)
         setIsMinimapAgrandi(true);
+        createPlayerMarker();
     } else {
         minimap.viewport = viewportNormal;
         minimapAgrandie = false;
-        setHauteur(60)
+        setHauteur(50)
         setIsMinimapAgrandi(false);
+        removePlayerMarker();
     }
 
     inputMap["m"] = false;
     inputMap["M"] = false;
 }
+
 }
