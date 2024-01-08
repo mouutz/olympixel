@@ -31,9 +31,14 @@ export const createScene = async function (engine) {
 
 
 let hauteur = 30;
+let isMinimapAgrandi = false;
 
 export const setHauteur = function (y) {
   hauteur = y;
+}
+
+export const setIsMinimapAgrandi = function (bool) {
+  isMinimapAgrandi = bool;
 }
 
 //Fonction pour creer la camera
@@ -58,7 +63,6 @@ export const createCamera = async function (scene, canvas, hero) {
   camera.ellipsoidOffset = new BABYLON.Vector3(0, 0, 0);
 
 
-
   return camera;
 };
 
@@ -68,7 +72,14 @@ export const createMinimap = function (scene,canvas,hero) {
 
     // La caméra reste au-dessus du héros, mais ne change pas de rotation
     scene.onBeforeRenderObservable.add(() => {
+      if(isMinimapAgrandi){
+        camera.setPosition(new BABYLON.Vector3(0, hauteur, 0));
+        camera.setTarget(BABYLON.Vector3.Zero());
+      }
+      else{
         camera.setPosition(new BABYLON.Vector3(hero.position.x, hauteur, hero.position.z));
+        camera.setTarget(hero.position);
+      }
     });
 
     //position de la camera à l'ecran

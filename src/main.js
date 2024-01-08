@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { createScene, createCamera, createMinimap, setHauteur } from "./scene.js";
-=======
-import { createScene, createCamera, createMinimap } from "./scene.js";
->>>>>>> f1482c7ac3c1abca128313aee207e2ca012a36aa
+import { createScene, createCamera, createMinimap, setHauteur, setIsMinimapAgrandi } from "./scene.js";
 import { Player } from "./player.js";
 
 var canvas = document.getElementById("renderCanvas");
@@ -68,7 +64,7 @@ scene.activeCameras.push(camera);
 scene.activeCameras.push(minimap);
 
 const viewportNormal = new BABYLON.Viewport(0.02, 0.81, 0.15, 0.15);
-const viewportAgrandi = new BABYLON.Viewport(0.1, 0.1, 0.8, 0.8); 
+const viewportAgrandi = new BABYLON.Viewport(0, 0, 1, 1); 
 
 let minimapAgrandie = false;
 
@@ -173,10 +169,12 @@ const handleMinimap = function () {
         minimap.viewport = viewportAgrandi;
         minimapAgrandie = true;
         setHauteur(300)
+        setIsMinimapAgrandi(true);
     } else {
         minimap.viewport = viewportNormal;
         minimapAgrandie = false;
         setHauteur(60)
+        setIsMinimapAgrandi(false);
     }
 
     inputMap["m"] = false;
