@@ -16,7 +16,7 @@ export const createScene = async function (engine) {
   const result = await BABYLON.SceneLoader.ImportMeshAsync(
     "",
     "assets/models/",
-    "polycity2.glb",
+    "city2.glb",
     scene
   );
   result.meshes.forEach((mesh) => {
@@ -56,6 +56,7 @@ export const createCamera = async function (scene, canvas, hero) {
 
   camera.ellipsoid = new BABYLON.Vector3(1, 1, 1);
   camera.ellipsoidOffset = new BABYLON.Vector3(0, 0, 0);
+
 
 
   return camera;
