@@ -25,7 +25,13 @@ export const createScene = async function (engine) {
 
 
   
+  var square = BABYLON.MeshBuilder.CreateBox("square", {size: 4}, scene);
+  square.position = new BABYLON.Vector3(42, 3, 49);
+  square.rotation.x = Math.PI / 2; // Rotate to lay flat on the ground
 
+  var redMaterial = new BABYLON.StandardMaterial("redMat", scene);
+  redMaterial.diffuseColor = new BABYLON.Color3(1, 0, 0); // Red
+  square.material = redMaterial;
   return scene;
 };
 

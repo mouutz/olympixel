@@ -1,4 +1,5 @@
 import { createScene, createCamera, createMinimap, setHauteur, setIsMinimapAgrandi } from "./scene.js";
+import { createIndicateur } from './indicateur.js';
 import { Player } from "./player.js";
 
 var canvas = document.getElementById("renderCanvas");
@@ -72,6 +73,16 @@ let minimapAgrandie = false;
 
 
 /* ---------------------------
+----Creation indicateur objectif----
+-----------------------------*/
+var fleche = createIndicateur(scene, hero);
+
+// Positionner l'objectif	
+fleche.setTarget(new BABYLON.Vector3(42, 5, 49));
+
+
+
+/* ---------------------------
 ----Gestion entrée clavier----
 -----------------------------*/
 
@@ -103,7 +114,6 @@ engine.runRenderLoop(function () {
  
   handleMinimap();
   playerMoove();
-
 });
 
 /* ---------------------------
