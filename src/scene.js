@@ -16,7 +16,7 @@ export const createScene = async function (engine) {
   const result = await BABYLON.SceneLoader.ImportMeshAsync(
     "",
     "assets/models/",
-    "city2.glb",
+    "city3.glb",
     scene
   );
   result.meshes.forEach((mesh) => {
