@@ -20,14 +20,14 @@ export const createScene = async function (engine) {
     scene
   );
   result.meshes.forEach((mesh) => {
-    mesh.checkCollisions = true;
+      mesh.checkCollisions = true;
   });
 
 
   
   var square = BABYLON.MeshBuilder.CreateBox("square", {size: 4}, scene);
   square.position = new BABYLON.Vector3(42, 3, 49);
-  square.rotation.x = Math.PI / 2; // Rotate to lay flat on the ground
+  square.rotation.x = Math.PI / 2;
 
   var redMaterial = new BABYLON.StandardMaterial("redMat", scene);
   redMaterial.diffuseColor = new BABYLON.Color3(1, 0, 0); // Red
@@ -55,8 +55,8 @@ export const createCamera = async function (scene, canvas, hero) {
     scene
   );
   camera.lockedTarget = hero;
-  camera.heightOffset = 25;
-  camera.radius = 50;
+  camera.heightOffset = 15;
+  camera.radius = 20;
   camera.rotationOffset = 0;
   camera.cameraAcceleration = 0.05;
   camera.maxCameraSpeed = 20;
@@ -67,7 +67,7 @@ export const createCamera = async function (scene, canvas, hero) {
   camera.ellipsoid = new BABYLON.Vector3(1, 1, 1);
   camera.ellipsoidOffset = new BABYLON.Vector3(0, 0, 0);
 
-  camera.inputs.clear();
+  //camera.inputs.clear();
   return camera;
 };
 

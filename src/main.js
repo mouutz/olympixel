@@ -51,8 +51,8 @@ createWall(new BABYLON.Vector3(0, 0, maxZ), {width: width, height: 50, depth: 2.
 -----------------------------*/
 
 const heroPlayer = new Player(scene);
-await heroPlayer.createHero();
-const hero = heroPlayer.hero;
+
+const hero = await heroPlayer.createHero();
 /* ---------------------------
 ---------Creation Camera-------
 -----------------------------*/
@@ -75,10 +75,10 @@ let minimapAgrandie = false;
 /* ---------------------------
 ----Creation indicateur objectif----
 -----------------------------*/
-var fleche = createIndicateur(scene, hero);
+//var fleche = createIndicateur(scene, hero);
 
 // Positionner l'objectif	
-fleche.setTarget(new BABYLON.Vector3(42, 5, 49));
+//fleche.setTarget(new BABYLON.Vector3(42, 5, 49));
 
 
 
@@ -113,43 +113,8 @@ scene.actionManager.registerAction(
 engine.runRenderLoop(function () {
  
   handleMinimap();
-  playerMoove();
+  heroPlayer.move(inputMap);
 });
-
-/* ---------------------------
---------Deplacer Joueur-------
------------------------------*/
-
-const playerMoove = function () {
-  var heroSpeed = heroPlayer.speed;
-
-  // Logique de rotation
-  if (inputMap["q"] || inputMap["Q"]) { // Tourner à gauche
-    hero.rotation.y -= 0.02;
-  }
-  if (inputMap["d"] || inputMap["D"]) { // Tourner à droite
-    hero.rotation.y += 0.02;
-  }
-
-  // Calculer le vecteur avant en fonction de la rotation du héros
-  var forward = new BABYLON.Vector3(Math.sin(hero.rotation.y), 0, Math.cos(hero.rotation.y));
-
-  // Mouvement vers l'avant ou l'arrière
-  var forwardDelta = forward.scale((inputMap["s"] || inputMap["S"] ? heroSpeed : 0) - (inputMap["z"] || inputMap["Z"] ? heroSpeed : 0));
-
-  // Appliquer le déplacement
-  hero.moveWithCollisions(forwardDelta);
-
-  // Ajustement de la hauteur avec un raycast
-  var ray = new BABYLON.Ray(hero.position, new BABYLON.Vector3(0, -1, 0));
-  var pickInfo = scene.pickWithRay(ray, function (item) {
-    return item != hero;
-  });
-  if (pickInfo.pickedMesh) {
-    var groundPosition = pickInfo.pickedPoint;
-    hero.position.y = groundPosition.y + 1.5;
-  }
-};
 
 
 createScene().then(function (createdScene) {
