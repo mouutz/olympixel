@@ -17,7 +17,7 @@ export class Player {
   // Créer une hitbox pour le héros
   this.heroBox = BABYLON.MeshBuilder.CreateBox("heroBox", { width: 1, height: 2, depth: 1 }, this.scene);
   this.heroBox.position = new BABYLON.Vector3(18, 1.5, 3.5);
-  this.heroBox.isVisible = true;
+  this.heroBox.isVisible = false;
   this.heroBox.checkCollisions = true;
 
   // Importer le modèle 3D du héros
