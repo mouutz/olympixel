@@ -16,14 +16,13 @@ export const createScene = async function (engine) {
   const result = await BABYLON.SceneLoader.ImportMeshAsync(
     "",
     "assets/models/",
-    "city3.glb",
+    "city5.glb",
     scene
   );
 
   result.meshes.forEach((mesh) => {
       mesh.checkCollisions = true;
   });
-
 
   
   var square = BABYLON.MeshBuilder.CreateBox("square", {size: 4}, scene);
@@ -57,8 +56,8 @@ export const createCamera = async function (scene, canvas, hero) {
     scene
   );
   camera.lockedTarget = hero;
-  camera.heightOffset = 15;
-  camera.radius = 20;
+  camera.heightOffset = 5;
+  camera.radius = 15;
   camera.rotationOffset = 0;
   camera.cameraAcceleration = 0.05;
   camera.maxCameraSpeed = 20;

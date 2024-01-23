@@ -11,7 +11,7 @@ export class Player {
 
 
  //Vitesse du hero
- speed = 0.3;
+ speed = 0.2;
 
  async createHero() {
   // Créer une hitbox pour le héros
@@ -52,7 +52,9 @@ checkInteraction(inputMap) {
     if (distance < 5) {
       this.guiManager.setNotif(this.interactionNotification, true);
       if (inputMap["e"]) {
-        window.location.href = "/test.html";
+        //timeout pour laisser le temps à l'animation de se jouer et puis rederiger vers la page suivante
+        setTimeout(function(){ window.location.href = "page2.html"; }, 1000);
+       
       }
     } else {
       this.guiManager.setNotif(this.interactionNotification, false);
@@ -111,10 +113,19 @@ move(inputMap) {
     }
     isMoving = true;
   }
+  //interact move mais sans rester appuyer sur la touche
+  else if (inputMap["e"] || inputMap["E"]) {
+    if (!this.isAnimating) {
+      this.startAnimation("CharacterArmature|Interact");
+      this.isAnimating = true;
+    }
+    isMoving = true;
+  }
+
 
   // Si le personnage s'arrête, arrêter l'animation
   if (!isMoving && this.isAnimating) {
-    this.startAnimation("CharacterArmature|Idle")
+    this.startAnimation("CharacterArmature|Idle_Neutral")
     
     this.isAnimating = false;
   }
