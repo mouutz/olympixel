@@ -1,6 +1,7 @@
 import { createScene, createCamera, createMinimap, setHauteur, setIsMinimapAgrandi } from "./scene.js";
 import { createIndicateur } from './indicateur.js';
 import { Player } from "./player.js";
+import { GUIManager } from './guiManager.js';
 
 var canvas = document.getElementById("renderCanvas");
 var engine = new BABYLON.Engine(canvas, true);
@@ -81,6 +82,10 @@ let minimapAgrandie = false;
 // Positionner l'objectif	
 //fleche.setTarget(new BABYLON.Vector3(42, 5, 49));
 
+/* ---------------------------
+----Creation GUI----
+-----------------------------*/
+const guiManager = new GUIManager(scene);
 
 
 /* ---------------------------

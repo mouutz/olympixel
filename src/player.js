@@ -1,8 +1,11 @@
+import { GUIManager } from "./guiManager.js";
 export class Player {
 
   //On donne la scene 
  constructor(scene) {
    this.scene = scene;
+   this.guiManager = new GUIManager(scene);
+   this.interactionNotification = this.guiManager.createNotif();
    this.isAnimating = false;
  }
 
@@ -12,9 +15,9 @@ export class Player {
 
  async createHero() {
   // Créer une hitbox pour le héros
-  this.heroBox = BABYLON.MeshBuilder.CreateBox("heroBox", { width: 0.5, height: 1, depth: 0.5 }, this.scene);
+  this.heroBox = BABYLON.MeshBuilder.CreateBox("heroBox", { width: 1, height: 2, depth: 1 }, this.scene);
   this.heroBox.position = new BABYLON.Vector3(18, 1.5, 3.5);
-  this.heroBox.isVisible = false;
+  this.heroBox.isVisible = true;
   this.heroBox.checkCollisions = true;
 
   // Importer le modèle 3D du héros
@@ -42,6 +45,20 @@ export class Player {
   return this.heroBox;  // Retourner la hitbox comme référence principale du héros
 }
 
+checkInteraction(inputMap) {
+  var interactableObject = this.scene.getMeshByName("square");
+  if (interactableObject && interactableObject.isInteractable) {
+    var distance = BABYLON.Vector3.Distance(this.heroBox.position, interactableObject.position);
+    if (distance < 5) {
+      this.guiManager.setNotif(this.interactionNotification, true);
+      if (inputMap["e"]) {
+        window.location.href = "/test.html";
+      }
+    } else {
+      this.guiManager.setNotif(this.interactionNotification, false);
+    }
+  }
+}
 
 raycast() {
   // Raycast pour ajuster la hauteur du héros
@@ -51,7 +68,11 @@ raycast() {
   if (pickInfo.hit && pickInfo.pickedMesh) {
       var groundPosition = pickInfo.pickedPoint;
       var heroHeightOffset = 1;
-      this.heroBox.position.y = groundPosition.y + heroHeightOffset;
+      var targetY = groundPosition.y + heroHeightOffset; // Déclarer targetY à l'intérieur du bloc if
+
+      // Interpoler la position actuelle vers la position cible
+      var lerpFactor = 0.1; // Ajuster cette valeur pour contrôler la vitesse de transition
+      this.heroBox.position.y += (targetY - this.heroBox.position.y) * lerpFactor;
   }
 }
 
@@ -99,6 +120,9 @@ move(inputMap) {
   }
 
   this.raycast();
+  this.checkInteraction(inputMap);
+
+
 }
 
 

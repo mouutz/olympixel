@@ -33,6 +33,7 @@ export const createScene = async function (engine) {
   var redMaterial = new BABYLON.StandardMaterial("redMat", scene);
   redMaterial.diffuseColor = new BABYLON.Color3(1, 0, 0); // Red
   square.material = redMaterial;
+  square.isInteractable = true;
   return scene;
 };
 
