@@ -51,8 +51,8 @@ createWall(new BABYLON.Vector3(0, 0, maxZ), {width: width, height: 50, depth: 2.
 -----------------------------*/
 
 const heroPlayer = new Player(scene);
+await heroPlayer.createHero();
 const hero = heroPlayer.hero;
-
 /* ---------------------------
 ---------Creation Camera-------
 -----------------------------*/
