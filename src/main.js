@@ -125,13 +125,14 @@ engine.runRenderLoop(function () {
 -----------------------------*/
 
 const changeLight = function (op) {
+  var light = scene.lights[0]
   if(mode == "nuit"){
     if(scene.lights[0].intensity == 1  ||scene.lights[0].intensity>1) {mode="jour"}
-      scene.lights[0].intensity +=0.0001
+      light.intensity +=0.0001
   }
   else{
     if(scene.lights[0].intensity==0.02 ||scene.lights[0].intensity<0.02 ){mode="nuit"}
-    scene.lights[0].intensity -=0.0001
+    light.intensity -=0.0001
 }
 }
 
