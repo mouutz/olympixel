@@ -26,6 +26,6 @@ export class Player {
  
      return hero;
    }
- 
+
    update() {}
  }

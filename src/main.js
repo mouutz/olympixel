@@ -121,29 +121,26 @@ engine.runRenderLoop(function () {
 -----------------------------*/
 
 const playerMoove = function () {
-  // Vitesse du personnage
   var heroSpeed = heroPlayer.speed;
 
-  // Calcul du déplacement relatif à la caméra
-  var forward = camera.getForwardRay().direction;
+  // Logique de rotation
+  if (inputMap["q"] || inputMap["Q"]) { // Tourner à gauche
+    hero.rotation.y -= 0.02;
+  }
+  if (inputMap["d"] || inputMap["D"]) { // Tourner à droite
+    hero.rotation.y += 0.02;
+  }
 
-  var right = BABYLON.Vector3.Cross(forward, new BABYLON.Vector3(0, 1, 0));
+  // Calculer le vecteur avant en fonction de la rotation du héros
+  var forward = new BABYLON.Vector3(Math.sin(hero.rotation.y), 0, Math.cos(hero.rotation.y));
 
-  var forwardDelta = forward.scaleInPlace(
-    (inputMap["z"] || inputMap["Z"] ? heroSpeed : 0) -
-      (inputMap["s"] || inputMap["S"] ? heroSpeed : 0)
-  );
-  var rightDelta = right.scaleInPlace(
-    (inputMap["q"] || inputMap["Q"] ? heroSpeed : 0) -
-      (inputMap["d"] || inputMap["D"] ? heroSpeed : 0)
-  );
+  // Mouvement vers l'avant ou l'arrière
+  var forwardDelta = forward.scale((inputMap["s"] || inputMap["S"] ? heroSpeed : 0) - (inputMap["z"] || inputMap["Z"] ? heroSpeed : 0));
 
-  var deltaMove = forwardDelta.addInPlace(rightDelta);
+  // Appliquer le déplacement
+  hero.moveWithCollisions(forwardDelta);
 
-  // Appliquer le déplacement relatif
-  hero.moveWithCollisions(deltaMove);
-
-  // Ajustement de la hauteur avec un raycast (comme avant)
+  // Ajustement de la hauteur avec un raycast
   var ray = new BABYLON.Ray(hero.position, new BABYLON.Vector3(0, -1, 0));
   var pickInfo = scene.pickWithRay(ray, function (item) {
     return item != hero;
@@ -153,6 +150,7 @@ const playerMoove = function () {
     hero.position.y = groundPosition.y + 1.5;
   }
 };
+
 
 createScene().then(function (createdScene) {
   // Débogueur
