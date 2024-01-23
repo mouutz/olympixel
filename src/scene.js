@@ -10,7 +10,7 @@ export const createScene = async function (engine) {
     new BABYLON.Vector3(0, 1, 0),
     scene
   );
-  light.intensity = 1;
+  light.intensity = 1.5;
 
   // Chargement de la scène (ville) et activation des collisions
   const result = await BABYLON.SceneLoader.ImportMeshAsync(

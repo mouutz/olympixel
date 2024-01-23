@@ -13,7 +13,7 @@ export class Player {
   // Créer une hitbox pour le héros
   this.heroBox = BABYLON.MeshBuilder.CreateBox("heroBox", { width: 0.5, height: 1, depth: 0.5 }, this.scene);
   this.heroBox.position = new BABYLON.Vector3(18, 1.5, 3.5);
-  this.heroBox.isVisible = true;
+  this.heroBox.isVisible = false;
   this.heroBox.checkCollisions = true;
 
   // Importer le modèle 3D du héros
@@ -27,6 +27,7 @@ export class Player {
   let heroModel = result.meshes[0];
   heroModel.parent = this.heroBox;  // Attacher le modèle à la hitbox
   heroModel.scaling = new BABYLON.Vector3(1.5,1.5,1.5);  // Redimensionner le modèle
+  heroModel.position.y = -1;  // Ajuster la position du modèle dans la hitbox
   
   // Stocker le modèle pour des références ultérieures
   this.hero = heroModel;
@@ -34,6 +35,18 @@ export class Player {
   return this.heroBox;  // Retourner la hitbox comme référence principale du héros
 }
 
+
+raycast() {
+  // Raycast pour ajuster la hauteur du héros
+  var ray = new BABYLON.Ray(this.heroBox.position, new BABYLON.Vector3(0, -1, 0));
+  var pickInfo = this.scene.pickWithRay(ray, (item) => item !== this.heroBox);
+
+  if (pickInfo.hit && pickInfo.pickedMesh) {
+      var groundPosition = pickInfo.pickedPoint;
+      var heroHeightOffset = 1;
+      this.heroBox.position.y = groundPosition.y + heroHeightOffset;
+  }
+}
 
 move(inputMap) {
   // Logique de rotation
@@ -49,10 +62,11 @@ move(inputMap) {
   var forward = new BABYLON.Vector3(Math.sin(this.heroBox.rotation.y), 0, Math.cos(this.heroBox.rotation.y));
 
   // Mouvement vers l'avant ou l'arrière
-  var forwardDelta = forward.scale((inputMap["z"] || inputMap["Z"] ? this.speed : 0)-(inputMap["s"] || inputMap["S"] ? this.speed : 0));
+  var forwardDelta = forward.scale((inputMap["s"] || inputMap["S"] ? this.speed : 0) -(inputMap["z"] || inputMap["Z"] ? this.speed : 0));
 
   // Appliquer le déplacement
   this.heroBox.moveWithCollisions(forwardDelta);
+  this.raycast();
 
 // Ajustement de la hauteur avec un raycast
 /*var heroBottom = this.heroBox.position.y - (this.heroBox.scaling.y / 2); // Position du bas de la hitbox
