@@ -3,6 +3,7 @@ export class Player {
   //On donne la scene 
  constructor(scene) {
    this.scene = scene;
+   this.isAnimating = false;
  }
 
 
@@ -24,10 +25,16 @@ export class Player {
     this.scene
   );
 
+  
+  //On garde les animations
+  this.animations = result.animationGroups;
+  console.log(this.animations);
+
+
   let heroModel = result.meshes[0];
   heroModel.parent = this.heroBox;  // Attacher le modèle à la hitbox
-  heroModel.scaling = new BABYLON.Vector3(1.5,1.5,1.5);  // Redimensionner le modèle
-  heroModel.position.y = -1;  // Ajuster la position du modèle dans la hitbox
+  heroModel.scaling = new BABYLON.Vector3(1,1,1);  // Redimensionner le modèle
+  heroModel.position.y = -0.85;  // Ajuster la position du modèle dans la hitbox
   
   // Stocker le modèle pour des références ultérieures
   this.hero = heroModel;
@@ -51,34 +58,63 @@ raycast() {
 move(inputMap) {
   // Logique de rotation
   if (inputMap["q"] || inputMap["Q"]) {
-    this.heroBox.rotation.y -= 0.02;
+    this.heroBox.rotation.y -= 0.04;
   }
   if (inputMap["d"] || inputMap["D"]) {
-    this.heroBox.rotation.y += 0.02;
+    this.heroBox.rotation.y += 0.04;
   }
 
-  console.log(this.heroBox.position);
   // Calculer le vecteur avant
   var forward = new BABYLON.Vector3(Math.sin(this.heroBox.rotation.y), 0, Math.cos(this.heroBox.rotation.y));
 
-  // Mouvement vers l'avant ou l'arrière
-  var forwardDelta = forward.scale((inputMap["s"] || inputMap["S"] ? this.speed : 0) -(inputMap["z"] || inputMap["Z"] ? this.speed : 0));
+  // Vérifier si le personnage est en mouvement
+  var isMoving = false;
 
-  // Appliquer le déplacement
-  this.heroBox.moveWithCollisions(forwardDelta);
+  // Mouvement vers l'arriere
+  if (inputMap["s"] || inputMap["S"]) {
+    var forwardDelta = forward.scale(this.speed);
+    this.heroBox.moveWithCollisions(forwardDelta);
+    if (!this.isAnimating) {
+      this.startAnimation("CharacterArmature|Run_Back");
+      this.isAnimating = true;
+    }
+    isMoving = true;
+  } 
+  // Mouvement vers l'avant
+  else if (inputMap["z"] || inputMap["Z"]) {
+    var backwardDelta = forward.scale(-this.speed);
+    this.heroBox.moveWithCollisions(backwardDelta);
+    if (!this.isAnimating) {
+      this.startAnimation("CharacterArmature|Run");
+      this.isAnimating = true;
+    }
+    isMoving = true;
+  }
+
+  // Si le personnage s'arrête, arrêter l'animation
+  if (!isMoving && this.isAnimating) {
+    this.startAnimation("CharacterArmature|Idle")
+    
+    this.isAnimating = false;
+  }
+
   this.raycast();
-
-// Ajustement de la hauteur avec un raycast
-/*var heroBottom = this.heroBox.position.y - (this.heroBox.scaling.y / 2); // Position du bas de la hitbox
-var rayOrigin = new BABYLON.Vector3(this.heroBox.position.x, heroBottom + 1, this.heroBox.position.z); // Légèrement au-dessus du bas de la hitbox
-var ray = new BABYLON.Ray(rayOrigin, new BABYLON.Vector3(0, -1, 0)); // Rayon descendant
-
-var pickInfo = this.scene.pickWithRay(ray, (item) => item != this.heroBox);
-if (pickInfo.hit) {
-  var groundPosition = pickInfo.pickedPoint;
-  var heroNewY = groundPosition.y + (this.heroBox.scaling.y / 1.2); // Ajuster pour que le bas de la hitbox touche le sol
-  this.heroBox.position.y = heroNewY;
-}*/
-
 }
+
+
+
+  startAnimation(animationName) {
+    const animation = this.animations.find(anim => anim.name === animationName);
+    if (animation) {
+      this.animations.forEach(anim => anim.stop()); // Arrêter toutes les autres animations
+      animation.start(true);
+    }
+  }
+
+  stopAnimation(animationNom) {
+    // Arrêter l'animation de course
+    const runAnim = this.animations.find(anim => anim.name === animationNom );
+    if (runAnim) runAnim.stop();
+  }
+
 }

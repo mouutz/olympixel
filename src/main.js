@@ -10,6 +10,7 @@ var engine = new BABYLON.Engine(canvas, true);
 -----------------------------*/
 
 var scene = await createScene(engine);
+let mode = "nuit"
 
 /* -----------------------------------------------
 ---------murs invisibles autour de la carte-------
@@ -114,8 +115,25 @@ engine.runRenderLoop(function () {
  
   handleMinimap();
   heroPlayer.move(inputMap);
+  //changeLight()
 });
 
+
+
+/* ---------------------------
+---------Cycle jour nuit-------
+-----------------------------*/
+
+const changeLight = function (op) {
+  if(mode == "nuit"){
+    if(scene.lights[0].intensity == 1  ||scene.lights[0].intensity>1) {mode="jour"}
+      scene.lights[0].intensity +=0.0001
+  }
+  else{
+    if(scene.lights[0].intensity==0.02 ||scene.lights[0].intensity<0.02 ){mode="nuit"}
+    scene.lights[0].intensity -=0.0001
+}
+}
 
 createScene().then(function (createdScene) {
   // Débogueur
