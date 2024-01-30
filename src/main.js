@@ -77,10 +77,10 @@ let minimapAgrandie = false;
 /* ---------------------------
 ----Creation indicateur objectif----
 -----------------------------*/
-//var fleche = createIndicateur(scene, hero);
+var fleche = createIndicateur(scene, hero);
 
 // Positionner l'objectif	
-//fleche.setTarget(new BABYLON.Vector3(42, 5, 49));
+fleche.setTarget(new BABYLON.Vector3(42, 5, 49));
 
 /* ---------------------------
 ----Creation GUI----
@@ -117,7 +117,7 @@ scene.actionManager.registerAction(
 -----------------------------*/
 
 engine.runRenderLoop(function () {
- 
+  scene.render()
   handleMinimap();
   heroPlayer.move(inputMap);
   //changeLight()
@@ -198,9 +198,7 @@ const removePlayerMarker = function () {
 
 
 const handleMinimap = function () {
-  if (scene.activeCamera) {
-    scene.render();
-  }
+
 
   if (inputMap["m"] || inputMap["M"]) {
     if (!minimapAgrandie) {

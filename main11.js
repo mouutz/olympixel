@@ -110,18 +110,13 @@ scene.actionManager.registerAction(
   })
 );
 
-
+engine.debugLayer.show();
 
 /* ---------------------------
 ---------Loop principale-------
 -----------------------------*/
 
-engine.runRenderLoop(function () {
- 
-  handleMinimap();
-  heroPlayer.move(inputMap);
-  //changeLight()
-});
+
 
 
 

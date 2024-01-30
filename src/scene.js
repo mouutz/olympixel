@@ -3,6 +3,7 @@ export const createScene = async function (engine) {
   var scene = new BABYLON.Scene(engine);
   scene.collisionsEnabled = true;
   scene.gravity = new BABYLON.Vector3(0, -0.9, 0); // Gravité de la scène
+  scene.blockfreeActiveMeshesAndRenderingGroups = true;
 
   // Configuration de la lumière
   var light = new BABYLON.HemisphericLight(
@@ -22,8 +23,9 @@ export const createScene = async function (engine) {
 
   result.meshes.forEach((mesh) => {
       mesh.checkCollisions = true;
+      mesh.freezeWorldMatrix();
   });
-
+  scene.blockfreeActiveMeshesAndRenderingGroups = false;
   
   var square = BABYLON.MeshBuilder.CreateBox("square", {size: 4}, scene);
   square.position = new BABYLON.Vector3(42, 3, 49);
@@ -33,8 +35,18 @@ export const createScene = async function (engine) {
   redMaterial.diffuseColor = new BABYLON.Color3(1, 0, 0); // Red
   square.material = redMaterial;
   square.isInteractable = true;
+
+  //Optimisation de la scene
+  scene.blockMaterialDirtyMechanism = true;
+  scene.useMaterialMeshMap=true;
+  scene.useGeometryIdsMap=true;
+  scene.useClonedMeshMap=true;
+  //scene.performancePriority === BABYLON.ScenePerformancePriority.Aggressive
+
   return scene;
 };
+
+
 
 
 let hauteur = 50;
@@ -68,7 +80,7 @@ export const createCamera = async function (scene, canvas, hero) {
   camera.ellipsoid = new BABYLON.Vector3(1, 1, 1);
   camera.ellipsoidOffset = new BABYLON.Vector3(0, 0, 0);
 
-  camera.inputs.clear();
+  //camera.inputs.clear();
   return camera;
 };
 
