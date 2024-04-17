@@ -17,13 +17,12 @@ export const createScene = async function (engine) {
   const result = await BABYLON.SceneLoader.ImportMeshAsync(
     "",
     "assets/models/",
-    "city5.glb",
+    "city8.glb",
     scene
   );
 
   result.meshes.forEach((mesh) => {
       mesh.checkCollisions = true;
-      mesh.freezeWorldMatrix();
   });
   scene.blockfreeActiveMeshesAndRenderingGroups = false;
   

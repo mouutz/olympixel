@@ -16,15 +16,15 @@ export class Player {
  async createHero() {
   // Créer une hitbox pour le héros
   this.heroBox = BABYLON.MeshBuilder.CreateBox("heroBox", { width: 1, height: 2, depth: 1 }, this.scene);
-  this.heroBox.position = new BABYLON.Vector3(18, 1.5, 3.5);
+  this.heroBox.position = new BABYLON.Vector3(18, 1.7, 3.7);
   this.heroBox.isVisible = false;
-  this.heroBox.checkCollisions = true;
+  this.heroBox.checkCollisions = false;
 
   // Importer le modèle 3D du héros
   const result = await BABYLON.SceneLoader.ImportMeshAsync(
     "",
     "assets/models/",
-    "man.glb",
+    "perso.glb",
     this.scene
   );
 
@@ -98,7 +98,7 @@ move(inputMap) {
     var forwardDelta = forward.scale(this.speed);
     this.heroBox.moveWithCollisions(forwardDelta);
     if (!this.isAnimating) {
-      this.startAnimation("CharacterArmature|Run_Back");
+      this.startAnimation("Back");
       this.isAnimating = true;
     }
     isMoving = true;
@@ -108,7 +108,7 @@ move(inputMap) {
     var backwardDelta = forward.scale(-this.speed);
     this.heroBox.moveWithCollisions(backwardDelta);
     if (!this.isAnimating) {
-      this.startAnimation("CharacterArmature|Run");
+      this.startAnimation("Running");
       this.isAnimating = true;
     }
     isMoving = true;
@@ -116,7 +116,16 @@ move(inputMap) {
   //interact move mais sans rester appuyer sur la touche
   else if (inputMap["e"] || inputMap["E"]) {
     if (!this.isAnimating) {
-      this.startAnimation("CharacterArmature|Interact");
+      this.startAnimation("Interact");
+      this.isAnimating = true;
+    }
+    isMoving = true;
+  }
+
+  //suater
+  else if (inputMap[" "]) {
+    if (!this.isAnimating) {
+      this.startAnimation("Jump");
       this.isAnimating = true;
     }
     isMoving = true;
@@ -125,7 +134,7 @@ move(inputMap) {
 
   // Si le personnage s'arrête, arrêter l'animation
   if (!isMoving && this.isAnimating) {
-    this.startAnimation("CharacterArmature|Idle_Neutral")
+    this.startAnimation("Idle")
     
     this.isAnimating = false;
   }
