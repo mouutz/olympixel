@@ -10,7 +10,7 @@ export class Player {
     this.interactionNotification = this.guiManager.createNotif();
     this.isAnimating = false;
     this.isDriving = false;
-    this.speed = 0.1;
+    this.speed = 0.15;
     this.car = new Car(scene, camera); // Créez une instance de Car
   }
   

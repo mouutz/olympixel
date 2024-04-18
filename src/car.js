@@ -6,7 +6,7 @@ export class Car {
         this.speed = 0;
         this.acceleration = 0.005;
         this.deceleration = 0.003;
-        this.maxSpeed = 0.2;
+        this.maxSpeed = 0.25;
         this.rotationRate = 0.02;
     }
 
@@ -17,7 +17,7 @@ export class Car {
         carObject.checkCollisions = false;
         this.carHitbox = BABYLON.MeshBuilder.CreateBox("carHitbox", { width: 2, height: 2, depth:5 }, this.scene);
         this.carHitbox.position = new BABYLON.Vector3(19, 1.5, 40);
-        this.carHitbox.isVisible = true;
+        this.carHitbox.isVisible = false;
         this.carHitbox.checkCollisions = true;
         carObject.setParent(this.carHitbox);
         carObject.position = new BABYLON.Vector3(0, -0.85, 0);
