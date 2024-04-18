@@ -143,10 +143,10 @@ const changeLight = function (op) {
 
 createScene().then(function (createdScene) {
   // Débogueur
-  createdScene.debugLayer.show({
+  /*createdScene.debugLayer.show({
     overlay: true,
     globalRoot: document.getElementById("debugLayer"),
-  });
+  });*/
 });
 
 window.addEventListener("resize", function () {

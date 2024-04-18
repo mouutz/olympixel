@@ -1,10 +1,7 @@
 //Fonction pour creer la scene
 export const createScene = async function (engine) {
   var scene = new BABYLON.Scene(engine);
-  scene.collisionsEnabled = true;
-  scene.gravity = new BABYLON.Vector3(0, -0.9, 0); // Gravité de la scène
-  scene.blockfreeActiveMeshesAndRenderingGroups = true;
-
+  
   // Configuration de la lumière
   var light = new BABYLON.HemisphericLight(
     "light1",
@@ -22,11 +19,15 @@ export const createScene = async function (engine) {
   );
 
   result.meshes.forEach((mesh) => {
-      mesh.checkCollisions = true;
+    mesh.checkCollisions = true;
   });
-  scene.blockfreeActiveMeshesAndRenderingGroups = false;
-  
-  var square = BABYLON.MeshBuilder.CreateBox("square", {size: 4}, scene);
+
+ 
+
+
+
+
+  var square = BABYLON.MeshBuilder.CreateBox("square", { size: 4 }, scene);
   square.position = new BABYLON.Vector3(42, 3, 49);
   square.rotation.x = Math.PI / 2;
 
@@ -34,18 +35,8 @@ export const createScene = async function (engine) {
   redMaterial.diffuseColor = new BABYLON.Color3(1, 0, 0); // Red
   square.material = redMaterial;
   square.isInteractable = true;
-
-  //Optimisation de la scene
-  scene.blockMaterialDirtyMechanism = true;
-  scene.useMaterialMeshMap=true;
-  scene.useGeometryIdsMap=true;
-  scene.useClonedMeshMap=true;
-  //scene.performancePriority === BABYLON.ScenePerformancePriority.Aggressive
-
   return scene;
 };
-
-
 
 
 let hauteur = 50;
@@ -83,25 +74,25 @@ export const createCamera = async function (scene, canvas, hero) {
   return camera;
 };
 
-export const createMinimap = function (scene,canvas,hero) {
-    var camera = new BABYLON.ArcRotateCamera("topDownCam", 0, Math.PI / 2, 10, hero.position, scene);
-    camera.attachControl(canvas, true);
+export const createMinimap = function (scene, canvas, hero) {
+  var camera = new BABYLON.ArcRotateCamera("topDownCam", 0, Math.PI / 2, 10, hero.position, scene);
+  camera.attachControl(canvas, true);
 
-    // La caméra reste au-dessus du héros, mais ne change pas de rotation
-    scene.onBeforeRenderObservable.add(() => {
-      if(isMinimapAgrandi){
-        camera.setPosition(new BABYLON.Vector3(0, hauteur, 0));
-        camera.setTarget(BABYLON.Vector3.Zero());
-      }
-      else{
-        camera.setPosition(new BABYLON.Vector3(hero.position.x, hauteur, hero.position.z));
-        camera.setTarget(hero.position);
-      }
-    });
+  // La caméra reste au-dessus du héros, mais ne change pas de rotation
+  scene.onBeforeRenderObservable.add(() => {
+    if (isMinimapAgrandi) {
+      camera.setPosition(new BABYLON.Vector3(0, hauteur, 0));
+      camera.setTarget(BABYLON.Vector3.Zero());
+    }
+    else {
+      camera.setPosition(new BABYLON.Vector3(hero.position.x, hauteur, hero.position.z));
+      camera.setTarget(hero.position);
+    }
+  });
 
-    //position de la camera à l'ecran
-    camera.viewport = new BABYLON.Viewport(0.02, 0.81, 0.15, 0.15);
+  //position de la camera à l'ecran
+  camera.viewport = new BABYLON.Viewport(0.02, 0.81, 0.15, 0.15);
 
-    return camera;
+  return camera;
 
 }
