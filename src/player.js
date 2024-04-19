@@ -21,7 +21,7 @@ export class Player {
     this.heroBox.isVisible = false;
     this.heroBox.checkCollisions = true;
 
-    const result = await BABYLON.SceneLoader.ImportMeshAsync("", "assets/models/", "man.glb", this.scene);
+    const result = await BABYLON.SceneLoader.ImportMeshAsync("", "assets/models/", "perso.glb", this.scene);
     this.animations = result.animationGroups;
     let heroModel = result.meshes[0];
     heroModel.parent = this.heroBox;
@@ -130,7 +130,8 @@ export class Player {
 
   raycast(heroBox) {
     var ray = new BABYLON.Ray(heroBox.position, new BABYLON.Vector3(0, -1, 0));
-    var pickInfo = this.scene.pickWithRay(ray, (item) => item !== heroBox);
+    var pickInfo = this.scene.pickWithRay(ray, (item) => item !== heroBox && item.name != "Male_shorts" && item.name !="Male_shoes");
+
     if (pickInfo.hit && pickInfo.pickedMesh) {
       var groundPosition = pickInfo.pickedPoint;
       var heroHeightOffset = 1;
