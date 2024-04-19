@@ -12,22 +12,23 @@ export class Player {
     this.isDriving = false;
     this.speed = 0.15;
     this.car = new Car(scene, camera); // Créez une instance de Car
+    
   }
   
 
   async createHero() {
-    this.heroBox = BABYLON.MeshBuilder.CreateBox("heroBox", { width: 1, height: 2, depth: 1 }, this.scene);
+    this.heroBox = BABYLON.MeshBuilder.CreateBox("heroBox", { width: 5, height: 2, depth: 6 }, this.scene);
     this.heroBox.position = new BABYLON.Vector3(18, 1.5, 3.5);
-    this.heroBox.isVisible = false;
+    this.heroBox.isVisible = true;
     this.heroBox.checkCollisions = true;
 
-    const result = await BABYLON.SceneLoader.ImportMeshAsync("", "assets/models/", "perso.glb", this.scene);
+    /*const result = await BABYLON.SceneLoader.ImportMeshAsync("", "assets/models/", "perso.glb", this.scene);
     this.animations = result.animationGroups;
     let heroModel = result.meshes[0];
     heroModel.parent = this.heroBox;
     heroModel.scaling = new BABYLON.Vector3(1, 1, 1);
     heroModel.position.y = -0.85;
-    this.hero = heroModel;
+    this.hero = heroModel;*/
 
     // Ajoutez cette ligne pour rendre le héros accessible globalement via la scène
     this.scene.hero = this;
@@ -175,32 +176,32 @@ export class Player {
       if (inputMap["s"] || inputMap["S"]) {
         var forwardDelta = forward.scale(this.speed);
         this.heroBox.moveWithCollisions(forwardDelta);
-        if (!this.isAnimating) {
+        /*if (!this.isAnimating) {
           this.startAnimation("CharacterArmature|Run_Back");
           this.isAnimating = true;
-        }
+        }*/
         isMoving = true;
       } else if (inputMap["z"] || inputMap["Z"]) {
         var backwardDelta = forward.scale(-this.speed);
         this.heroBox.moveWithCollisions(backwardDelta);
-        if (!this.isAnimating) {
+        /*if (!this.isAnimating) {
           this.startAnimation("CharacterArmature|Run");
           this.isAnimating = true;
-        }
+        }*/
         isMoving = true;
       }
       //quand j'appui sur  E la'animation intercat s'active 
       if (inputMap["e"] || inputMap["E"]) {
-        if (!this.isAnimating) {
+        /*if (!this.isAnimating) {
           this.startAnimation("CharacterArmature|Interact");
           this.isAnimating = true;
-        }
+        }*/
         isMoving = true;
       }
 
 
       if (!isMoving && this.isAnimating) {
-        this.startAnimation("CharacterArmature|Idle_Neutral");
+        //this.startAnimation("CharacterArmature|Idle_Neutral");
         this.isAnimating = false;
       }
       this.raycast(this.heroBox);

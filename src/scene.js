@@ -1,6 +1,7 @@
 //Fonction pour creer la scene
 export const createScene = async function (engine) {
   var scene = new BABYLON.Scene(engine);
+  scene.collisionsEnabled = true;
   
   // Configuration de la lumière
   var light = new BABYLON.HemisphericLight(
@@ -21,8 +22,6 @@ export const createScene = async function (engine) {
   result.meshes.forEach((mesh) => {
     mesh.checkCollisions = true;
   });
-
- 
 
 
 
@@ -85,8 +84,8 @@ export const createMinimap = function (scene, canvas, hero) {
       camera.setTarget(BABYLON.Vector3.Zero());
     }
     else {
-      camera.setPosition(new BABYLON.Vector3(hero.position.x, hauteur, hero.position.z));
-      camera.setTarget(hero.position);
+      camera.setPosition(new BABYLON.Vector3(hero.getAbsolutePosition().x, hauteur, hero.getAbsolutePosition().z));
+      camera.setTarget(hero.getAbsolutePosition());
     }
   });
 

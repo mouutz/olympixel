@@ -31,14 +31,14 @@ function createIndicateur(scene, hero) {
     line.parent = arrow;
 
     // Position initiale de la flèche
-    arrow.position = new BABYLON.Vector3(hero.position.x, hero.position.y + 2, hero.position.z);
+    arrow.position = new BABYLON.Vector3(hero.getAbsolutePosition().x, hero.getAbsolutePosition().y + 2, hero.getAbsolutePosition().z);
 
     // Objectif initial
     var objectif = new BABYLON.Vector3(0, 0, 0);
 
     // Fonction pour orienter la flèche vers l'objectif
     scene.onBeforeRenderObservable.add(() => {
-        arrow.position = new BABYLON.Vector3(hero.position.x, hero.position.y + 2, hero.position.z);
+        arrow.position = new BABYLON.Vector3(hero.getAbsolutePosition().x, hero.getAbsolutePosition().y + 2, hero.getAbsolutePosition().z);
         updateArrowColor(cylinder,line, objectif, arrow.position);
         arrow.lookAt(objectif);
     });

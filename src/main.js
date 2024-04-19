@@ -121,6 +121,10 @@ engine.runRenderLoop(function () {
   handleMinimap();
   heroPlayer.move(inputMap);
   //changeLight()
+
+  heroPlayer.heroBox.onCollide = function(collidedMesh) {
+    console.log("Hero hitbox collided with " + collidedMesh.name);
+  };
 });
 
 
@@ -179,8 +183,8 @@ anneau.material.reflectionTexture = null;
 
     // Mettre à jour la position de l'anneau pour qu'il suive le héros
     scene.onBeforeRenderObservable.add(() => {
-      anneau.position.x = hero.position.x;
-      anneau.position.z = hero.position.z;
+      anneau.position.x = hero.getAbsolutePosition().x;
+      anneau.position.z = hero.getAbsolutePosition().z;
       // La hauteur (y) peut rester constante ou être ajustée si nécessaire
   });
 
