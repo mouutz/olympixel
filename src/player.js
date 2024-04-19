@@ -130,7 +130,10 @@ export class Player {
 
   raycast(heroBox) {
     var ray = new BABYLON.Ray(heroBox.position, new BABYLON.Vector3(0, -1, 0));
-    var pickInfo = this.scene.pickWithRay(ray, (item) => item !== heroBox && item.name != "Male_shorts" && item.name !="Male_shoes");
+    var pickInfo = this.scene.pickWithRay(ray, (item) => {
+      const excludedNames = ["Male_shorts", "Male_shoes"];
+      return item && item !== heroBox && !excludedNames.includes(item.name);
+    });
 
     if (pickInfo.hit && pickInfo.pickedMesh) {
       var groundPosition = pickInfo.pickedPoint;

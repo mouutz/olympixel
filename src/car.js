@@ -71,7 +71,10 @@ export class Car {
 
     raycast() {
         var ray = new BABYLON.Ray(this.carHitbox.position, new BABYLON.Vector3(0, -1, 0)); 
-        var pickInfo = this.scene.pickWithRay(ray, (item) => item !== this.carHitbox && item !== this.carObjet && item.name!="heroBox");
+        var pickInfo = this.scene.pickWithRay(ray, (item) => {
+            const excludedNames = ["Male_shorts", "Male_shoes", "heroBox", "Male_tshirt"];
+            return item && item !== this.carHitbox && item !== this.carObjet && !excludedNames.includes(item?.name);
+          });
         if (pickInfo.hit && pickInfo.pickedMesh) {
             var groundPosition = pickInfo.pickedPoint;
             var carHeightOffset = 1; 
