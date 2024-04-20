@@ -14,7 +14,7 @@ export class GameAudioManager {
 
 
         // Sons pour l'environnement
-        this.sounds.waves = new BABYLON.Sound("beach", "assets/audio/beach.mp3", this.scene, () => {
+        this.sounds.river = new BABYLON.Sound("river", "assets/audio/beach.mp3", this.scene, () => {
             
         }, { loop: true, autoplay: false });
 
@@ -36,7 +36,10 @@ export class GameAudioManager {
             //baiiser le volum de tout les sons de la voiture uniquement
             if(name === "drive1" || name === "drive0" || name === "caridle" || name === "jump"){
                 this.sounds[name].setVolume(0.05);
-            }else{
+            }else if(name === "beach"){
+                this.sounds[name].setVolume(0.1);
+            }
+            else{
                 this.sounds[name].setVolume(0.1);
             }
             

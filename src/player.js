@@ -64,6 +64,34 @@ export class Player {
     }
   }
 
+  checksoundbeach(){
+    var river = this.scene.getMeshByName("Bridge_Tile_1.001");
+    var boat = this.scene.getMeshByName("Yacht_2");
+    var boat2 = this.scene.getMeshByName("Boat_2__1_");
+
+    
+    if (river && boat && boat2) {
+      var distance1 = BABYLON.Vector3.Distance(
+        this.heroBox.position,
+        river.position
+      );
+      var distance2 = BABYLON.Vector3.Distance(
+        this.heroBox.position,
+        boat.position
+      );
+      var distance3 = BABYLON.Vector3.Distance(
+        this.heroBox.position,
+        boat2.position
+      );
+
+      if (distance1 < 50 || distance2 < 50 || distance3 < 50 ) {
+        this.audioManager.playSound("river");
+      } else {
+        this.audioManager.stopSound("river");
+      }
+    }
+  }
+
   checkInteractionCar(inputMap) {
     var carHitbox = this.scene.getMeshByName("carHitbox");
     if (carHitbox) {
@@ -94,6 +122,10 @@ export class Player {
 
     //changer la hitbox du hero pour la hitbox de la voiture
     this.heroBox.checkCollisions = false;
+
+    this.audioManager.stopSound("run");
+    this.audioManager.stopSound("jump");
+    
 
     if (this.camera) {
       this.camera.lockedTarget = carHitbox;
@@ -176,7 +208,7 @@ export class Player {
         if (inputMap["f"]) {
             this.exitCar();
         }
-        this.car.move(inputMap, this.audioManager); // Gestion du mouvement en voiture
+        this.car.move(inputMap, this.audioManager); // gestion du mouvement en voiture
         return;
     }
 
@@ -188,7 +220,7 @@ export class Player {
         this.heroBox.rotation.y += 0.04;
     }
 
-    // Gestion du mouvement et des animations de course
+    // gestoin du mouvement et des animations de course
     if (inputMap["s"] || inputMap["S"] || inputMap["z"] || inputMap["Z"]) {
         let directionMultiplier = inputMap["s"] || inputMap["S"] ? 1 : -1;
         this.heroBox.moveWithCollisions(forward.scale(this.speed * directionMultiplier));
@@ -199,11 +231,12 @@ export class Player {
             this.isAnimating = true;
         }
         isMoving = true;
+        this.raycast(this.heroBox);
     }
 
-    // Gestion du saut pendant la course
+    // gestion du saut pendant la course
     if (inputMap[" "]) {
-        // Si le joueur est en train de se déplacer et appuie sur espace, déclencher JumpRun
+        
         if (isMoving) {
             this.startAnimation("Jump");
             this.audioManager.playSound("jump");
@@ -217,7 +250,7 @@ export class Player {
                 this.startAnimation("Idle");
                 this.isAnimating = false;
             }
-        }, 800); // Supposons que l'animation JumpRun dure 1 seconde
+        }, 800); 
     }
 
     
@@ -243,6 +276,7 @@ export class Player {
 
     this.checkInteraction(inputMap);
     this.checkInteractionCar(inputMap);
+    this.checksoundbeach()
 }
 
 startAnimation(animationName) {
