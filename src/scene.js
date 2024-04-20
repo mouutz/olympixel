@@ -22,11 +22,7 @@ export const createScene = async function (engine) {
     mesh.checkCollisions = true;
   });
 
- 
-
-
-
-
+  
   var square = BABYLON.MeshBuilder.CreateBox("square", { size: 4 }, scene);
   square.position = new BABYLON.Vector3(42, 3, 49);
   square.rotation.x = Math.PI / 2;

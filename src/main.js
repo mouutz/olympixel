@@ -2,6 +2,7 @@ import { createScene, createCamera, createMinimap, setHauteur, setIsMinimapAgran
 import { createIndicateur } from './indicateur.js';
 import { Player } from "./player.js";
 import { GUIManager } from './guiManager.js';
+import { GameAudioManager } from './audio.js';
 
 var canvas = document.getElementById("renderCanvas");
 var engine = new BABYLON.Engine(canvas, true);
@@ -46,13 +47,18 @@ createWall(new BABYLON.Vector3(maxX, 0, -16), {width: 1, height: 50, depth: dept
 createWall(new BABYLON.Vector3(0, 0, minZ), {width: width, height: 50, depth: 1});
 createWall(new BABYLON.Vector3(0, 0, maxZ), {width: width, height: 50, depth: 2.5});
 
+/* ---------------------------
+----Gestion audio----
+-----------------------------*/
 
+const audioManager = new GameAudioManager(scene);
+audioManager.loadSounds();
 
 /* ---------------------------
 ---------Creation joueur-------
 -----------------------------*/
 
-const heroPlayer = new Player(scene);
+const heroPlayer = new Player(scene,camera, audioManager);
 
 const hero = await heroPlayer.createHero();
 /* ---------------------------
@@ -82,7 +88,7 @@ var fleche = createIndicateur(scene, hero);
 // Positionner l'objectif	
 fleche.setTarget(new BABYLON.Vector3(42, 5, 49));
 
-/* ---------------------------
+/* ---------------------------f
 ----Creation GUI----
 -----------------------------*/
 const guiManager = new GUIManager(scene);
@@ -109,6 +115,7 @@ scene.actionManager.registerAction(
     inputMap[evt.sourceEvent.key] = false;
   })
 );
+
 
 
 
