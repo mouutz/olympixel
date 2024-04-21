@@ -122,9 +122,6 @@ engine.runRenderLoop(function () {
   heroPlayer.move(inputMap);
   //changeLight()
 
-  heroPlayer.heroBox.onCollide = function(collidedMesh) {
-    console.log("Hero hitbox collided with " + collidedMesh.name);
-  };
 });
 
 
