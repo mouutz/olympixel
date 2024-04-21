@@ -8,7 +8,9 @@ var canvas = document.getElementById("renderCanvas");
 var engine = new BABYLON.Engine(canvas, true);
 let divFps = document.getElementById("fps");
 
-
+if (engine.audioEngine) {
+  engine.audioEngine.useCustomUnlockedButton = true;
+}
 /* ---------------------------
 ---------Creation scene-------
 -----------------------------*/
@@ -44,11 +46,45 @@ function createWall(position, size) {
   return wall;
 }
 
+
 createWall(new BABYLON.Vector3(minX+33, 0, -16), {width: 1, height: 50, depth: depth});
 createWall(new BABYLON.Vector3(maxX, 0, -16), {width: 1, height: 50, depth: depth});
 createWall(new BABYLON.Vector3(0, 0, minZ), {width: width, height: 50, depth: 1});
 createWall(new BABYLON.Vector3(0, 0, maxZ), {width: width, height: 50, depth: 2.5});
 
+
+/* ---------------------------
+---------Creation Skybox-------
+-----------------------------*/
+const setupSkybox = (scene) => {
+  
+  var skyboxMaterial = new BABYLON.SkyMaterial("skyMaterial", scene);
+  skyboxMaterial.backFaceCulling = false;
+
+  // Créer la mesh Skybox
+  var skybox = BABYLON.Mesh.CreateBox("skyBox", 1000.0, scene);
+  skybox.material = skyboxMaterial;
+
+  return skyboxMaterial;
+};
+
+const skyboxMaterial = setupSkybox(scene);
+const adjustSkyboxSetting = (property, value) => {
+  const animation = new BABYLON.Animation("skyAnimation", property, 30, 
+    BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+    BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+  
+  const keys = [
+    { frame: 0, value: skyboxMaterial[property] },
+    { frame: 30, value: value }
+  ];
+  
+  animation.setKeys(keys);
+  
+  scene.beginDirectAnimation(skyboxMaterial, [animation], 0, 30, false);
+};
+adjustSkyboxSetting("inclination", 0); // jour
+//adjustSkyboxSetting("inclination", -0.5); //nuit
 /* ---------------------------
 ----Gestion audio----
 -----------------------------*/

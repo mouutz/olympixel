@@ -102,7 +102,7 @@ export class Car {
         var ray = new BABYLON.Ray(this.carHitbox.position, new BABYLON.Vector3(0, -1, 0)); 
         var pickInfo = this.scene.pickWithRay(ray, (item) => {
             const excludedNames =  ["heroBox","Male_shorts", "Male_shoes","Male_tshirt" ,"Male_body","Male_hair"];
-            return item && item !== this.carHitbox && item !== this.carObjet && !excludedNames.includes(item?.name);
+            return item && item !== this.carHitbox && item !== this.carObjet && !excludedNames.includes(item?.name) && item.name !== "skyBox";
           });
         if (pickInfo.hit && pickInfo.pickedMesh) {
             var groundPosition = pickInfo.pickedPoint;

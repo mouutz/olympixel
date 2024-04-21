@@ -217,7 +217,7 @@ export class Player {
         "Male_body",
         "Male_hair",
       ];
-      return item && item !== heroBox && !excludedNames.includes(item.name);
+      return item && item !== heroBox && !excludedNames.includes(item.name) && item.name !== "skyBox";
     });
 
     if (pickInfo.hit && pickInfo.pickedMesh) {
