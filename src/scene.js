@@ -15,13 +15,16 @@ export const createScene = async function (engine) {
   const result = await BABYLON.SceneLoader.ImportMeshAsync(
     "",
     "assets/models/",
-    "city9.glb",
+    "city10.glb",
     scene
   );
 
   result.meshes.forEach((mesh) => {
     mesh.checkCollisions = true;
   });
+
+
+
 
 
 

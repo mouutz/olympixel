@@ -14,7 +14,7 @@ export class Player {
     this.isJumping = false;
     this.car = new Car(scene, camera, audioManager);
     this.JUMP_COOLDOWN = 750;
-    this.JUMP_POWER = 0.2;
+    this.JUMP_POWER = 0.05;
     this.jumpTime = 0;
 
     this.river = scene.getMeshByName("Bridge_Tile_1.001");
@@ -198,6 +198,7 @@ export class Player {
     this.audioManager.stopSound("drive0");
     this.audioManager.stopSound("drive1");
     this.audioManager.stopSound("caridle");
+    
     this.startAnimation("Idle");
 
     // Mettre à jour l'état du personnage
