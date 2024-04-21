@@ -5,7 +5,7 @@ export class Car {
         this.carHitbox = null;
         this.speed = 0;
         this.acceleration = 0.005;
-        this.deceleration = 0.003;
+        this.deceleration = 0.002;
         this.maxSpeed = 0.25;
         this.rotationRate = 0.02;
         this.audioManager = audioManager;
@@ -36,6 +36,7 @@ export class Car {
 
         this.applyMovement();
     }
+    
 
     //faonction qui lance le son quand la voiture avance et s'arrete
     carsoud(){
@@ -74,13 +75,24 @@ export class Car {
 
     updateRotation(inputMap) {
         if (this.speed !== 0) {
+            //si on avance
+            if(this.speed < 0) {
             if (inputMap["q"]) {
                 this.carHitbox.rotation.y -= this.rotationRate;
             } else if (inputMap["d"]) {
                 this.carHitbox.rotation.y += this.rotationRate;
             }
         }
+        //si on recule
+        else{
+            if (inputMap["q"]) {
+                this.carHitbox.rotation.y += this.rotationRate;
+            } else if (inputMap["d"]) {
+                this.carHitbox.rotation.y -= this.rotationRate;
+            }
+        }
     }
+}
 
     applyMovement() {
         const forward = new BABYLON.Vector3(Math.sin(this.carHitbox.rotation.y), 0, Math.cos(this.carHitbox.rotation.y));

@@ -105,6 +105,7 @@ const hero = await heroPlayer.createHero();
 
 var camera = await createCamera(scene, canvas, hero);
 camera.layerMask = 0x0FFFFFFF;
+heroPlayer.setCamera(camera);
 
 var minimap = await createMinimap(scene,canvas, hero);
 minimap.layerMask = 0x10000000 | 0x0FFFFFFF;

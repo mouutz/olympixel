@@ -48,14 +48,12 @@ export class GameAudioManager {
             
             this.sounds[name].play();
             
-            console.log("Playing sound:", name);
         }
     }
 
     stopSound(name) {
         if (this.sounds[name] && this.sounds[name].isPlaying) {
             this.sounds[name].stop();
-            console.log("Stopped sound:", name);
         }
     }
 }
