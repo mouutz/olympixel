@@ -18,7 +18,7 @@ export class Car {
 
         carObject.checkCollisions = false;
         this.carHitbox = BABYLON.MeshBuilder.CreateBox("carHitbox", { width: 2, height: 2, depth:5 }, this.scene);
-        this.carHitbox.position = new BABYLON.Vector3(19, 1.5, 40);
+        this.carHitbox.position = new BABYLON.Vector3(19, 1.5, 10);
         this.carHitbox.isVisible = true;
         this.carHitbox.checkCollisions = true;
         carObject.setParent(this.carHitbox);
@@ -53,7 +53,7 @@ export class Car {
             
         }else{
             this.audioManager.stopSound("drive1");
-        }
+        }   
         if(this.speed === 0 ){
             this.audioManager.playSound("caridle");
         }else{

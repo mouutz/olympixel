@@ -11,7 +11,7 @@ export class Player {
     this.isDriving = false;
     this.speed = 0.15;
     this.audioManager = audioManager;
-    this.car = new Car(scene, camera,audioManager);
+    this.car = new Car(scene, camera, audioManager);
   }
 
   async createHero() {
@@ -44,44 +44,21 @@ export class Player {
     return this.heroBox;
   }
 
-  checkInteraction(inputMap) {
-    var interactableObject = this.scene.getMeshByName("square");
-    if (interactableObject && interactableObject.isInteractable) {
-      var distance = BABYLON.Vector3.Distance(
-        this.heroBox.position,
-        interactableObject.position
-      );
-      if (distance < 5) {
-        this.guiManager.setNotif(this.interactionNotification, true);
-        if (inputMap["e"] || inputMap["E"]) {
-          setTimeout(() => {
-            window.location.href = "page2.html";
-          }, 1000);
-        }
-      } else {
-        this.guiManager.setNotif(this.interactionNotification, false);
-      }
-    }
-  }
-
-  updateEnvironmentSounds(hero_position){
+  updateEnvironmentSounds(hero_position) {
     var river = this.scene.getMeshByName("Bridge_Tile_1.001");
     var yacht = this.scene.getMeshByName("Yacht_1");
     var yacht2 = this.scene.getMeshByName("Yacht_2");
     var boat2 = this.scene.getMeshByName("Boat_2__1_");
     var ambulance = this.scene.getMeshByName("Ambulance_1__2_");
 
-    
     var car_position = this.car.carHitbox.getAbsolutePosition();
 
+    var river_position = river.getAbsolutePosition();
+    var yacht_position = yacht.getAbsolutePosition();
+    var yacht2_position = yacht2.getAbsolutePosition();
+    var boat2_position = boat2.getAbsolutePosition();
+    var ambulance_position = ambulance.getAbsolutePosition();
 
-    var river_position  = river.getAbsolutePosition();
-    var yacht_position  = yacht.getAbsolutePosition();
-    var yacht2_position  = yacht2.getAbsolutePosition();
-    var boat2_position  = boat2.getAbsolutePosition();
-    var ambulance_position  = ambulance.getAbsolutePosition();
-
-    
     if (river && yacht && boat2 && yacht2) {
       var D_hero_river = BABYLON.Vector3.Distance(
         hero_position,
@@ -102,17 +79,19 @@ export class Player {
         boat2_position
       );
 
-
-
-
-      if (D_hero_river < 50 || D_hero_yacht < 50 || D_hero_boat2 < 50 || D_hero_yacht2 < 30) {
+      if (
+        D_hero_river < 50 ||
+        D_hero_yacht < 50 ||
+        D_hero_boat2 < 50 ||
+        D_hero_yacht2 < 30
+      ) {
         this.audioManager.playSound("river");
         this.audioManager.stopSound("city");
       } else {
         this.audioManager.stopSound("river");
         this.audioManager.playSound("city");
       }
-    }else{
+    } else {
       this.audioManager.playSound("city");
     }
 
@@ -133,24 +112,41 @@ export class Player {
         this.audioManager.stopSound("ambulance");
       }
     }
-    
   }
-
-  checkInteractionCar(inputMap) {
+  checkInteraction(inputMap) {
+    var interactableObject = this.scene.getMeshByName("square");
     var carHitbox = this.scene.getMeshByName("carHitbox");
+
+    // Réinitialisation de la notification
+    this.guiManager.setNotif(this.interactionNotification, false);
+
+    // Vérification de l'interaction avec l'objet "square"
+    if (interactableObject && interactableObject.isInteractable) {
+      var distanceToObject = BABYLON.Vector3.Distance(
+        this.heroBox.position,
+        interactableObject.position
+      );
+      if (distanceToObject < 5 && !this.isDriving) {
+        this.guiManager.setNotif(this.interactionNotification, true);
+        if (inputMap["e"] || inputMap["E"]) {
+          setTimeout(() => {
+            window.location.href = "page2.html";
+          }, 1000);
+        }
+      }
+    }
+
+    // Vérification de l'interaction avec la voiture "carHitbox"
     if (carHitbox) {
-      var distance = BABYLON.Vector3.Distance(
+      var distanceToCar = BABYLON.Vector3.Distance(
         this.heroBox.position,
         carHitbox.position
       );
-      
-      if (distance < 5  && !this.isDriving) {
+      if (distanceToCar < 5 && !this.isDriving) {
         this.guiManager.setNotif(this.interactionNotification, true);
         if (inputMap["e"] || inputMap["E"]) {
           this.interactWithCar(carHitbox);
         }
-      } else {
-        this.guiManager.setNotif(this.interactionNotification, false);
       }
     }
   }
@@ -170,7 +166,6 @@ export class Player {
 
     this.audioManager.stopSound("run");
     this.audioManager.stopSound("jump");
-    
 
     if (this.camera) {
       this.camera.lockedTarget = carHitbox;
@@ -207,8 +202,6 @@ export class Player {
     this.audioManager.stopSound("drive1");
     this.audioManager.stopSound("caridle");
     this.startAnimation("Idle");
-
-    
 
     // Mettre à jour l'état du personnage
     this.isDriving = false;
@@ -249,99 +242,108 @@ export class Player {
     let hero_position = this.heroBox.getAbsolutePosition();
     let isMoving = false;
     const forward = new BABYLON.Vector3(
-        Math.sin(this.heroBox.rotation.y), 0, Math.cos(this.heroBox.rotation.y));   
+      Math.sin(this.heroBox.rotation.y),
+      0,
+      Math.cos(this.heroBox.rotation.y)
+    );
+
+    this.updateEnvironmentSounds(hero_position);
+    this.checkInteraction(inputMap);
 
     if (this.isDriving) {
-        if (inputMap["f"]) {
-            this.exitCar();
-        }
-        this.car.move(inputMap, this.audioManager); // gestion du mouvement en voiture
+      if (inputMap["f"]) {
+        this.exitCar();
+      }
+      this.car.move(inputMap, this.audioManager); // gestion du mouvement en voiture
 
-        return;
+      return;
     }
 
     // Rotation du personnage avec Q et D
     if (inputMap["q"] || inputMap["Q"]) {
-        this.heroBox.rotation.y -= 0.04;
+      this.heroBox.rotation.y -= 0.04;
     }
     if (inputMap["d"] || inputMap["D"]) {
-        this.heroBox.rotation.y += 0.04;
+      this.heroBox.rotation.y += 0.04;
     }
 
     // gestoin du mouvement et des animations de course
     if (inputMap["s"] || inputMap["S"] || inputMap["z"] || inputMap["Z"]) {
-        let directionMultiplier = inputMap["s"] || inputMap["S"] ? 1 : -1;
-        this.heroBox.moveWithCollisions(forward.scale(this.speed * directionMultiplier));
-        let runningAnimation = inputMap["s"] || inputMap["S"] ? "Back" : "Running";
-        if (!this.isAnimating || this.currentAnimation !== runningAnimation) {
-            this.startAnimation(runningAnimation);
-            this.audioManager.playSound("run");
-            this.isAnimating = true;
-        }
-        isMoving = true;
-        this.raycast(this.heroBox);
+      let directionMultiplier = inputMap["s"] || inputMap["S"] ? 1 : -1;
+      this.heroBox.moveWithCollisions(
+        forward.scale(this.speed * directionMultiplier)
+      );
+      let runningAnimation =
+        inputMap["s"] || inputMap["S"] ? "Back" : "Running";
+      if (!this.isAnimating || this.currentAnimation !== runningAnimation) {
+        this.startAnimation(runningAnimation);
+        this.audioManager.playSound("run");
+        this.isAnimating = true;
+      }
+      isMoving = true;
+      this.raycast(this.heroBox);
     }
 
     // gestion du saut pendant la course
     if (inputMap[" "]) {
-        
-        if (isMoving) {
-            this.startAnimation("Jump");
-            this.audioManager.playSound("jump");
-        } else {
-            this.startAnimation("Jump");
-            this.audioManager.playSound("jump");
-            this.isAnimating = true; // Si le joueur n'est pas déjà en mouvement
+      if (isMoving) {
+        this.startAnimation("Jump");
+        this.audioManager.playSound("jump");
+      } else {
+        this.startAnimation("Jump");
+        this.audioManager.playSound("jump");
+        this.isAnimating = true; // Si le joueur n'est pas déjà en mouvement
+      }
+      setTimeout(() => {
+        if (!isMoving) {
+          this.startAnimation("Idle");
+          this.isAnimating = false;
         }
-        setTimeout(() => {
-            if (!isMoving) {
-                this.startAnimation("Idle");
-                this.isAnimating = false;
-            }
-        }, 800); 
+      }, 800);
     }
 
-    
-
     // Interaction
-    if (inputMap["e"] || inputMap["E"] && !this.isAnimating) {
-        this.startAnimation("Interact");
-        setTimeout(() => {
-            if (!isMoving) {
-                this.startAnimation("Idle");
-                this.isAnimating = false;
-            }
-        }, 3000); // Durée estimée de l'animation d'interaction
+    if (inputMap["e"] || (inputMap["E"] && !this.isAnimating)) {
+      this.startAnimation("Interact");
+      setTimeout(() => {
+        if (!isMoving) {
+          this.startAnimation("Idle");
+          this.isAnimating = false;
+        }
+      }, 3000); // Durée estimée de l'animation d'interaction
     }
 
     // Revenir à l'animation "Idle" si aucune touche n'est pressée et que le joueur n'est plus en animation
-    if (!isMoving && this.isAnimating && this.currentAnimation !== "Jump" && this.currentAnimation !== "Interact") {
-        this.audioManager.stopSound("run");
-        this.stopAnimation(this.currentAnimation);
-        this.startAnimation("Idle");
-        this.isAnimating = false;
+    if (
+      !isMoving &&
+      this.isAnimating &&
+      this.currentAnimation !== "Jump" &&
+      this.currentAnimation !== "Interact"
+    ) {
+      this.audioManager.stopSound("run");
+      this.stopAnimation(this.currentAnimation);
+      this.startAnimation("Idle");
+      this.isAnimating = false;
     }
+  }
 
-    this.checkInteraction(inputMap);
-    this.checkInteractionCar(inputMap);
-    this.updateEnvironmentSounds(hero_position)
-}
-
-startAnimation(animationName) {
-    const animation = this.animations.find((anim) => anim.name === animationName);
+  startAnimation(animationName) {
+    const animation = this.animations.find(
+      (anim) => anim.name === animationName
+    );
     if (animation) {
-        this.animations.forEach((anim) => anim.stop());
-        animation.start(true);
-        this.currentAnimation = animationName; // Mise à jour de l'animation actuelle
+      this.animations.forEach((anim) => anim.stop());
+      animation.start(true);
+      this.currentAnimation = animationName; // Mise à jour de l'animation actuelle
     }
-}
+  }
 
-stopAnimation(animationName) {
-    const animation = this.animations.find((anim) => anim.name === animationName);
+  stopAnimation(animationName) {
+    const animation = this.animations.find(
+      (anim) => anim.name === animationName
+    );
     if (animation) {
-        animation.stop();
+      animation.stop();
     }
-}
-
-
+  }
 }
