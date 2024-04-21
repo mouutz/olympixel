@@ -1,5 +1,5 @@
 export class Car {
-    constructor(scene, camera) {
+    constructor(scene, camera, audioManager, isdraiving) {
         this.scene = scene;
         this.camera = camera;
         this.carHitbox = null;
@@ -8,6 +8,8 @@ export class Car {
         this.deceleration = 0.003;
         this.maxSpeed = 0.25;
         this.rotationRate = 0.02;
+        this.audioManager = audioManager;
+        this.isDriving = isdraiving;
     }
 
     async createCar() {
@@ -36,9 +38,36 @@ export class Car {
         this.applyMovement();
     }
 
+    //faonction qui lance le son quand la voiture avance et s'arrete
+    carsoud(){
+        if(this.speed > 0){
+            this.audioManager.playSound("drive0");
+            
+        }
+        else{
+            this.audioManager.stopSound("drive0");
+        }
+
+        if(this.speed < 0){
+            this.audioManager.playSound("drive1");
+            
+        }else{
+            this.audioManager.stopSound("drive1");
+        }
+        if(this.speed === 0 ){
+            this.audioManager.playSound("caridle");
+        }else{
+            this.audioManager.stopSound("caridle");
+        }
+    
+    }
+
+
     updateSpeed(inputMap) {
         if (inputMap["s"] || inputMap["S"]) {
             this.speed = Math.min(this.speed + this.acceleration, this.maxSpeed);
+            
+            
         } else if (inputMap["z"] || inputMap["Z"]) {
             this.speed = Math.max(this.speed - this.acceleration, -this.maxSpeed);
         }
@@ -58,6 +87,7 @@ export class Car {
         const forward = new BABYLON.Vector3(Math.sin(this.carHitbox.rotation.y), 0, Math.cos(this.carHitbox.rotation.y));
         this.carHitbox.moveWithCollisions(forward.scale(this.speed));
         this.applyDeceleration();
+        this.carsoud();
         this.raycast();
     }
 
@@ -72,7 +102,7 @@ export class Car {
     raycast() {
         var ray = new BABYLON.Ray(this.carHitbox.position, new BABYLON.Vector3(0, -1, 0)); 
         var pickInfo = this.scene.pickWithRay(ray, (item) => {
-            const excludedNames = ["Male_shorts", "Male_shoes", "heroBox", "Male_tshirt", "Male_body"];
+            const excludedNames =  ["heroBox","Male_shorts", "Male_shoes","Male_tshirt" ,"Male_body","Male_hair"];
             return item && item !== this.carHitbox && item !== this.carObjet && !excludedNames.includes(item?.name);
           });
         if (pickInfo.hit && pickInfo.pickedMesh) {
