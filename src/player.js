@@ -64,14 +64,14 @@ export class Player {
     }
   }
 
-  updateEnvironmentSounds(){
+  updateEnvironmentSounds(hero_position){
     var river = this.scene.getMeshByName("Bridge_Tile_1.001");
     var yacht = this.scene.getMeshByName("Yacht_1");
     var yacht2 = this.scene.getMeshByName("Yacht_2");
     var boat2 = this.scene.getMeshByName("Boat_2__1_");
     var ambulance = this.scene.getMeshByName("Ambulance_1__2_");
 
-    var hero_position = this.heroBox.getAbsolutePosition();
+    
     var car_position = this.car.carHitbox.getAbsolutePosition();
 
 
@@ -246,6 +246,7 @@ export class Player {
   }
 
   move(inputMap) {
+    let hero_position = this.heroBox.getAbsolutePosition();
     let isMoving = false;
     const forward = new BABYLON.Vector3(
         Math.sin(this.heroBox.rotation.y), 0, Math.cos(this.heroBox.rotation.y));   
@@ -323,7 +324,7 @@ export class Player {
 
     this.checkInteraction(inputMap);
     this.checkInteractionCar(inputMap);
-    this.updateEnvironmentSounds()
+    this.updateEnvironmentSounds(hero_position)
 }
 
 startAnimation(animationName) {
