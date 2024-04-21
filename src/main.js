@@ -6,6 +6,8 @@ import { GameAudioManager } from './audio.js';
 
 var canvas = document.getElementById("renderCanvas");
 var engine = new BABYLON.Engine(canvas, true);
+let divFps = document.getElementById("fps");
+
 
 /* ---------------------------
 ---------Creation scene-------
@@ -127,6 +129,8 @@ engine.runRenderLoop(function () {
   scene.render()
   handleMinimap();
   heroPlayer.move(inputMap);
+  divFps.innerHTML = engine.getFps().toFixed() + " fps";
+
   //changeLight()
 
 });

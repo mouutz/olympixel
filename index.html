@@ -22,9 +22,24 @@
     <script src="https://cdn.babylonjs.com/viewer/babylon.viewer.js"></script>
     <script src="https://cdn.babylonjs.com/viewer/babylon.viewer.max.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ammo.js/2.0.2/ammo.js"></script>
+
+    <style>
+        #fps {
+            position: absolute;
+            background-color: rgb(130, 6, 212);
+            text-align: center;
+            font-size: 16px;
+            color: white;
+            top: 15px;
+            right: 10px;
+            width: 60px;
+            height: 20px;
+        }
+</style>
     
 </head>
 <body>
+    <div id="fps">0</div>
     <canvas id="renderCanvas"></canvas>
     <script  src="src/main.js" type="module"></script>
 </body>
