@@ -15,7 +15,7 @@ export const createScene = async function (engine) {
   const result = await BABYLON.SceneLoader.ImportMeshAsync(
     "",
     "assets/models/",
-    "city8.glb",
+    "city9.glb",
     scene
   );
 
@@ -25,6 +25,7 @@ export const createScene = async function (engine) {
 
 
 
+  
 
   var square = BABYLON.MeshBuilder.CreateBox("square", { size: 4 }, scene);
   square.position = new BABYLON.Vector3(42, 3, 49);

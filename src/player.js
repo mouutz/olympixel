@@ -64,32 +64,76 @@ export class Player {
     }
   }
 
-  checksoundbeach(){
+  updateEnvironmentSounds(){
     var river = this.scene.getMeshByName("Bridge_Tile_1.001");
-    var boat = this.scene.getMeshByName("Yacht_2");
+    var yacht = this.scene.getMeshByName("Yacht_1");
+    var yacht2 = this.scene.getMeshByName("Yacht_2");
     var boat2 = this.scene.getMeshByName("Boat_2__1_");
+    var ambulance = this.scene.getMeshByName("Ambulance_1__2_");
+
+    var hero_position = this.heroBox.getAbsolutePosition();
+    var car_position = this.car.carHitbox.getAbsolutePosition();
+
+
+    var river_position  = river.getAbsolutePosition();
+    var yacht_position  = yacht.getAbsolutePosition();
+    var yacht2_position  = yacht2.getAbsolutePosition();
+    var boat2_position  = boat2.getAbsolutePosition();
+    var ambulance_position  = ambulance.getAbsolutePosition();
 
     
-    if (river && boat && boat2) {
-      var distance1 = BABYLON.Vector3.Distance(
-        this.heroBox.position,
-        river.position
+    if (river && yacht && boat2 && yacht2) {
+      var D_hero_river = BABYLON.Vector3.Distance(
+        hero_position,
+        river_position
       );
-      var distance2 = BABYLON.Vector3.Distance(
-        this.heroBox.position,
-        boat.position
-      );
-      var distance3 = BABYLON.Vector3.Distance(
-        this.heroBox.position,
-        boat2.position
+      var D_hero_yacht = BABYLON.Vector3.Distance(
+        hero_position,
+        yacht_position
       );
 
-      if (distance1 < 50 || distance2 < 50 || distance3 < 50 ) {
+      var D_hero_yacht2 = BABYLON.Vector3.Distance(
+        hero_position,
+        yacht2_position
+      );
+
+      var D_hero_boat2 = BABYLON.Vector3.Distance(
+        hero_position,
+        boat2_position
+      );
+
+
+
+
+      if (D_hero_river < 50 || D_hero_yacht < 50 || D_hero_boat2 < 50 || D_hero_yacht2 < 30) {
         this.audioManager.playSound("river");
+        this.audioManager.stopSound("city");
       } else {
         this.audioManager.stopSound("river");
+        this.audioManager.playSound("city");
+      }
+    }else{
+      this.audioManager.playSound("city");
+    }
+
+    if (ambulance) {
+      var D_hero_ambu = BABYLON.Vector3.Distance(
+        hero_position,
+        ambulance_position
+      );
+      var D_car_ambu = BABYLON.Vector3.Distance(
+        car_position,
+        ambulance_position
+      );
+
+      if (D_hero_ambu < 30 || (this.isDriving && D_car_ambu < 30)) {
+        console.log(this.isDriving);
+        this.audioManager.playSound("ambulance");
+      } else {
+        this.audioManager.stopSound("ambulance");
       }
     }
+    
   }
 
   checkInteractionCar(inputMap) {
@@ -99,7 +143,8 @@ export class Player {
         this.heroBox.position,
         carHitbox.position
       );
-      if (distance < 5) {
+      
+      if (distance < 5  && !this.isDriving) {
         this.guiManager.setNotif(this.interactionNotification, true);
         if (inputMap["e"] || inputMap["E"]) {
           this.interactWithCar(carHitbox);
@@ -158,11 +203,12 @@ export class Player {
       this.heroBox.rotation.y = carHitbox.rotation.y;
       this.hero.rotation.y = carHitbox.rotation.y;
     }
-    this.startAnimation("Idle");
-
     this.audioManager.stopSound("drive0");
     this.audioManager.stopSound("drive1");
     this.audioManager.stopSound("caridle");
+    this.startAnimation("Idle");
+
+    
 
     // Mettre à jour l'état du personnage
     this.isDriving = false;
@@ -202,13 +248,14 @@ export class Player {
   move(inputMap) {
     let isMoving = false;
     const forward = new BABYLON.Vector3(
-        Math.sin(this.heroBox.rotation.y), 0, Math.cos(this.heroBox.rotation.y));
+        Math.sin(this.heroBox.rotation.y), 0, Math.cos(this.heroBox.rotation.y));   
 
     if (this.isDriving) {
         if (inputMap["f"]) {
             this.exitCar();
         }
         this.car.move(inputMap, this.audioManager); // gestion du mouvement en voiture
+
         return;
     }
 
@@ -276,7 +323,7 @@ export class Player {
 
     this.checkInteraction(inputMap);
     this.checkInteractionCar(inputMap);
-    this.checksoundbeach()
+    this.updateEnvironmentSounds()
 }
 
 startAnimation(animationName) {
