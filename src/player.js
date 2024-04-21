@@ -12,6 +12,12 @@ export class Player {
     this.speed = 0.15;
     this.audioManager = audioManager;
     this.car = new Car(scene, camera, audioManager);
+
+    this.river = scene.getMeshByName("Bridge_Tile_1.001");
+    this.yacht = scene.getMeshByName("Yacht_1");
+    this.yacht2 = scene.getMeshByName("Yacht_2");
+    this.boat2 = scene.getMeshByName("Boat_2__1_");
+    this.ambulance = scene.getMeshByName("Ambulance_1__2_");
   }
 
   async createHero() {
@@ -45,21 +51,14 @@ export class Player {
   }
 
   updateEnvironmentSounds(hero_position) {
-    var river = this.scene.getMeshByName("Bridge_Tile_1.001");
-    var yacht = this.scene.getMeshByName("Yacht_1");
-    var yacht2 = this.scene.getMeshByName("Yacht_2");
-    var boat2 = this.scene.getMeshByName("Boat_2__1_");
-    var ambulance = this.scene.getMeshByName("Ambulance_1__2_");
 
-    var car_position = this.car.carHitbox.getAbsolutePosition();
+    var river_position = this.river.getAbsolutePosition();
+    var yacht_position = this.yacht.getAbsolutePosition();
+    var yacht2_position = this.yacht2.getAbsolutePosition();
+    var boat2_position = this.boat2.getAbsolutePosition();
+    var ambulance_position = this.ambulance.getAbsolutePosition();
 
-    var river_position = river.getAbsolutePosition();
-    var yacht_position = yacht.getAbsolutePosition();
-    var yacht2_position = yacht2.getAbsolutePosition();
-    var boat2_position = boat2.getAbsolutePosition();
-    var ambulance_position = ambulance.getAbsolutePosition();
-
-    if (river && yacht && boat2 && yacht2) {
+    if (this.river && this.yacht && this.boat2 && this.yacht2) {
       var D_hero_river = BABYLON.Vector3.Distance(
         hero_position,
         river_position
@@ -95,17 +94,13 @@ export class Player {
       this.audioManager.playSound("city");
     }
 
-    if (ambulance) {
+    if (this.ambulance) {
       var D_hero_ambu = BABYLON.Vector3.Distance(
         hero_position,
         ambulance_position
       );
-      var D_car_ambu = BABYLON.Vector3.Distance(
-        car_position,
-        ambulance_position
-      );
 
-      if (D_hero_ambu < 30 || (this.isDriving && D_car_ambu < 30)) {
+      if (D_hero_ambu < 30) {
         console.log(this.isDriving);
         this.audioManager.playSound("ambulance");
       } else {
