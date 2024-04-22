@@ -10,15 +10,40 @@ html, body {
     height:100%;
 }
 
-h1 {
-  font-size: 2.5em;
-  margin: 0 0 0.5em;
-}
-#menuContainer{
+
+#loadingScreen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #f2d1d1;
+    color: #fff;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    font-size: 2em;
 }
 
+#fps {
+    position: absolute;
+    background-color: rgb(130, 6, 212);
+    text-align: center;
+    font-size: 16px;
+    color: white;
+    top: 15px;
+    right: 10px;
+    width: 60px;
+    height: 20px;
+}
 
+#loadingBar {
+    border: 1px solid #000;
+    width: 50%;
+    height: 20px;
+}
+
+#loadingBarFill {
+    background: greenyellow;
+    width: 100%;
+    height: 100%;
+}
