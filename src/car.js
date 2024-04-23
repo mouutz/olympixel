@@ -77,17 +77,17 @@ export class Car {
         if (this.speed !== 0) {
             //si on avance
             if(this.speed < 0) {
-            if (inputMap["q"]) {
+            if (inputMap["q"] || inputMap["Q"]) {
                 this.carHitbox.rotation.y -= this.rotationRate;
-            } else if (inputMap["d"]) {
+            } else if (inputMap["d"] || inputMap["D"]) {
                 this.carHitbox.rotation.y += this.rotationRate;
             }
         }
         //si on recule
         else{
-            if (inputMap["q"]) {
+            if (inputMap["q"] || inputMap["Q"]) {
                 this.carHitbox.rotation.y += this.rotationRate;
-            } else if (inputMap["d"]) {
+            } else if (inputMap["d"] || inputMap["D"]) {
                 this.carHitbox.rotation.y -= this.rotationRate;
             }
         }

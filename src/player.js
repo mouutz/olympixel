@@ -22,6 +22,7 @@ export class Player {
     this.yacht2 = scene.getMeshByName("Yacht_2");
     this.boat2 = scene.getMeshByName("Boat_2__1_");
     this.ambulance = scene.getMeshByName("Ambulance_1__2_");
+    this.postBox = this.scene.getMeshByName("Post_box_1");
   }
 
   async createHero() {
@@ -146,6 +147,20 @@ export class Player {
         }
       }
     }
+
+    //Verifivation de l'intyeraction avec la boite au lettre "Post_box_1"
+    if (this.postBox) {
+      var distanceToPostBox = BABYLON.Vector3.Distance(
+        this.heroBox.position,
+        this.postBox.getAbsolutePosition()
+      );
+      if (distanceToPostBox < 3 && !this.isDriving && !this.guiManager.isReading) {
+        this.guiManager.setNotif(this.interactionNotification, true);
+        if (inputMap["e"] || inputMap["E"]) {
+          this.guiManager.showLetter("this.letterText");
+        }
+      }
+    }
   }
 
   interactWithCar(carHitbox) {
@@ -198,7 +213,7 @@ export class Player {
     this.audioManager.stopSound("drive0");
     this.audioManager.stopSound("drive1");
     this.audioManager.stopSound("caridle");
-    
+
     this.startAnimation("Idle");
 
     // Mettre à jour l'état du personnage
@@ -255,7 +270,7 @@ export class Player {
     this.checkInteraction(inputMap);
 
     if (this.isDriving) {
-      if (inputMap["f"]) {
+      if (inputMap["f"]|| inputMap["F"]) {
         this.exitCar();
       }
       this.car.move(inputMap, this.audioManager); // gestion du mouvement en voiture
@@ -263,7 +278,7 @@ export class Player {
       return;
     }
 
-    if(this.car.speed !== 0){
+    if (this.car.speed !== 0) {
       this.car.applyMovement();
     }
     this.raycast(this.heroBox);
@@ -285,42 +300,39 @@ export class Player {
         inputMap["s"] || inputMap["S"] ? "Back" : "Running";
       if (!this.isAnimating || this.currentAnimation !== runningAnimation) {
         this.startAnimation(runningAnimation);
-        if(!this.isJumping){
-        this.audioManager.playSound("run");
+        if (!this.isJumping) {
+          this.audioManager.playSound("run");
         }
         this.isAnimating = true;
       }
       isMoving = true;
     }
 
-    
     if (this.isJumping) {
       this.jumpTime += deltaTime;
-      if (this.jumpTime <= this.JUMP_COOLDOWN/2) {
+      if (this.jumpTime <= this.JUMP_COOLDOWN / 2) {
         // Continue la montée si le temps de montée n'est pas écoulé
         this.heroBox.position.y += this.verticalSpeed;
+      }
     }
-  }
 
-  
     // gestion du saut pendant la course
     if (inputMap[" "]) {
       if (this.isJumping) return;
-      
+
       this.audioManager.stopSound("run");
       this.startAnimation("Jump");
       this.audioManager.playSound("jump");
       this.isJumping = true;
       this.jumpTime = 0;
       this.verticalSpeed = this.JUMP_POWER;
-      
+
       setTimeout(() => {
         this.isAnimating = false;
         this.isJumping = false;
         this.startAnimation("Idle");
       }, this.JUMP_COOLDOWN); // Durée estimée de l'animation de saut
     }
-
 
     // Interaction
     if (inputMap["e"] || (inputMap["E"] && !this.isAnimating)) {
@@ -371,4 +383,5 @@ export class Player {
   setCamera(camera) {
     this.camera = camera;
   }
+
 }
