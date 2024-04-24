@@ -177,11 +177,9 @@ anneau.material = materialRouge;
 //no relfection on the material 
 anneau.material.reflectionTexture = null;
 
-    // Mettre à jour la position de l'anneau pour qu'il suive le héros
     scene.onBeforeRenderObservable.add(() => {
       anneau.position.x = hero.position.x;
       anneau.position.z = hero.position.z;
-      // La hauteur (y) peut rester constante ou être ajustée si nécessaire
   });
 
 // Positionner l'anneau
@@ -192,7 +190,7 @@ anneau.layerMask = 0x10000000;
 const removePlayerMarker = function () {
   var anneau = scene.getMeshByName("anneau");
   if (anneau) {
-      anneau.dispose();  // Supprime le mesh de la scène
+      anneau.dispose(); 
   }
 }
 

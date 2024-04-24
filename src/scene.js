@@ -11,6 +11,7 @@ export const createScene = async function (engine) {
   );
   light.intensity = 1;
 
+
   // Chargement de la scène (ville) et activation des collisions
   const result = await BABYLON.SceneLoader.ImportMeshAsync(
     "",
@@ -23,9 +24,6 @@ export const createScene = async function (engine) {
     mesh.checkCollisions = true;
   });
 
-
-
-
   var square = BABYLON.MeshBuilder.CreateBox("square", { size: 4 }, scene);
   square.position = new BABYLON.Vector3(42, 3, 49);
   square.rotation.x = Math.PI / 2;
@@ -34,9 +32,9 @@ export const createScene = async function (engine) {
   redMaterial.diffuseColor = new BABYLON.Color3(1, 0, 0); // Red
   square.material = redMaterial;
   square.isInteractable = true;
+
   return scene;
 };
-
 
 let hauteur = 50;
 let isMinimapAgrandi = false;

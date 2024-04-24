@@ -86,20 +86,22 @@ const adjustSkyboxSetting = (property, value) => {
 };
 adjustSkyboxSetting("inclination", 0); // jour
 //adjustSkyboxSetting("inclination", -0.5); //nuit
+
 /* ---------------------------
 ----Gestion audio----
 -----------------------------*/
 
-const audioManager = new GameAudioManager(scene);
+export const audioManager = new GameAudioManager(scene);
 audioManager.loadSounds();
 
 /* ---------------------------
 ---------Creation joueur-------
 -----------------------------*/
 
-const heroPlayer = new Player(scene,camera, audioManager);
+const heroPlayer = new Player(scene,camera);
 
 const hero = await heroPlayer.createHero();
+scene.audioListenerPositionProvider =  () => hero.getAbsolutePosition();
 /* ---------------------------
 ---------Creation Camera-------
 -----------------------------*/

@@ -1,8 +1,9 @@
 import { GUIManager } from "./guiManager.js";
-import { Car } from "./car.js"; // Importez la classe Car
+import { Car } from "./car.js"; 
+import { audioManager } from "./main.js";
 
 export class Player {
-  constructor(scene, camera, audioManager) {
+  constructor(scene, camera) {
     this.scene = scene;
     this.camera = camera;
     this.guiManager = new GUIManager(scene);
@@ -12,17 +13,11 @@ export class Player {
     this.speed = 20;
     this.audioManager = audioManager;
     this.isJumping = false;
-    this.car = new Car(scene, camera, audioManager);
+    this.car = new Car(scene, camera);
     this.JUMP_COOLDOWN = 750;
     this.JUMP_POWER = 5.3;
     this.jumpTime = 0;
 
-    this.river = scene.getMeshByName("Bridge_Tile_1.001");
-    this.yacht = scene.getMeshByName("Yacht_1");
-    this.yacht2 = scene.getMeshByName("Yacht_2");
-    this.boat2 = scene.getMeshByName("Boat_2__1_");
-    this.ambulance = scene.getMeshByName("Ambulance_1__2_");
-    this.postBox = this.scene.getMeshByName("Post_box_1");
   }
 
   async createHero() {
@@ -52,79 +47,26 @@ export class Player {
     this.scene.hero = this;
 
     await this.car.createCar();
+
     return this.heroBox;
   }
 
-  updateEnvironmentSounds(hero_position) {
-    var river_position = this.river.getAbsolutePosition();
-    var yacht_position = this.yacht.getAbsolutePosition();
-    var yacht2_position = this.yacht2.getAbsolutePosition();
-    var boat2_position = this.boat2.getAbsolutePosition();
-    var ambulance_position = this.ambulance.getAbsolutePosition();
-
-    if (this.river && this.yacht && this.boat2 && this.yacht2) {
-      var D_hero_river = BABYLON.Vector3.Distance(
-        hero_position,
-        river_position
-      );
-      var D_hero_yacht = BABYLON.Vector3.Distance(
-        hero_position,
-        yacht_position
-      );
-
-      var D_hero_yacht2 = BABYLON.Vector3.Distance(
-        hero_position,
-        yacht2_position
-      );
-
-      var D_hero_boat2 = BABYLON.Vector3.Distance(
-        hero_position,
-        boat2_position
-      );
-
-      if (
-        D_hero_river < 50 ||
-        D_hero_yacht < 50 ||
-        D_hero_boat2 < 50 ||
-        D_hero_yacht2 < 30
-      ) {
-        this.audioManager.playSound("river");
-        this.audioManager.stopSound("city");
-      } else {
-        this.audioManager.stopSound("river");
-        this.audioManager.playSound("city");
-      }
-    } else {
-      this.audioManager.playSound("city");
-    }
-
-    if (this.ambulance) {
-      var D_hero_ambu = BABYLON.Vector3.Distance(
-        hero_position,
-        ambulance_position
-      );
-
-      if (D_hero_ambu < 30) {
-        this.audioManager.playSound("ambulance");
-      } else {
-        this.audioManager.stopSound("ambulance");
-      }
-    }
-  }
+  
   checkInteraction(inputMap) {
-    var interactableObject = this.scene.getMeshByName("square");
-    var carHitbox = this.scene.getMeshByName("carHitbox");
 
     // Réinitialisation de la notification
     this.guiManager.setNotif(this.interactionNotification, false);
+    if (this.isDriving) return;
 
+    var interactableObject = this.scene.getMeshByName("square");
+    var carHitbox = this.car.carHitbox;
     // Vérification de l'interaction avec l'objet "square"
     if (interactableObject && interactableObject.isInteractable) {
       var distanceToObject = BABYLON.Vector3.Distance(
         this.heroBox.position,
         interactableObject.position
       );
-      if (distanceToObject < 5 && !this.isDriving) {
+      if (distanceToObject < 5) {
         this.guiManager.setNotif(this.interactionNotification, true);
         if (inputMap["e"] || inputMap["E"]) {
           setTimeout(() => {
@@ -140,7 +82,7 @@ export class Player {
         this.heroBox.position,
         carHitbox.position
       );
-      if (distanceToCar < 5 && !this.isDriving) {
+      if (distanceToCar < 5) {
         this.guiManager.setNotif(this.interactionNotification, true);
         if (inputMap["e"] || inputMap["E"]) {
           this.interactWithCar(carHitbox);
@@ -172,7 +114,6 @@ export class Player {
     this.heroBox.setParent(carHitbox);
     this.heroBox.rotationQuaternion = BABYLON.Quaternion.Identity();
     this.isDriving = true;
-
     //changer la hitbox du hero pour la hitbox de la voiture
     this.heroBox.checkCollisions = false;
 
@@ -196,7 +137,7 @@ export class Player {
     this.heroBox.checkCollisions = true;
 
     // Positionner le héros à côté de la voiture
-    var carHitbox = this.scene.getMeshByName("carHitbox");
+    var carHitbox = this.car.carHitbox;
     if (carHitbox) {
       var leftSideOffset = new BABYLON.Vector3(3, 0, 0); // 3 mètres sur le côté gauche
       leftSideOffset.rotateByQuaternionAroundPointToRef(
@@ -210,9 +151,6 @@ export class Player {
       this.heroBox.rotation.y = carHitbox.rotation.y;
       this.hero.rotation.y = carHitbox.rotation.y;
     }
-    this.audioManager.stopSound("drive0");
-    this.audioManager.stopSound("drive1");
-    this.audioManager.stopSound("caridle");
 
     this.startAnimation("Idle");
 
@@ -257,8 +195,7 @@ export class Player {
   }
 
   move(inputMap) {
-    const deltaTime = this.scene.getEngine().getDeltaTime() / 1000.0;
-    let hero_position = this.heroBox.getAbsolutePosition();
+    let deltaTime = this.scene.getEngine().getDeltaTime() / 1000.0;
     let isMoving = false;
     const forward = new BABYLON.Vector3(
       Math.sin(this.heroBox.rotation.y),
@@ -266,15 +203,13 @@ export class Player {
       Math.cos(this.heroBox.rotation.y)
     );
 
-    this.updateEnvironmentSounds(hero_position);
     this.checkInteraction(inputMap);
 
     if (this.isDriving) {
       if (inputMap["f"]|| inputMap["F"]) {
         this.exitCar();
       }
-      this.car.move(inputMap, this.audioManager,deltaTime); // gestion du mouvement en voiture
-
+      this.car.move(inputMap);
       return;
     }
 

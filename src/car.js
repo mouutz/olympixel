@@ -1,14 +1,16 @@
+import { audioManager } from "./main.js";
 export class Car {
-    constructor(scene, camera, audioManager) {
+    constructor(scene, camera) {
         this.scene = scene;
         this.camera = camera;
         this.carHitbox = null;
         this.speed = 0;
-        this.acceleration = 0.005;
+        this.acceleration = 0.05;
         this.deceleration = 0.002;
-        this.maxSpeed = 0.25;
+        this.maxSpeed = 0.45;
         this.rotationRate = 0.02;
         this.audioManager = audioManager;
+        
     }
 
     async createCar() {
@@ -24,6 +26,10 @@ export class Car {
         carObject.position = new BABYLON.Vector3(0, -0.85, 0);
         this.carObjet = carObject;
 
+        this.audioManager.sounds.drive1.attachToMesh(this.carHitbox);
+        this.audioManager.sounds.drive0.attachToMesh(this.carHitbox);
+        this.audioManager.sounds.caridle.attachToMesh(this.carHitbox);
+
         return this.carHitbox;
     }
 
@@ -38,29 +44,41 @@ export class Car {
     }
     
 
-    //faonction qui lance le son quand la voiture avance et s'arrete
+    //fonction qui lance le son quand la voiture avance et s'arrete
     carsoud(){
         if(this.speed > 0){
-            this.audioManager.playSound("drive0");
-            
-        }
-        else{
-            this.audioManager.stopSound("drive0");
-        }
-
-        if(this.speed < 0){
-            this.audioManager.playSound("drive1");
-            
-        }else{
-            this.audioManager.stopSound("drive1");
+            if (!this.audioManager.sounds.drive0.isPlaying) {
+                this.audioManager.playSound("drive0");
+            }
+            if (this.audioManager.sounds.drive1.isPlaying) {
+                this.audioManager.stopSound("drive1");
+            }
+            if (this.audioManager.sounds.caridle.isPlaying) {
+                this.audioManager.stopSound("caridle");
+            }
+        } else if(this.speed < 0){
+            if (!this.audioManager.sounds.drive1.isPlaying) {
+                this.audioManager.playSound("drive1");
+            }
+            if (this.audioManager.sounds.drive0.isPlaying) {
+                this.audioManager.stopSound("drive0");
+            }
+            if (this.audioManager.sounds.caridle.isPlaying) {
+                this.audioManager.stopSound("caridle");
+            }
+        } else if(this.speed === 0){
+            if (!this.audioManager.sounds.caridle.isPlaying) {
+                this.audioManager.playSound("caridle");
+            }
+            if (this.audioManager.sounds.drive0.isPlaying) {
+                this.audioManager.stopSound("drive0");
+            }
+            if (this.audioManager.sounds.drive1.isPlaying) {
+                this.audioManager.stopSound("drive1");
+            }
         }   
-        if(this.speed === 0 ){
-            this.audioManager.playSound("caridle");
-        }else{
-            this.audioManager.stopSound("caridle");
-        }
-    
     }
+    
 
 
     updateSpeed(inputMap) {
