@@ -9,12 +9,12 @@ export class Player {
     this.interactionNotification = this.guiManager.createNotif();
     this.isAnimating = false;
     this.isDriving = false;
-    this.speed = 0.15;
+    this.speed = 20;
     this.audioManager = audioManager;
     this.isJumping = false;
     this.car = new Car(scene, camera, audioManager);
     this.JUMP_COOLDOWN = 750;
-    this.JUMP_POWER = 0.05;
+    this.JUMP_POWER = 5.3;
     this.jumpTime = 0;
 
     this.river = scene.getMeshByName("Bridge_Tile_1.001");
@@ -257,7 +257,7 @@ export class Player {
   }
 
   move(inputMap) {
-    let deltaTime = this.scene.getEngine().getDeltaTime();
+    const deltaTime = this.scene.getEngine().getDeltaTime() / 1000.0;
     let hero_position = this.heroBox.getAbsolutePosition();
     let isMoving = false;
     const forward = new BABYLON.Vector3(
@@ -273,28 +273,28 @@ export class Player {
       if (inputMap["f"]|| inputMap["F"]) {
         this.exitCar();
       }
-      this.car.move(inputMap, this.audioManager); // gestion du mouvement en voiture
+      this.car.move(inputMap, this.audioManager,deltaTime); // gestion du mouvement en voiture
 
       return;
     }
 
     if (this.car.speed !== 0) {
-      this.car.applyMovement();
+      this.car.applyMovement(deltaTime);
     }
     this.raycast(this.heroBox);
     // Rotation du personnage avec Q et D
     if (inputMap["q"] || inputMap["Q"]) {
-      this.heroBox.rotation.y -= 0.04;
+      this.heroBox.rotation.y -= 5.3 * deltaTime;
     }
     if (inputMap["d"] || inputMap["D"]) {
-      this.heroBox.rotation.y += 0.04;
+      this.heroBox.rotation.y += 5.3 * deltaTime;
     }
 
     // gestoin du mouvement et des animations de course
     if (inputMap["s"] || inputMap["S"] || inputMap["z"] || inputMap["Z"]) {
       let directionMultiplier = inputMap["s"] || inputMap["S"] ? 1 : -1;
       this.heroBox.moveWithCollisions(
-        forward.scale(this.speed * directionMultiplier)
+        forward.scale(this.speed * directionMultiplier * deltaTime)
       );
       let runningAnimation =
         inputMap["s"] || inputMap["S"] ? "Back" : "Running";
@@ -310,9 +310,11 @@ export class Player {
 
     if (this.isJumping) {
       this.jumpTime += deltaTime;
-      if (this.jumpTime <= this.JUMP_COOLDOWN / 2) {
-        // Continue la montée si le temps de montée n'est pas écoulé
-        this.heroBox.position.y += this.verticalSpeed;
+      if (this.jumpTime <= this.JUMP_COOLDOWN) {
+        // Appliquer la force de saut multipliée par deltaTime
+        this.heroBox.position.y += this.JUMP_POWER * deltaTime;
+      } else {
+        this.isJumping = false;
       }
     }
 
