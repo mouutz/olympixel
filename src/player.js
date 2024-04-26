@@ -195,7 +195,6 @@ export class Player {
   }
 
   move(inputMap) {
-    console.log(audioManager.sounds.caridle);
     let deltaTime = this.scene.getEngine().getDeltaTime() / 1000.0;
     let isMoving = false;
     const forward = new BABYLON.Vector3(
