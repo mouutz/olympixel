@@ -13,7 +13,7 @@ export class Player {
     this.speed = 20;
     this.audioManager = audioManager;
     this.isJumping = false;
-    this.car = new Car(scene, camera);
+    this.car = new Car(scene, camera, this.isDriving);
     this.JUMP_COOLDOWN = 750;
     this.JUMP_POWER = 5.3;
     this.jumpTime = 0;
@@ -195,6 +195,7 @@ export class Player {
   }
 
   move(inputMap) {
+    console.log(audioManager.sounds.caridle);
     let deltaTime = this.scene.getEngine().getDeltaTime() / 1000.0;
     let isMoving = false;
     const forward = new BABYLON.Vector3(
@@ -209,12 +210,12 @@ export class Player {
       if (inputMap["f"]|| inputMap["F"]) {
         this.exitCar();
       }
-      this.car.move(inputMap);
+      this.car.move(inputMap, this.isDriving);
       return;
     }
 
     if (this.car.speed !== 0) {
-      this.car.applyMovement(deltaTime);
+      this.car.applyMovement();
     }
     this.raycast(this.heroBox);
     // Rotation du personnage avec Q et D

@@ -1,15 +1,16 @@
 import { audioManager } from "./main.js";
 export class Car {
-    constructor(scene, camera) {
+    constructor(scene, camera, isDriving) {
         this.scene = scene;
         this.camera = camera;
         this.carHitbox = null;
         this.speed = 0;
-        this.acceleration = 0.05;
+        this.acceleration = 0.005;
         this.deceleration = 0.002;
-        this.maxSpeed = 0.45;
+        this.maxSpeed = 0.30;
         this.rotationRate = 0.02;
         this.audioManager = audioManager;
+        this.isDriving = isDriving;
         
     }
 
@@ -33,7 +34,8 @@ export class Car {
         return this.carHitbox;
     }
 
-    move(inputMap) {
+    move(inputMap, isDriving) {
+        this.isDriving = isDriving;
         const hasInput = Object.keys(inputMap).some(k => inputMap[k]);
         if (hasInput) {
             this.updateSpeed(inputMap);
@@ -47,35 +49,22 @@ export class Car {
     //fonction qui lance le son quand la voiture avance et s'arrete
     carsoud(){
         if(this.speed > 0){
-            if (!this.audioManager.sounds.drive0.isPlaying) {
-                this.audioManager.playSound("drive0");
-            }
-            if (this.audioManager.sounds.drive1.isPlaying) {
+                this.audioManager.playSound("drive0",this.isDriving);
                 this.audioManager.stopSound("drive1");
-            }
-            if (this.audioManager.sounds.caridle.isPlaying) {
                 this.audioManager.stopSound("caridle");
             }
-        } else if(this.speed < 0){
-            if (!this.audioManager.sounds.drive1.isPlaying) {
-                this.audioManager.playSound("drive1");
-            }
-            if (this.audioManager.sounds.drive0.isPlaying) {
+         else if(this.speed < 0){
+           
+                this.audioManager.playSound("drive1", this.isDriving);
                 this.audioManager.stopSound("drive0");
-            }
-            if (this.audioManager.sounds.caridle.isPlaying) {
                 this.audioManager.stopSound("caridle");
-            }
-        } else if(this.speed === 0){
-            if (!this.audioManager.sounds.caridle.isPlaying) {
-                this.audioManager.playSound("caridle");
-            }
-            if (this.audioManager.sounds.drive0.isPlaying) {
+          }
+         else if(this.speed === 0){
+           
+                this.audioManager.playSound("caridle", this.isDriving);
                 this.audioManager.stopSound("drive0");
-            }
-            if (this.audioManager.sounds.drive1.isPlaying) {
                 this.audioManager.stopSound("drive1");
-            }
+
         }   
     }
     
@@ -121,6 +110,7 @@ export class Car {
     }
 
     applyDeceleration() {
+        this.isDriving ? this.deceleration = 0.002 : this.deceleration = 0.005;
         if (this.speed > 0) {
             this.speed = Math.max(this.speed - this.deceleration, 0);
         } else if (this.speed < 0) {

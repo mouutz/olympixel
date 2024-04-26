@@ -48,12 +48,12 @@ export class GameAudioManager {
         loop: true,
         autoplay: true,
         spatialSound: true,
-        maxDistance: 105,
+        maxDistance: 250,
         rolloffFactor: 15,
-        refDistance: 30,
+        refDistance: 120,
       }
     );
-    this.sounds.city.setVolume(0.05);
+    this.sounds.city.setVolume(0.1);
 
     this.sounds.ambulance = new BABYLON.Sound(
       "ambulance",
@@ -69,7 +69,7 @@ export class GameAudioManager {
         refDistance: 30,
       }
     );
-    this.sounds.ambulance.setVolume(0.03);
+    this.sounds.ambulance.setVolume(0.2);
 
     // sonns pour la voiture
     this.sounds.drive1 = new BABYLON.Sound(
@@ -80,14 +80,13 @@ export class GameAudioManager {
       {
         loop: true,
         autoplay: false,
-        maxDistance: 30,
+        maxDistance: 100,
         distanceModel: "exponential",
         spatialSound: true,
-        rolloffFactor: 2,
-        refDistance: 15,
+        refDistance: 100,
       }
     );
-    this.sounds.drive1.setVolume(0.05);
+    this.sounds.drive1.setVolume(0.1);
 
     this.sounds.drive0 = new BABYLON.Sound(
       "drive1",
@@ -97,14 +96,13 @@ export class GameAudioManager {
       {
         loop: true,
         autoplay: false,
-        maxDistance: 30,
+        maxDistance: 100,
         distanceModel: "exponential",
         spatialSound: true,
-        rolloffFactor: 2,
-        refDistance: 15,
+        refDistance: 100,
       }
     );
-    this.sounds.drive0.setVolume(0.05);
+    this.sounds.drive0.setVolume(0.1);
 
     this.sounds.caridle = new BABYLON.Sound(
       "caridle",
@@ -114,33 +112,40 @@ export class GameAudioManager {
       {
         loop: true,
         autoplay: false,
-        maxDistance: 30,
+        maxDistance: 100,
         distanceModel: "exponential",
         spatialSound: true,
-        rolloffFactor: 2,
-        refDistance: 15,
+        refDistance: 100,
       }
     );
-    this.sounds.caridle.setVolume(0.05);
+    this.sounds.caridle.setVolume(0.1);
 
     this.attachSoundsToMesh();
   }
 
-  playSound(name) {
+  playSound(name, isDriving = false) {
+    if(!isDriving){
+      this.sounds[name].updateOptions({ maxDistance: 30, refDistance: 8, rolloffFactor : 1});
+    }
+    else {
+      this.sounds[name].updateOptions({ maxDistance: 150, refDistance: 150, rolloffFactor : 1});
+    }
     if (this.sounds[name] && !this.sounds[name].isPlaying) {
       //baiiser le volum de tout les sons de la voiture uniquement
       if (
         name === "drive1" ||
         name === "drive0" ||
-        name === "caridle" ||
-        name === "jump" ||
-        name === "ambulance"
-      ) {
-        this.sounds[name].setVolume(0.05);
+        name === "caridle" ) {
+          if(!isDriving){
+            this.sounds[name].setVolume(0.3);
+          }
+         else {
+          this.sounds[name].setVolume(0.5);
+        } 
       } else if (name === "beach") {
         this.sounds[name].setVolume(0.1);
       } else {
-        this.sounds[name].setVolume(0.1);
+        this.sounds[name].setVolume(0.7);
       }
 
       this.sounds[name].play();
