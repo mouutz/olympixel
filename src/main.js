@@ -121,7 +121,7 @@ const viewportAgrandi = new BABYLON.Viewport(0, 0, 1, 1);
 
 let minimapAgrandie = false;
 
-
+hideLoadingScreen();
 /* ---------------------------
 ----Creation indicateur objectif----
 -----------------------------*/
@@ -193,13 +193,6 @@ const changeLight = function (op) {
 }
 }
 
-createScene().then(function (createdScene) {
-  // Débogueur
-  /*createdScene.debugLayer.show({
-    overlay: true,
-    globalRoot: document.getElementById("debugLayer"),
-  });*/
-});
 
 window.addEventListener("resize", function () {
   engine.resize();
@@ -271,4 +264,12 @@ const handleMinimap = function () {
     inputMap["M"] = false;
 }
 
+}
+
+
+function hideLoadingScreen() {
+  const loadingScreen = document.getElementById("loadingScreen");
+  if (loadingScreen) {
+      loadingScreen.remove(); // Ou retirer l'écran du DOM
+  }
 }

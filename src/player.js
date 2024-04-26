@@ -21,6 +21,7 @@ export class Player {
   }
 
   async createHero() {
+    document.getElementById('numero').innerHTML = "2/2";
     this.heroBox = BABYLON.MeshBuilder.CreateBox(
       "heroBox",
       { width: 1, height: 2, depth: 1 },
@@ -34,8 +35,13 @@ export class Player {
       "",
       "assets/models/",
       "perso.glb",
-      this.scene
-    );
+      this.scene,
+      function (event) {
+        if (event.lengthComputable) {
+            let percentComplete = (event.loaded / event.total) * 100;
+            updateLoadingBar(percentComplete);
+        }
+    });
     this.animations = result.animationGroups;
     let heroModel = result.meshes[0];
     heroModel.parent = this.heroBox;
@@ -215,6 +221,7 @@ export class Player {
 
     if (this.car.speed !== 0) {
       this.car.applyMovement();
+      this.car.updateRotation2(inputMap);
     }
     this.raycast(this.heroBox);
     // Rotation du personnage avec Q et D
@@ -321,4 +328,13 @@ export class Player {
     this.camera = camera;
   }
 
+}
+
+
+function updateLoadingBar(percent) {
+  const loadingBar = document.getElementById("loadingBarFill");
+  if (loadingBar) {
+      // Mise à jour directe de la largeur de la barre de chargement
+      loadingBar.style.width = `${percent}%`; // Définit la largeur en fonction du pourcentage de chargement
+  }
 }

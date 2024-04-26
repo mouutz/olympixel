@@ -9,6 +9,9 @@ export class Car {
         this.deceleration = 0.002;
         this.maxSpeed = 0.30;
         this.rotationRate = 0.02;
+        this.rotationVelocity = 0;
+        this.rotationDeceleration = 0.01;
+        this.rotationAcceleration = 0.0003;
         this.audioManager = audioManager;
         this.isDriving = isDriving;
         
@@ -41,7 +44,7 @@ export class Car {
             this.updateSpeed(inputMap);
             this.updateRotation(inputMap);
         }
-
+        this.rotationVelocity *= (1 - this.rotationDeceleration);
         this.applyMovement();
     }
     
@@ -81,25 +84,54 @@ export class Car {
     }
 
     updateRotation(inputMap) {
+        console.log(this.rotationVelocity);
         if (this.speed !== 0) {
             //si on avance
             if(this.speed < 0) {
             if (inputMap["q"] || inputMap["Q"]) {
                 this.carHitbox.rotation.y -= this.rotationRate;
+                if(this.rotationVelocity > -this.rotationRate*1.5){
+                    this.rotationVelocity += -this.rotationAcceleration;
+                }
             } else if (inputMap["d"] || inputMap["D"]) {
                 this.carHitbox.rotation.y += this.rotationRate;
+                if(this.rotationVelocity < this.rotationRate*1.5){
+                    this.rotationVelocity += this.rotationAcceleration;
+                }
             }
         }
         //si on recule
         else{
             if (inputMap["q"] || inputMap["Q"]) {
                 this.carHitbox.rotation.y += this.rotationRate;
+                if(this.rotationVelocity < this.rotationRate*1.5){
+                    this.rotationVelocity += this.rotationAcceleration;
+                }
             } else if (inputMap["d"] || inputMap["D"]) {
                 this.carHitbox.rotation.y -= this.rotationRate;
+                if(this.rotationVelocity > -this.rotationRate*1.5){
+                this.rotationVelocity += -this.rotationAcceleration;
+                }
+
             }
         }
     }
 }
+
+updateRotation2() {
+ 
+
+    // Appliquer la décélération en tout temps
+    if (Math.abs(this.rotationVelocity) < 0.0005) { // Un seuil pour arrêter complètement la rotation
+        this.rotationVelocity = 0;
+    } else {
+        this.rotationVelocity *= (1 - this.rotationDeceleration);
+    }
+
+    // Appliquer la rotation accumulée
+    this.carHitbox.rotation.y += this.rotationVelocity;
+}
+
 
     applyMovement() {
         const forward = new BABYLON.Vector3(Math.sin(this.carHitbox.rotation.y), 0, Math.cos(this.carHitbox.rotation.y));
@@ -110,7 +142,7 @@ export class Car {
     }
 
     applyDeceleration() {
-        this.isDriving ? this.deceleration = 0.002 : this.deceleration = 0.005;
+        this.isDriving ? this.deceleration = 0.002 : this.deceleration = 0.002;
         if (this.speed > 0) {
             this.speed = Math.max(this.speed - this.deceleration, 0);
         } else if (this.speed < 0) {

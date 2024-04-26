@@ -2,7 +2,6 @@
 export const createScene = async function (engine) {
   var scene = new BABYLON.Scene(engine);
   scene.collisionsEnabled = true;
-  
   // Configuration de la lumière
   var light = new BABYLON.HemisphericLight(
     "light1",
@@ -17,8 +16,13 @@ export const createScene = async function (engine) {
     "",
     "assets/models/",
     "city_low.glb",
-    scene
-  );
+    scene,
+    function (event) {
+      if (event.lengthComputable) {
+          let percentComplete = (event.loaded / event.total) * 100;
+          updateLoadingBar(percentComplete);
+      }
+  } );
 
   result.meshes.forEach((mesh) => {
     mesh.checkCollisions = true;
@@ -93,3 +97,12 @@ export const createMinimap = function (scene, canvas, hero) {
   return camera;
 
 }
+
+function updateLoadingBar(percent) {
+  const loadingBar = document.getElementById("loadingBarFill");
+  if (loadingBar) {
+      // Mise à jour directe de la largeur de la barre de chargement
+      loadingBar.style.width = `${percent}%`; // Définit la largeur en fonction du pourcentage de chargement
+  }
+}
+

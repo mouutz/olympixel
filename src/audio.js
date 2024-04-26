@@ -125,7 +125,7 @@ export class GameAudioManager {
 
   playSound(name, isDriving = false) {
     if(!isDriving){
-      this.sounds[name].updateOptions({ maxDistance: 30, refDistance: 8, rolloffFactor : 1});
+      this.sounds[name].updateOptions({ maxDistance: 17, refDistance: 8, rolloffFactor : 1});
     }
     else {
       this.sounds[name].updateOptions({ maxDistance: 150, refDistance: 150, rolloffFactor : 1});
