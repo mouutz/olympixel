@@ -69,7 +69,7 @@ export class GameAudioManager {
         refDistance: 30,
       }
     );
-    this.sounds.ambulance.setVolume(0.2);
+    this.sounds.ambulance.setVolume(0.04);
 
     // sonns pour la voiture
     this.sounds.drive1 = new BABYLON.Sound(

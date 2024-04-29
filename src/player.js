@@ -10,7 +10,7 @@ export class Player {
     this.interactionNotification = this.guiManager.createNotif();
     this.isAnimating = false;
     this.isDriving = false;
-    this.speed = 20;
+    this.speed = 15;
     this.audioManager = audioManager;
     this.isJumping = false;
     this.car = new Car(scene, camera, this.isDriving);
@@ -96,7 +96,9 @@ export class Player {
       }
     }
 
+
     //Verifivation de l'intyeraction avec la boite au lettre "Post_box_1"
+    this.postBox = this.scene.getMeshByName("Post_box_1");
     if (this.postBox) {
       var distanceToPostBox = BABYLON.Vector3.Distance(
         this.heroBox.position,
@@ -109,7 +111,39 @@ export class Player {
         }
       }
     }
+
+    // Vérification de l'interaction avec coffre "Sketchfab_model"
+    this.sketchfab_model = this.scene.getTransformNodeByName("Chest");
+    if (this.sketchfab_model) {
+      var distanceToSketchfab = BABYLON.Vector3.Distance(
+        this.heroBox.position,
+        this.sketchfab_model.getAbsolutePosition()
+      );
+      this.scene.animationGroups.forEach((anim) => {
+        if (anim.name === "ChestBody|Chest_Shake") {
+          anim.start(false, 1, anim.from, anim.to, false);
+        }
+      });
+      if (distanceToSketchfab < 3 && !this.isDriving && !this.guiManager.isReading) {
+        this.guiManager.setNotif(this.interactionNotification, true);
+        if (inputMap["e"] || inputMap["E"]) {
+
+          //lancer l'animation "Chest_Up|Chest_Open_Close" uen seule fois
+          this.scene.animationGroups.forEach((anim) => {
+            if (anim.name === "Chest_Up|Chest_Open_Close") {
+              anim.start(false, 1, anim.from, anim.to, false);
+            }
+            //dispose le coffre après 5 secondes
+            setTimeout(() => {
+              this.sketchfab_model.dispose();
+            }, 5000);
+          });
+        }
+      }
+    }
   }
+
+  
 
   interactWithCar(carHitbox) {
     this.heroBox.position = carHitbox.position.clone();

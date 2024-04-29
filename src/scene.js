@@ -15,7 +15,7 @@ export const createScene = async function (engine) {
   const result = await BABYLON.SceneLoader.ImportMeshAsync(
     "",
     "assets/models/",
-    "city_low.glb",
+    "city12.glb",
     scene,
     function (event) {
       if (event.lengthComputable) {
@@ -36,6 +36,9 @@ export const createScene = async function (engine) {
   redMaterial.diffuseColor = new BABYLON.Color3(1, 0, 0); // Red
   square.material = redMaterial;
   square.isInteractable = true;
+
+  //debug layer pour voir les collisions
+  //scene.debugLayer.show();
 
   return scene;
 };
