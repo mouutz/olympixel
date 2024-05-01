@@ -270,6 +270,6 @@ const handleMinimap = function () {
 function hideLoadingScreen() {
   const loadingScreen = document.getElementById("loadingScreen");
   if (loadingScreen) {
-      loadingScreen.remove(); // Ou retirer l'écran du DOM
+    loadingScreen.style.display = 'none'
   }
 }

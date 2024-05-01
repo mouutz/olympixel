@@ -1,5 +1,5 @@
 import { GUIManager } from "./guiManager.js";
-import { Car } from "./car.js"; 
+import { Car } from "./car.js";
 import { audioManager } from "./main.js";
 
 export class Player {
@@ -38,10 +38,10 @@ export class Player {
       this.scene,
       function (event) {
         if (event.lengthComputable) {
-            let percentComplete = (event.loaded / event.total) * 100;
-            updateLoadingBar(percentComplete);
+          let percentComplete = (event.loaded / event.total) * 100;
+          updateLoadingBar(percentComplete);
         }
-    });
+      });
     this.animations = result.animationGroups;
     let heroModel = result.meshes[0];
     heroModel.parent = this.heroBox;
@@ -57,7 +57,7 @@ export class Player {
     return this.heroBox;
   }
 
-  
+
   checkInteraction(inputMap) {
 
     // Réinitialisation de la notification
@@ -75,9 +75,7 @@ export class Player {
       if (distanceToObject < 5) {
         this.guiManager.setNotif(this.interactionNotification, true);
         if (inputMap["e"] || inputMap["E"]) {
-          setTimeout(() => {
-            window.location.href = "page2.html";
-          }, 1000);
+          this.playLabyrinthe();
         }
       }
     }
@@ -143,7 +141,44 @@ export class Player {
     }
   }
 
-  
+  async playLabyrinthe() {
+
+    showLoadingScreen();
+    this.heroBox.setAbsolutePosition(new BABYLON.Vector3(99, 5, 90.5));
+ 
+    const result = await BABYLON.SceneLoader.ImportMeshAsync( 
+      "",
+      "assets/models/",
+      "maze2.glb",
+      this.scene,
+      function (event) {
+        if (event.lengthComputable) {
+          let percentComplete = (event.loaded / event.total) * 100;
+          updateLoadingBar(percentComplete);
+        }
+      }
+    );
+
+
+    // Créer un mesh parent pour contenir tous les meshes du labyrinthe
+    let mazeParent = new BABYLON.Mesh("mazeParent", this.scene);
+    mazeParent.position = new BABYLON.Vector3(100, 0, 100); // Position du parent
+    mazeParent.rotation.x = BABYLON.Tools.ToRadians(-90);
+    result.meshes.forEach(mesh => {
+      mesh.parent = mazeParent; // Définir le parent
+      mesh.checkCollisions = true;
+      if(mesh.name === "Object_2"){
+        mesh.checkCollisions = false;
+      }
+    });
+    mazeParent.scaling = new BABYLON.Vector3(3.5, 3.5, 3.5);
+    this.camera.radius = 7; 
+    this.camera.heightOffset = 3; 
+    hideLoadingScreen();
+  }
+
+
+
 
   interactWithCar(carHitbox) {
     this.heroBox.position = carHitbox.position.clone();
@@ -246,7 +281,7 @@ export class Player {
     this.checkInteraction(inputMap);
 
     if (this.isDriving) {
-      if (inputMap["f"]|| inputMap["F"]) {
+      if (inputMap["f"] || inputMap["F"]) {
         this.exitCar();
       }
       this.car.move(inputMap, this.isDriving);
@@ -368,7 +403,21 @@ export class Player {
 function updateLoadingBar(percent) {
   const loadingBar = document.getElementById("loadingBarFill");
   if (loadingBar) {
-      // Mise à jour directe de la largeur de la barre de chargement
-      loadingBar.style.width = `${percent}%`; // Définit la largeur en fonction du pourcentage de chargement
+    // Mise à jour directe de la largeur de la barre de chargement
+    loadingBar.style.width = `${percent}%`; // Définit la largeur en fonction du pourcentage de chargement
+  }
+}
+
+function hideLoadingScreen() {
+  const loadingScreen = document.getElementById("loadingScreen");
+  if (loadingScreen) {
+    loadingScreen.style.display = 'none'
+  }
+}
+
+function showLoadingScreen() {
+  const loadingScreen = document.getElementById("loadingScreen");
+  if (loadingScreen) {
+    loadingScreen.style.display = 'flex'
   }
 }
