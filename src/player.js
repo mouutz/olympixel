@@ -17,6 +17,7 @@ export class Player {
     this.JUMP_COOLDOWN = 750;
     this.JUMP_POWER = 5.3;
     this.jumpTime = 0;
+    this.rings = [];
 
   }
 
@@ -75,7 +76,8 @@ export class Player {
       if (distanceToObject < 5) {
         this.guiManager.setNotif(this.interactionNotification, true);
         if (inputMap["e"] || inputMap["E"]) {
-          this.playLabyrinthe();
+          //this.playLabyrinthe();
+          recupererAnneaux("blue");
         }
       }
     }
@@ -421,3 +423,21 @@ function showLoadingScreen() {
     loadingScreen.style.display = 'flex'
   }
 }
+
+function recupererAnneaux(color) {
+  const ring = document.querySelector(`.ring.${color}`);
+  console.log(ring);
+  console.log(ring.classList);
+  if (ring) {
+      ring.classList.add('animate');
+      ring.classList.remove('nonCollected');
+      // Remove the animation class and add the collected class after the animation is complete
+      ring.addEventListener('animationend', function() {
+          ring.classList.remove('animate');
+          ring.classList.add('collected');
+      }, { once: true });
+  } else {
+      console.error(`No ring found with the color: ${color}`);
+  }
+}
+

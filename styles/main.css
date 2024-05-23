@@ -47,3 +47,102 @@ html, body {
     width: 100%;
     height: 100%;
 }
+
+  
+.logo {
+  position: absolute;
+  right: 50%;
+  top: 2.5vh;
+}
+
+.ring {
+  width: 3vh;
+  height: 3vh;
+  border-radius: 50%;
+  border: solid 0.5vh;
+  position: absolute;
+  background: transparent;
+  opacity: 0.3;
+  transition: opacity 2s;
+}
+
+.blue {
+  border-color: #0085c7;
+  transform: rotateX(-45deg) scaleY(1.4142);
+}
+
+.yellow {
+  border-color: #f4c300;
+  left: 2.1vh;
+  top: 1.35vh;
+  transform: rotateX(0deg);
+}
+
+.black {
+  border-color: black;
+  left: 4.2vh;
+  transform: rotateX(45deg) scaleY(1.4142);
+}
+
+.green {
+  border-color: #009f3d;
+  top: 1.35vh;
+  left: 6.3vh;
+  transform: translateZ(20vh) rotateX(70deg) scaleY(2.9238);
+}
+
+.red {
+  border-color: #df0024;
+  left: 8.4vh;
+  transform: translateZ(-32vh) rotateX(80deg) scaleY(5.7588);
+}
+
+@keyframes animateRing {
+  0% {
+      opacity: 0.3;
+      transform: none;
+      top: initial;
+      left: initial;
+  }
+  50% {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, 500%) scale(3) rotate3d(1, 1, 0, 180deg);
+      opacity: 1;
+  }
+  75% {
+      transform: translate(-50%, 500%) scale(3) rotate3d(1, 1, 0, 360deg);
+      opacity: 1;
+  }
+  100% {
+      transform: none;
+      opacity: 1;
+      top: initial;
+      left: initial;
+  }
+}
+
+@keyframes pulsate {
+  0% {
+      box-shadow: 0px 0px 5px 1px rgba(255, 255, 255, 0.5);
+  }
+  50% {
+      box-shadow: 0px 0px 10px 3px rgba(255, 255, 255, 1);
+  }
+  100% {
+      box-shadow: 0px 0px 5px 1px rgba(255, 255, 255, 0.5);
+  }
+}
+
+.animate {
+  animation: animateRing 2s ease-in-out forwards;
+}
+
+.collected {
+  opacity: 1 !important;
+
+}
+
+.nonCollected {
+  animation: pulsate 3s infinite ease-in-out;
+}
