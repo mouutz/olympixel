@@ -84,7 +84,6 @@ export class Car {
     }
 
     updateRotation(inputMap) {
-        console.log(this.rotationVelocity);
         if (this.speed !== 0) {
             //si on avance
             if(this.speed < 0) {

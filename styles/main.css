@@ -101,8 +101,7 @@ html, body {
   0% {
       opacity: 0.3;
       transform: none;
-      top: initial;
-      left: initial;
+
   }
   50% {
       top: 50%;
@@ -117,8 +116,6 @@ html, body {
   100% {
       transform: none;
       opacity: 1;
-      top: initial;
-      left: initial;
   }
 }
 

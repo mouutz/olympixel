@@ -73,10 +73,10 @@ export class Player {
         this.heroBox.position,
         interactableObject.position
       );
-      //Si on a deja recuperer l'anneau bleu on ne peut plus l'interagir
-      if(this.rings.includes("blue")) return;
 
       if (distanceToObject < 5) {
+       //Si on a deja recuperer l'anneau bleu on ne peut plus l'interagir
+      if(this.rings.includes("blue")) return;
         this.guiManager.setNotif(this.interactionNotification, true);
         if (inputMap["e"] || inputMap["E"]) {
           //this.playLabyrinthe();
@@ -127,10 +127,14 @@ export class Player {
           anim.start(false, 1, anim.from, anim.to, false);
         }
       });
-      if (distanceToSketchfab < 3 && !this.isDriving && !this.guiManager.isReading) {
+
+      if (distanceToSketchfab < 3  && !this.guiManager.isReading) {
+        //si on a deja recuperer l'anneau rouge on ne peut plus l'interagir
+        if(this.rings.includes("red")) return;
         this.guiManager.setNotif(this.interactionNotification, true);
         if (inputMap["e"] || inputMap["E"]) {
-
+          //recuperer l'anneau rouge
+          this.recupererAnneaux("red");
           //lancer l'animation "Chest_Up|Chest_Open_Close" uen seule fois
           this.scene.animationGroups.forEach((anim) => {
             if (anim.name === "Chest_Up|Chest_Open_Close") {
