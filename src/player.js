@@ -73,11 +73,14 @@ export class Player {
         this.heroBox.position,
         interactableObject.position
       );
+      //Si on a deja recuperer l'anneau bleu on ne peut plus l'interagir
+      if(this.rings.includes("blue")) return;
+
       if (distanceToObject < 5) {
         this.guiManager.setNotif(this.interactionNotification, true);
         if (inputMap["e"] || inputMap["E"]) {
           //this.playLabyrinthe();
-          recupererAnneaux("blue");
+          this.recupererAnneaux("blue");
         }
       }
     }
@@ -399,6 +402,25 @@ export class Player {
     this.camera = camera;
   }
 
+
+   recupererAnneaux(color) {
+    const ring = document.querySelector(`.ring.${color}`);
+    this.rings.push(color);
+    console.log(ring);
+    console.log(ring.classList);
+    if (ring) {
+        ring.classList.add('animate');
+        ring.classList.remove('nonCollected');
+        // Remove the animation class and add the collected class after the animation is complete
+        ring.addEventListener('animationend', function() {
+            ring.classList.remove('animate');
+            ring.classList.add('collected');
+        }, { once: true });
+    } else {
+        console.error(`No ring found with the color: ${color}`);
+    }
+  }
+
 }
 
 
@@ -424,20 +446,5 @@ function showLoadingScreen() {
   }
 }
 
-function recupererAnneaux(color) {
-  const ring = document.querySelector(`.ring.${color}`);
-  console.log(ring);
-  console.log(ring.classList);
-  if (ring) {
-      ring.classList.add('animate');
-      ring.classList.remove('nonCollected');
-      // Remove the animation class and add the collected class after the animation is complete
-      ring.addEventListener('animationend', function() {
-          ring.classList.remove('animate');
-          ring.classList.add('collected');
-      }, { once: true });
-  } else {
-      console.error(`No ring found with the color: ${color}`);
-  }
-}
+
 
