@@ -18,6 +18,8 @@ export class Player {
     this.JUMP_POWER = 5.3;
     this.jumpTime = 0;
     this.rings = [];
+    this.teleportCooldown = 2000;
+    this.lastTeleportTime = 0;
 
   }
 
@@ -79,7 +81,7 @@ export class Player {
       if(this.rings.includes("blue")) return;
         this.guiManager.setNotif(this.interactionNotification, true);
         if (inputMap["e"] || inputMap["E"]) {
-          //this.playLabyrinthe();
+          this.playLabyrinthe();
           this.recupererAnneaux("blue");
         }
       }
@@ -379,6 +381,10 @@ export class Player {
       this.startAnimation("Idle");
       this.isAnimating = false;
     }
+
+    if ((inputMap["b"] || inputMap["B"]) && (inputMap["n"] || inputMap["N"])) {
+      this.teleportRandomly();
+    }
   }
 
   startAnimation(animationName) {
@@ -410,8 +416,6 @@ export class Player {
    recupererAnneaux(color) {
     const ring = document.querySelector(`.ring.${color}`);
     this.rings.push(color);
-    console.log(ring);
-    console.log(ring.classList);
     if (ring) {
         ring.classList.add('animate');
         ring.classList.remove('nonCollected');
@@ -423,6 +427,22 @@ export class Player {
     } else {
         console.error(`No ring found with the color: ${color}`);
     }
+  }
+
+  teleportRandomly() {
+    const currentTime = Date.now();
+    if (currentTime - this.lastTeleportTime < this.teleportCooldown) {
+      return; // Si le cooldown n'est pas terminé, ne fait rien
+    }
+
+    const radius = 5; // Rayon de téléportation
+    const randomAngle = Math.random() * 2 * Math.PI;
+    const offsetX = radius * Math.cos(randomAngle);
+    const offsetZ = radius * Math.sin(randomAngle);
+
+    this.heroBox.position.addInPlace(new BABYLON.Vector3(offsetX, 0, offsetZ));
+
+    this.lastTeleportTime = currentTime; // Mise à jour du dernier temps de téléportation
   }
 
 }
