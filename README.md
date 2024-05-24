@@ -52,6 +52,6 @@ L'année précédente, nous avons déjà participé et avons obtenu la 10ème pl
 ## Conseils
 
 - Jouez avec un casque ou des écouteurs pour une expérience immersive.
-- Prenez le temps d'explorer chaque recoin de Paris et de découvrir ses secrets cachés !
+- Prenez le temps d'explorer chaque recoin de Paris.
 - N'oubliez pas de vous amuser et de profiter de cette aventure unique !
 
