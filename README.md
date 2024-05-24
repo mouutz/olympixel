@@ -36,7 +36,7 @@ Prêt à relever ce défi épique ? Alors préparez-vous à plonger au cœur de 
 
 ## Démo
 
-Découvrez le gameplay et l'atmosphère de Paris Adventure: Jeux Olympiques 2024 dans notre vidéo de démonstration disponible sur [YouTube](lien_youtube).
+Découvrez le gameplay et l'atmosphère de Olympixel dans notre vidéo de démonstration disponible sur [YouTube](lien_youtube).
 
 ## Solutions
 
