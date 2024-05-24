@@ -28,6 +28,7 @@ Prêt à relever ce défi épique ? Alors préparez-vous à plonger au cœur de 
 - **F** : Sortir de la voiture
 - **B + N** : Téléporter le joueur dans une zone aléatoire (à utiliser lorsque le joueur est bloqué entre des collisions)
 - **I** : Afficher la lettre
+- **M** : Ouvrir/fermer la carte. (vous êtes entouré en rouge dessus pour vous trouver plus facilement)
 
 ## Options Graphiques Disponibles
 
