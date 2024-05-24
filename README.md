@@ -44,8 +44,8 @@ Consultez cette section pour des conseils, des astuces et des captures d'écran 
 
 ## Auteurs
 
-- **Ayoub Admessiev** - Étudiant en Master 2 MBDS
-- **Mootez Sahli** - Étudiant en Master 2 IA
+- **Ayoub Admessiev** - Étudiant en Master 2 MBDS MIAGE
+- **Mootez Sahli** - Étudiant en Master 2 IA MIAGE
     
 L'année précédente, nous avons déjà participé et avons obtenu la 10ème place avec notre jeu SaveIt! On revien cette année pour obtenir une meilleur place ! :)
 
