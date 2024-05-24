@@ -7,7 +7,8 @@ import { GameAudioManager } from './audio.js';
 var canvas = document.getElementById("renderCanvas");
 var engine = new BABYLON.Engine(canvas, true);
 let divFps = document.getElementById("fps");
-
+let menu = document.getElementById("menu");
+let isMenuDisplayed = true;
 
 if (engine.audioEngine) {
   engine.audioEngine.useCustomUnlockedButton = true;
@@ -126,6 +127,7 @@ hideLoadingScreen();
 ----Creation indicateur objectif----
 -----------------------------*/
 var fleche = createIndicateur(scene, hero);
+heroPlayer.indicateur = fleche;
 
 // Positionner l'objectif	
 fleche.setTarget(new BABYLON.Vector3(42, 5, 49));
@@ -167,6 +169,9 @@ scene.actionManager.registerAction(
 
 engine.runRenderLoop(function () {
   scene.render()
+  if(isMenuDisplayed){
+    return;
+  }
   handleMinimap();
   heroPlayer.move(inputMap);
   divFps.innerHTML = engine.getFps().toFixed() + " fps";
@@ -272,4 +277,86 @@ function hideLoadingScreen() {
   if (loadingScreen) {
     loadingScreen.style.display = 'none'
   }
+  menu.style.display = "block";
 }
+
+
+if (document.readyState !== 'loading') {
+  initMainMenu();
+} else {
+  document.addEventListener('DOMContentLoaded', function () {
+      initMainMenu();
+  });
+}
+
+function initMainMenu() {  const menu = document.getElementById("menu");
+  const mainMenu = document.querySelector(".button-container");
+  const graphicOptions = document.querySelector(".graphic-options");
+  const playButton = document.getElementById("playButton");
+  const backButton = document.getElementById("backButton");
+
+
+  const highQualityButton = document.getElementById("highQualityButton");
+  const lowQualityButton = document.getElementById("lowQualityButton");
+
+
+  const quality = localStorage.getItem("quality");
+
+
+  const defaultQuality = quality && (quality === "low" || quality === "high") ? quality : "high";
+
+
+  lowQualityButton.classList.remove("selected");
+  highQualityButton.classList.remove("selected");
+
+
+  if (defaultQuality === "low") {
+      lowQualityButton.classList.add("selected");
+  } else {
+      highQualityButton.classList.add("selected");
+  }
+
+
+  playButton.addEventListener("click", function() {
+      menu.style.display = "none";
+      graphicOptions.style.display = "none";
+      canvas.classList.remove("menu-active");
+      canvas.focus();
+      isMenuDisplayed = false;
+  });
+
+  backButton.addEventListener("click", function() {
+      mainMenu.style.display = "flex";
+      graphicOptions.style.display = "none";
+  });
+
+  // Gestion de la sélection des options graphiques
+  const graphicOptionsButton = document.getElementById("graphicOptionsButton");
+  const backButtonOptions = document.getElementById("backButtonOptions");
+
+  graphicOptionsButton.addEventListener("click", () => {
+      graphicOptions.style.display = "block";
+      mainMenu.style.display = "none";
+  });
+
+  lowQualityButton.addEventListener("click", () => {
+      highQualityButton.classList.remove("selected");
+      lowQualityButton.classList.add("selected");
+      localStorage.setItem("quality", "low");
+      window.location.reload();
+  });
+
+  highQualityButton.addEventListener("click", () => {
+      lowQualityButton.classList.remove("selected");
+      highQualityButton.classList.add("selected");
+      localStorage.setItem("quality", "high");
+      window.location.reload();
+  });
+
+  backButtonOptions.addEventListener("click", () => {
+      graphicOptions.style.display = "none";
+      mainMenu.style.display = "flex";
+  });
+}
+
+

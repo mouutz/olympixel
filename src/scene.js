@@ -10,12 +10,21 @@ export const createScene = async function (engine) {
   );
   light.intensity = 1;
 
+  let quality = localStorage.getItem("quality");
+  let map = "city5.glb"; //HIGH PAR DEFAUT
+  if (quality === "high") {
+    map = "city5.glb";
+  }
+  else if (quality === "low") {
+    map = "city12.glb";
+  }
 
+  console.log(quality);
   // Chargement de la scène (ville) et activation des collisions
   const result = await BABYLON.SceneLoader.ImportMeshAsync(
     "",
     "assets/models/",
-    "city12.glb",
+    map,
     scene,
     function (event) {
       if (event.lengthComputable) {

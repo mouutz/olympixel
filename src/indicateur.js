@@ -54,16 +54,22 @@ function createIndicateur(scene, hero) {
 
 function updateArrowColor(cylinder, line, targetPosition, arrowPosition) {
     var distance = BABYLON.Vector3.Distance(arrowPosition, targetPosition);
-    var color;
     if (distance > 80) {
-        color = new BABYLON.Color3(1, 0, 0); // Rouge
-    } else if (distance > 30) {
-        color = new BABYLON.Color3(1, 0.647, 0); // Orange
+        var color = new BABYLON.Color3(1, 0, 0); 
+        cylinder.isVisible = true;
+        line.isVisible = true;
+    } else if (distance > 25) {
+        var color = new BABYLON.Color3(1, 0.647, 0); 
+        cylinder.isVisible = true;
+        line.isVisible = true;
     } else {
-        color = new BABYLON.Color3(0, 1, 0); // Vert
+        cylinder.isVisible = false;
+        line.isVisible = false;
+        return; 
     }
     cylinder.material.diffuseColor = color;
-    line.material.diffuseColor = color;}
+    line.material.diffuseColor = color;
+}
 
 
 export { createIndicateur };

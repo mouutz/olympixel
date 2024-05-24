@@ -16,6 +16,8 @@
     <script src="https://cdn.babylonjs.com/viewer/babylon.viewer.js"></script>
     <script src="https://cdn.babylonjs.com/viewer/babylon.viewer.max.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ammo.js/2.0.2/ammo.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olympixel</title>
     
 </head>
 <body>
@@ -26,19 +28,32 @@
         <div class="ring black nonCollected"></div>
         <div class="ring green nonCollected"></div>
         <div class="ring red nonCollected"></div>
-      </div>
+    </div>
     <div id="loadingScreen">
         <h3>Olympixel</h3>
         <div id="loadingScreenText">
             <p>Loading...</p>
             <p id="numero"> 1/2 </p>
-
         </div>
         <div id="loadingBar">
             <div id="loadingBarFill"></div>
         </div>
     </div>
-    <canvas id="renderCanvas"></canvas>
-    <script  src="src/main.js" type="module"></script>
+    <canvas id="renderCanvas" class="menu-active"></canvas>
+    <!-- Menu -->
+    <div id="menu" class="menu">
+        <h1>Olympixel</h1>
+        <div class="button-container">
+            <button id="playButton">Play</button>
+            <button id="graphicOptionsButton">Graphic Options</button>
+        </div>
+        <div id="graphicOptions" class="graphic-options">
+            <button id="lowQualityButton">Low Quality</button>
+            <button id="highQualityButton">High Quality</button>
+            <button id="backButton">Back</button>
+        </div>
+    </div>
+    <script src="src/main.js" type="module"></script>
 </body>
+
 </html>

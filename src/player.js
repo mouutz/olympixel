@@ -62,7 +62,6 @@ export class Player {
 
 
   checkInteraction(inputMap) {
-
     // Réinitialisation de la notification
     this.guiManager.setNotif(this.interactionNotification, false);
     if (this.isDriving) return;
@@ -81,8 +80,9 @@ export class Player {
       if(this.rings.includes("blue")) return;
         this.guiManager.setNotif(this.interactionNotification, true);
         if (inputMap["e"] || inputMap["E"]) {
-          this.playLabyrinthe();
+          //this.playLabyrinthe();
           this.recupererAnneaux("blue");
+          this.indicateur.setTarget(new BABYLON.Vector3(55.45, 1.74, 31.89));
         }
       }
     }

@@ -143,3 +143,73 @@ html, body {
 .nonCollected {
   animation: pulsate 3s infinite ease-in-out;
 }
+
+#renderCanvas.menu-active {
+  filter: blur(10px);
+}
+
+.menu {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 100;
+  display: none;
+}
+
+.menu h1 {
+  font-size: 3em;
+  color: #fff;
+}
+
+.button-container {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.button-container button {
+  padding: 20px 40px;
+  margin: 0 20px;
+  font-size: 1.5em;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.button-container button:hover {
+  background-color: #0056b3;
+}
+
+.graphic-options {
+  display: none;
+}
+
+.graphic-options button {
+  margin: 10px;
+  font-size: 1.2em;
+}
+
+
+.graphic-options {
+  display: none;
+}
+
+.graphic-options button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  font-size: 1.2em;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.graphic-options button.selected {
+  background-color: #0056b3;
+}
