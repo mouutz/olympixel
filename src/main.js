@@ -114,6 +114,9 @@ heroPlayer.setCamera(camera);
 var minimap = await createMinimap(scene,canvas, hero);
 minimap.layerMask = 0x10000000 | 0x0FFFFFFF;
 
+
+
+
 scene.activeCameras.push(camera);
 scene.activeCameras.push(minimap);
 
@@ -121,6 +124,14 @@ const viewportNormal = new BABYLON.Viewport(0.02, 0.81, 0.15, 0.15);
 const viewportAgrandi = new BABYLON.Viewport(0, 0, 1, 1); 
 
 let minimapAgrandie = false;
+
+export function hideMinimap() {
+  const minimapCanvas = document.getElementById("minimapCanvas");
+  if (minimapCanvas) {
+    minimapCanvas.style.display = 'none';
+  }
+}
+
 
 hideLoadingScreen();
 /* ---------------------------
@@ -136,6 +147,7 @@ fleche.setTarget(new BABYLON.Vector3(42, 5, 49));
 ----Creation GUI----
 -----------------------------*/
 const guiManager = new GUIManager(scene);
+
 
 
 /* ---------------------------

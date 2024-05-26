@@ -1,6 +1,6 @@
 import { GUIManager } from "./guiManager.js";
 import { Car } from "./car.js";
-import { audioManager } from "./main.js";
+import { audioManager,hideMinimap } from "./main.js";
 
 export class Player {
   constructor(scene, camera) {
@@ -15,11 +15,12 @@ export class Player {
     this.isJumping = false;
     this.car = new Car(scene, camera, this.isDriving);
     this.JUMP_COOLDOWN = 750;
-    this.JUMP_POWER = 5.3;
+    this.JUMP_POWER = 0.05;
     this.jumpTime = 0;
     this.rings = [];
     this.teleportCooldown = 2000;
     this.lastTeleportTime = 0;
+    this.hideMinimap = hideMinimap;
 
   }
 
@@ -30,7 +31,7 @@ export class Player {
       { width: 1, height: 2, depth: 1 },
       this.scene
     );
-    this.heroBox.position = new BABYLON.Vector3(18, 1.5, 3.5);
+    this.heroBox.position = new BABYLON.Vector3(45.8, 1.74, 48.26);
     this.heroBox.isVisible = false;
     this.heroBox.checkCollisions = true;
 
@@ -74,14 +75,15 @@ export class Player {
         this.heroBox.position,
         interactableObject.position
       );
+      //console.log(this.heroBox.position);
 
       if (distanceToObject < 5) {
        //Si on a deja recuperer l'anneau bleu on ne peut plus l'interagir
       if(this.rings.includes("blue")) return;
         this.guiManager.setNotif(this.interactionNotification, true);
         if (inputMap["e"] || inputMap["E"]) {
-          //this.playLabyrinthe();
-          this.recupererAnneaux("blue");
+          this.playLabyrinthe();
+          //this.recupererAnneaux("blue");
           this.indicateur.setTarget(new BABYLON.Vector3(55.45, 1.74, 31.89));
         }
       }
@@ -152,41 +154,106 @@ export class Player {
     }
   }
 
+
+
+
   async playLabyrinthe() {
-
     showLoadingScreen();
-    this.heroBox.setAbsolutePosition(new BABYLON.Vector3(99, 5, 90.5));
- 
-    const result = await BABYLON.SceneLoader.ImportMeshAsync( 
-      "",
-      "assets/models/",
-      "maze2.glb",
-      this.scene,
-      function (event) {
-        if (event.lengthComputable) {
-          let percentComplete = (event.loaded / event.total) * 100;
-          updateLoadingBar(percentComplete);
-        }
-      }
-    );
+    this.heroBox.setAbsolutePosition(new BABYLON.Vector3(104.84, 1, 104.9));
 
+    //desenable this.indicateur
+    this.indicateur.setEnabled(false);
+    this.hideMinimap();
 
     // Créer un mesh parent pour contenir tous les meshes du labyrinthe
     let mazeParent = new BABYLON.Mesh("mazeParent", this.scene);
     mazeParent.position = new BABYLON.Vector3(100, 0, 100); // Position du parent
-    mazeParent.rotation.x = BABYLON.Tools.ToRadians(-90);
-    result.meshes.forEach(mesh => {
-      mesh.parent = mazeParent; // Définir le parent
-      mesh.checkCollisions = true;
-      if(mesh.name === "Object_2"){
-        mesh.checkCollisions = false;
-      }
-    });
-    mazeParent.scaling = new BABYLON.Vector3(3.5, 3.5, 3.5);
-    this.camera.radius = 7; 
-    this.camera.heightOffset = 3; 
+
+    // Matrice représentant le labyrinthe (0 = espace vide, 1 = mur)
+    const mazeMatrix = [
+      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+      [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1],
+      [1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+  ];
+
+
+    // Créer un sol
+    let groundMaterial = new BABYLON.StandardMaterial("groundMaterial", this.scene);
+    groundMaterial.diffuseTexture = new BABYLON.Texture("assets/Texture/floor.png", this.scene);
+
+    const mazeWidth = mazeMatrix[0].length; // Largeur de la matrice
+    const mazeHeight = mazeMatrix.length; // Hauteur de la matrice
+    let ground = BABYLON.MeshBuilder.CreateGround("ground", {width: mazeWidth * 2, height: mazeHeight * 2}, this.scene);
+    ground.position = new BABYLON.Vector3(mazeWidth - 1, 0, mazeHeight - 1); // Ajuster la position du sol
+    ground.material = groundMaterial;
+    ground.parent = mazeParent;
+    ground.checkCollisions = true;
+
+    // Créer un matériau avec une texture pour les murs
+    let wallMaterial = new BABYLON.StandardMaterial("wallMaterial", this.scene);
+    wallMaterial.diffuseTexture = new BABYLON.Texture("assets/Texture/wall.png", this.scene);
+
+    // Utiliser une fonction fléchée pour conserver le contexte de `this`
+    const createWall = (x, z, width, depth) => {
+        let wall = BABYLON.MeshBuilder.CreateBox("wall", {height: 4, width: width, depth: depth}, this.scene);
+        wall.position = new BABYLON.Vector3(x, 2.5, z);
+        wall.material = wallMaterial; // Appliquer la texture
+        wall.checkCollisions = true;
+        wall.parent = mazeParent;
+        return wall;
+    }
+
+    // Générer les murs en fonction de la matrice
+    for (let z = 0; z < mazeHeight; z++) {
+        for (let x = 0; x < mazeWidth; x++) {
+            if (mazeMatrix[z][x] === 1) {
+                createWall(x * 2, z * 2, 2, 2); // Création de murs collés avec dimensions ajustées
+            }
+        }
+    }
+
+    mazeParent.scaling = new BABYLON.Vector3(1, 1, 1);
+
+    // Positionner la caméra en hauteur pour une vue d'en haut
+    this.camera.heightOffset = 30;
+    this.camera.radius = 15;
+
+
+    // Créer un effet de post-traitement pour limiter la vision autour du personnage
+    var postProcess = new BABYLON.ImageProcessingPostProcess("processing", 1.0, this.camera);
+    postProcess.vignetteWeight = 100;
+    postProcess.vignetteStretch = 0;
+    postProcess.vignetteColor = new BABYLON.Color4(0, 0, 0, 1); // Couleur noire pour la vignette
+    postProcess.vignetteEnabled = true;
+
     hideLoadingScreen();
-  }
+}
+
+
 
 
 
