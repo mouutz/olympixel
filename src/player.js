@@ -1,6 +1,6 @@
 import { GUIManager } from "./guiManager.js";
 import { Car } from "./car.js";
-import { audioManager,hideMinimap } from "./main.js";
+import { audioManager, hideMinimap } from "./main.js";
 
 export class Player {
   constructor(scene, camera) {
@@ -21,11 +21,11 @@ export class Player {
     this.teleportCooldown = 2000;
     this.lastTeleportTime = 0;
     this.hideMinimap = hideMinimap;
-
+    this.readedLetter = false;
   }
 
   async createHero() {
-    document.getElementById('numero').innerHTML = "2/2";
+    document.getElementById("numero").innerHTML = "2/2";
     this.heroBox = BABYLON.MeshBuilder.CreateBox(
       "heroBox",
       { width: 1, height: 2, depth: 1 },
@@ -45,7 +45,8 @@ export class Player {
           let percentComplete = (event.loaded / event.total) * 100;
           updateLoadingBar(percentComplete);
         }
-      });
+      }
+    );
     this.animations = result.animationGroups;
     let heroModel = result.meshes[0];
     heroModel.parent = this.heroBox;
@@ -60,7 +61,6 @@ export class Player {
 
     return this.heroBox;
   }
-
 
   checkInteraction(inputMap) {
     // Réinitialisation de la notification
@@ -77,14 +77,12 @@ export class Player {
       );
       //console.log(this.heroBox.position);
 
-      if (distanceToObject < 5) {
-       //Si on a deja recuperer l'anneau bleu on ne peut plus l'interagir
-      if(this.rings.includes("blue")) return;
+      if (distanceToObject < 5 && this.rings.length === 5) {
+        //Si on a deja recuperer l'anneau bleu on ne peut plus l'interagir
+        if (this.rings.includes("blue")) return;
         this.guiManager.setNotif(this.interactionNotification, true);
         if (inputMap["e"] || inputMap["E"]) {
           this.playLabyrinthe();
-          //this.recupererAnneaux("blue");
-          this.indicateur.setTarget(new BABYLON.Vector3(55.45, 1.74, 31.89));
         }
       }
     }
@@ -103,59 +101,101 @@ export class Player {
       }
     }
 
-
     //Verifivation de l'intyeraction avec la boite au lettre "Post_box_1"
     this.postBox = this.scene.getMeshByName("Post_box_1");
+    this.postBox_position = this.postBox.getAbsolutePosition();
+    console.log(this.readedLetter);
     if (this.postBox) {
       var distanceToPostBox = BABYLON.Vector3.Distance(
         this.heroBox.position,
         this.postBox.getAbsolutePosition()
       );
-      if (distanceToPostBox < 3 && !this.isDriving && !this.guiManager.isReading) {
+      if (this.readedLetter == false) {
+        this.indicateur.setEnabled(true);
+        this.indicateur.setTarget(this.postBox_position);
+      }
+      if (
+        distanceToPostBox < 3 &&
+        !this.isDriving &&
+        !this.guiManager.isReading
+      ) {
         this.guiManager.setNotif(this.interactionNotification, true);
         if (inputMap["e"] || inputMap["E"]) {
           this.guiManager.showLetter("this.letterText");
+          this.readedLetter = true;
         }
       }
     }
 
     // Vérification de l'interaction avec coffre "Sketchfab_model"
-    this.sketchfab_model = this.scene.getTransformNodeByName("Chest");
-    if (this.sketchfab_model) {
-      var distanceToSketchfab = BABYLON.Vector3.Distance(
-        this.heroBox.position,
-        this.sketchfab_model.getAbsolutePosition()
-      );
-      this.scene.animationGroups.forEach((anim) => {
-        if (anim.name === "ChestBody|Chest_Shake") {
-          anim.start(false, 1, anim.from, anim.to, false);
-        }
-      });
 
-      if (distanceToSketchfab < 3  && !this.guiManager.isReading) {
-        //si on a deja recuperer l'anneau rouge on ne peut plus l'interagir
-        if(this.rings.includes("red")) return;
-        this.guiManager.setNotif(this.interactionNotification, true);
-        if (inputMap["e"] || inputMap["E"]) {
-          //recuperer l'anneau rouge
-          this.recupererAnneaux("red");
-          //lancer l'animation "Chest_Up|Chest_Open_Close" uen seule fois
-          this.scene.animationGroups.forEach((anim) => {
-            if (anim.name === "Chest_Up|Chest_Open_Close") {
-              anim.start(false, 1, anim.from, anim.to, false);
-            }
-            //dispose le coffre après 5 secondes
-            setTimeout(() => {
-              this.sketchfab_model.dispose();
-            }, 5000);
-          });
+    // Tableau des coffres et des couleurs associées
+    // Tableau des coffres et des couleurs associées
+    const coffres = [
+      { name: "Chest", color: "red" },
+      { name: "Chest.001", color: "blue" },
+      { name: "Chest.002", color: "yellow" },
+      { name: "Chest.003", color: "black" },
+      { name: "Chest.004", color: "green" },
+    ];
+
+    // Fonction pour mettre à jour l'indicateur
+    const updateIndicateur = () => {
+      for (let i = 0; i < coffres.length; i++) {
+        if (!this.rings.includes(coffres[i].color)) {
+          const nextCoffre = this.scene.getTransformNodeByName(coffres[i].name);
+          if (nextCoffre) {
+            this.indicateur.setTarget(nextCoffre.getAbsolutePosition());
+            break;
+          }
         }
       }
-    }
+    };
+
+    // Boucle à travers chaque coffre
+    coffres.forEach((coffre) => {
+      const sketchfab_model = this.scene.getTransformNodeByName(coffre.name);
+
+      if (sketchfab_model) {
+        const distanceToSketchfab = BABYLON.Vector3.Distance(
+          this.heroBox.position,
+          sketchfab_model.getAbsolutePosition()
+        );
+
+        this.scene.animationGroups.forEach((anim) => {
+          if (anim.name === "ChestBody|Chest_Shake") {
+            anim.start(false, 1, anim.from, anim.to, false);
+          }
+        });
+
+        if (distanceToSketchfab < 3 && !this.guiManager.isReading && this.readedLetter) {
+          // Si on a déjà récupéré l'anneau de la couleur du coffre, on ne peut plus interagir
+          if (this.rings.includes(coffre.color)) return;
+
+          this.guiManager.setNotif(this.interactionNotification, true);
+          if (inputMap["e"] || inputMap["E"]) {
+            // Récupérer l'anneau de la couleur du coffre
+            this.recupererAnneaux(coffre.color);
+
+            // Lancer l'animation "Chest_Up|Chest_Open_Close" une seule fois
+            this.scene.animationGroups.forEach((anim) => {
+              if (anim.name === "Chest_Up|Chest_Open_Close") {
+                anim.start(false, 1, anim.from, anim.to, false);
+              }
+              // Dispose le coffre après 5 secondes
+              setTimeout(() => {
+                sketchfab_model.dispose();
+                updateIndicateur(); // Mettre à jour l'indicateur après avoir disposé du coffre
+              }, 5000);
+            });
+          }
+        }
+      }
+    });
+
+    if (this.readedLetter) {
+    updateIndicateur();}
   }
-
-
-
 
   async playLabyrinthe() {
     showLoadingScreen();
@@ -171,43 +211,133 @@ export class Player {
 
     // Matrice représentant le labyrinthe (0 = espace vide, 1 = mur)
     const mazeMatrix = [
-      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
-      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
-      [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1],
-      [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1],
-      [1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-  ];
-
+      [
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1,
+      ],
+      [
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 1,
+      ],
+      [
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 1,
+      ],
+      [
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0,
+        0, 0, 1, 1, 1, 0, 0, 0, 1,
+      ],
+      [
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+        0, 0, 1, 0, 0, 0, 0, 0, 1,
+      ],
+      [
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+        0, 0, 1, 0, 0, 0, 0, 0, 1,
+      ],
+      [
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+        0, 0, 1, 0, 0, 0, 0, 0, 1,
+      ],
+      [
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+        0, 0, 1, 0, 0, 0, 0, 0, 1,
+      ],
+      [
+        1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
+        0, 0, 1, 0, 0, 0, 0, 0, 1,
+      ],
+      [
+        1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 1, 0, 0, 0, 0, 0, 1,
+      ],
+      [
+        1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 1, 0, 0, 0, 0, 0, 1,
+      ],
+      [
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 0, 0, 0, 0, 1,
+      ],
+      [
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 1,
+      ],
+      [
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1,
+        1, 1, 1, 1, 1, 1, 0, 0, 1,
+      ],
+      [
+        1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 1, 0, 0, 1,
+      ],
+      [
+        1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 1, 0, 0, 1,
+      ],
+      [
+        1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0,
+        0, 1, 0, 0, 0, 1, 0, 0, 1,
+      ],
+      [
+        1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0,
+        0, 1, 1, 1, 1, 1, 0, 0, 1,
+      ],
+      [
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 1,
+      ],
+      [
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 1,
+      ],
+      [
+        1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 1,
+      ],
+      [
+        1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 1,
+      ],
+      [
+        1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 1,
+      ],
+      [
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1,
+      ],
+      [
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 1,
+      ],
+      [
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 1,
+      ],
+      [
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1,
+      ],
+    ];
 
     // Créer un sol
-    let groundMaterial = new BABYLON.StandardMaterial("groundMaterial", this.scene);
-    groundMaterial.diffuseTexture = new BABYLON.Texture("assets/Texture/floor.png", this.scene);
+    let groundMaterial = new BABYLON.StandardMaterial(
+      "groundMaterial",
+      this.scene
+    );
+    groundMaterial.diffuseTexture = new BABYLON.Texture(
+      "assets/Texture/floor.png",
+      this.scene
+    );
 
     const mazeWidth = mazeMatrix[0].length; // Largeur de la matrice
     const mazeHeight = mazeMatrix.length; // Hauteur de la matrice
-    let ground = BABYLON.MeshBuilder.CreateGround("ground", {width: mazeWidth * 2, height: mazeHeight * 2}, this.scene);
+    let ground = BABYLON.MeshBuilder.CreateGround(
+      "ground",
+      { width: mazeWidth * 2, height: mazeHeight * 2 },
+      this.scene
+    );
     ground.position = new BABYLON.Vector3(mazeWidth - 1, 0, mazeHeight - 1); // Ajuster la position du sol
     ground.material = groundMaterial;
     ground.parent = mazeParent;
@@ -215,25 +345,32 @@ export class Player {
 
     // Créer un matériau avec une texture pour les murs
     let wallMaterial = new BABYLON.StandardMaterial("wallMaterial", this.scene);
-    wallMaterial.diffuseTexture = new BABYLON.Texture("assets/Texture/wall.png", this.scene);
+    wallMaterial.diffuseTexture = new BABYLON.Texture(
+      "assets/Texture/wall.png",
+      this.scene
+    );
 
     // Utiliser une fonction fléchée pour conserver le contexte de `this`
     const createWall = (x, z, width, depth) => {
-        let wall = BABYLON.MeshBuilder.CreateBox("wall", {height: 4, width: width, depth: depth}, this.scene);
-        wall.position = new BABYLON.Vector3(x, 2.5, z);
-        wall.material = wallMaterial; // Appliquer la texture
-        wall.checkCollisions = true;
-        wall.parent = mazeParent;
-        return wall;
-    }
+      let wall = BABYLON.MeshBuilder.CreateBox(
+        "wall",
+        { height: 4, width: width, depth: depth },
+        this.scene
+      );
+      wall.position = new BABYLON.Vector3(x, 2.5, z);
+      wall.material = wallMaterial; // Appliquer la texture
+      wall.checkCollisions = true;
+      wall.parent = mazeParent;
+      return wall;
+    };
 
     // Générer les murs en fonction de la matrice
     for (let z = 0; z < mazeHeight; z++) {
-        for (let x = 0; x < mazeWidth; x++) {
-            if (mazeMatrix[z][x] === 1) {
-                createWall(x * 2, z * 2, 2, 2); // Création de murs collés avec dimensions ajustées
-            }
+      for (let x = 0; x < mazeWidth; x++) {
+        if (mazeMatrix[z][x] === 1) {
+          createWall(x * 2, z * 2, 2, 2); // Création de murs collés avec dimensions ajustées
         }
+      }
     }
 
     mazeParent.scaling = new BABYLON.Vector3(1, 1, 1);
@@ -242,21 +379,19 @@ export class Player {
     this.camera.heightOffset = 30;
     this.camera.radius = 15;
 
-
     // Créer un effet de post-traitement pour limiter la vision autour du personnage
-    var postProcess = new BABYLON.ImageProcessingPostProcess("processing", 1.0, this.camera);
+    var postProcess = new BABYLON.ImageProcessingPostProcess(
+      "processing",
+      1.0,
+      this.camera
+    );
     postProcess.vignetteWeight = 100;
     postProcess.vignetteStretch = 0;
     postProcess.vignetteColor = new BABYLON.Color4(0, 0, 0, 1); // Couleur noire pour la vignette
     postProcess.vignetteEnabled = true;
 
     hideLoadingScreen();
-}
-
-
-
-
-
+  }
 
   interactWithCar(carHitbox) {
     this.heroBox.position = carHitbox.position.clone();
@@ -479,20 +614,23 @@ export class Player {
     this.camera = camera;
   }
 
-
-   recupererAnneaux(color) {
+  recupererAnneaux(color) {
     const ring = document.querySelector(`.ring.${color}`);
     this.rings.push(color);
     if (ring) {
-        ring.classList.add('animate');
-        ring.classList.remove('nonCollected');
-        // Remove the animation class and add the collected class after the animation is complete
-        ring.addEventListener('animationend', function() {
-            ring.classList.remove('animate');
-            ring.classList.add('collected');
-        }, { once: true });
+      ring.classList.add("animate");
+      ring.classList.remove("nonCollected");
+      // Remove the animation class and add the collected class after the animation is complete
+      ring.addEventListener(
+        "animationend",
+        function () {
+          ring.classList.remove("animate");
+          ring.classList.add("collected");
+        },
+        { once: true }
+      );
     } else {
-        console.error(`No ring found with the color: ${color}`);
+      console.error(`No ring found with the color: ${color}`);
     }
   }
 
@@ -511,9 +649,7 @@ export class Player {
 
     this.lastTeleportTime = currentTime; // Mise à jour du dernier temps de téléportation
   }
-
 }
-
 
 function updateLoadingBar(percent) {
   const loadingBar = document.getElementById("loadingBarFill");
@@ -526,16 +662,13 @@ function updateLoadingBar(percent) {
 function hideLoadingScreen() {
   const loadingScreen = document.getElementById("loadingScreen");
   if (loadingScreen) {
-    loadingScreen.style.display = 'none'
+    loadingScreen.style.display = "none";
   }
 }
 
 function showLoadingScreen() {
   const loadingScreen = document.getElementById("loadingScreen");
   if (loadingScreen) {
-    loadingScreen.style.display = 'flex'
+    loadingScreen.style.display = "flex";
   }
 }
-
-
-

@@ -140,8 +140,11 @@ hideLoadingScreen();
 var fleche = createIndicateur(scene, hero);
 heroPlayer.indicateur = fleche;
 
+fleche.setEnabled(false);
+
+
 // Positionner l'objectif	
-fleche.setTarget(new BABYLON.Vector3(42, 5, 49));
+//fleche.setTarget(new BABYLON.Vector3(42, 5, 49));
 
 /* ---------------------------f
 ----Creation GUI----
