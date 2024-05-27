@@ -1,6 +1,8 @@
+// player.js
 import { GUIManager } from "./guiManager.js";
 import { Car } from "./car.js";
 import { audioManager, hideMinimap } from "./main.js";
+import { playLabyrinthe } from "./labyrinthe.js"; // Importer playLabyrinthe
 
 export class Player {
   constructor(scene, camera) {
@@ -22,6 +24,7 @@ export class Player {
     this.lastTeleportTime = 0;
     this.hideMinimap = hideMinimap;
     this.readedLetter = false;
+    this.closetoFlame = false;
   }
 
   async createHero() {
@@ -76,13 +79,14 @@ export class Player {
         interactableObject.position
       );
       //console.log(this.heroBox.position);
-
-      if (distanceToObject < 5 && this.rings.length === 5) {
-        //Si on a deja recuperer l'anneau bleu on ne peut plus l'interagir
-        if (this.rings.includes("blue")) return;
+      //console.log(distanceToObject);
+      if (distanceToObject < 5 ) {
         this.guiManager.setNotif(this.interactionNotification, true);
         if (inputMap["e"] || inputMap["E"]) {
-          this.playLabyrinthe();
+          this.indicateur.setEnabled(false);
+          
+          playLabyrinthe(this.scene, this.camera, this.heroBox, this.audioManager,this);
+          hideLoadingScreen();
         }
       }
     }
@@ -104,7 +108,7 @@ export class Player {
     //Verifivation de l'intyeraction avec la boite au lettre "Post_box_1"
     this.postBox = this.scene.getMeshByName("Post_box_1");
     this.postBox_position = this.postBox.getAbsolutePosition();
-    console.log(this.readedLetter);
+    //console.log(this.readedLetter);
     if (this.postBox) {
       var distanceToPostBox = BABYLON.Vector3.Distance(
         this.heroBox.position,
@@ -130,7 +134,6 @@ export class Player {
     // Vérification de l'interaction avec coffre "Sketchfab_model"
 
     // Tableau des coffres et des couleurs associées
-    // Tableau des coffres et des couleurs associées
     const coffres = [
       { name: "Chest", color: "red" },
       { name: "Chest.001", color: "blue" },
@@ -141,12 +144,28 @@ export class Player {
 
     // Fonction pour mettre à jour l'indicateur
     const updateIndicateur = () => {
-      for (let i = 0; i < coffres.length; i++) {
-        if (!this.rings.includes(coffres[i].color)) {
-          const nextCoffre = this.scene.getTransformNodeByName(coffres[i].name);
-          if (nextCoffre) {
-            this.indicateur.setTarget(nextCoffre.getAbsolutePosition());
-            break;
+      // Vérifie si tous les anneaux ont été récupérés
+      const allRingsCollected = coffres.every((coffre) =>
+        this.rings.includes(coffre.color)
+      );
+
+      if (allRingsCollected) {
+        // Si tous les anneaux ont été récupérés, pointer vers "square"
+        const squareMesh = this.scene.getMeshByName("square");
+        if (squareMesh) {
+          this.indicateur.setTarget(squareMesh.getAbsolutePosition());
+        }
+      } else {
+        // Sinon, pointer vers le prochain coffre non récupéré
+        for (let i = 0; i < coffres.length; i++) {
+          if (!this.rings.includes(coffres[i].color)) {
+            const nextCoffre = this.scene.getTransformNodeByName(
+              coffres[i].name
+            );
+            if (nextCoffre) {
+              this.indicateur.setTarget(nextCoffre.getAbsolutePosition());
+              break;
+            }
           }
         }
       }
@@ -168,229 +187,65 @@ export class Player {
           }
         });
 
-        if (distanceToSketchfab < 3 && !this.guiManager.isReading && this.readedLetter) {
+        if (distanceToSketchfab < 3 && !this.guiManager.isReading) {
           // Si on a déjà récupéré l'anneau de la couleur du coffre, on ne peut plus interagir
           if (this.rings.includes(coffre.color)) return;
 
           this.guiManager.setNotif(this.interactionNotification, true);
           if (inputMap["e"] || inputMap["E"]) {
-            // Récupérer l'anneau de la couleur du coffre
-            this.recupererAnneaux(coffre.color);
+            // Vérifier si la lettre a été lue
+            if (this.readedLetter) {
+              // Récupérer l'anneau de la couleur du coffre
+              this.recupererAnneaux(coffre.color);
+              this.audioManager.playSound("collect");
 
-            // Lancer l'animation "Chest_Up|Chest_Open_Close" une seule fois
-            this.scene.animationGroups.forEach((anim) => {
-              if (anim.name === "Chest_Up|Chest_Open_Close") {
-                anim.start(false, 1, anim.from, anim.to, false);
-              }
-              // Dispose le coffre après 5 secondes
-              setTimeout(() => {
-                sketchfab_model.dispose();
-                updateIndicateur(); // Mettre à jour l'indicateur après avoir disposé du coffre
-              }, 5000);
-            });
+              // Lancer l'animation "Chest_Up|Chest_Open_Close" une seule fois
+              this.scene.animationGroups.forEach((anim) => {
+                if (anim.name === "Chest_Up|Chest_Open_Close") {
+                  anim.start(false, 1, anim.from, anim.to, false);
+                }
+                // Dispose le coffre après 5 secondes
+                setTimeout(() => {
+                  sketchfab_model.dispose();
+                  updateIndicateur(); // Mettre à jour l'indicateur après avoir disposé du coffre
+                }, 5000);
+              });
+            }
           }
         }
       }
     });
 
+    // Initialiser l'indicateur au début si la lettre a été lue
     if (this.readedLetter) {
-    updateIndicateur();}
-  }
-
-  async playLabyrinthe() {
-    showLoadingScreen();
-    this.heroBox.setAbsolutePosition(new BABYLON.Vector3(104.84, 1, 104.9));
-
-    //desenable this.indicateur
-    this.indicateur.setEnabled(false);
-    this.hideMinimap();
-
-    // Créer un mesh parent pour contenir tous les meshes du labyrinthe
-    let mazeParent = new BABYLON.Mesh("mazeParent", this.scene);
-    mazeParent.position = new BABYLON.Vector3(100, 0, 100); // Position du parent
-
-    // Matrice représentant le labyrinthe (0 = espace vide, 1 = mur)
-    const mazeMatrix = [
-      [
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1,
-      ],
-      [
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 1,
-      ],
-      [
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 1,
-      ],
-      [
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0,
-        0, 0, 1, 1, 1, 0, 0, 0, 1,
-      ],
-      [
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
-        0, 0, 1, 0, 0, 0, 0, 0, 1,
-      ],
-      [
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
-        0, 0, 1, 0, 0, 0, 0, 0, 1,
-      ],
-      [
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
-        0, 0, 1, 0, 0, 0, 0, 0, 1,
-      ],
-      [
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
-        0, 0, 1, 0, 0, 0, 0, 0, 1,
-      ],
-      [
-        1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
-        0, 0, 1, 0, 0, 0, 0, 0, 1,
-      ],
-      [
-        1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 1, 0, 0, 0, 0, 0, 1,
-      ],
-      [
-        1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 1, 0, 0, 0, 0, 0, 1,
-      ],
-      [
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 0, 0, 0, 0, 1,
-      ],
-      [
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 1,
-      ],
-      [
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1,
-        1, 1, 1, 1, 1, 1, 0, 0, 1,
-      ],
-      [
-        1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 1, 0, 0, 1,
-      ],
-      [
-        1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 1, 0, 0, 1,
-      ],
-      [
-        1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0,
-        0, 1, 0, 0, 0, 1, 0, 0, 1,
-      ],
-      [
-        1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0,
-        0, 1, 1, 1, 1, 1, 0, 0, 1,
-      ],
-      [
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 1,
-      ],
-      [
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 1,
-      ],
-      [
-        1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 1,
-      ],
-      [
-        1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 1,
-      ],
-      [
-        1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 1,
-      ],
-      [
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1,
-      ],
-      [
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 1,
-      ],
-      [
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 1,
-      ],
-      [
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1,
-      ],
-    ];
-
-    // Créer un sol
-    let groundMaterial = new BABYLON.StandardMaterial(
-      "groundMaterial",
-      this.scene
-    );
-    groundMaterial.diffuseTexture = new BABYLON.Texture(
-      "assets/Texture/floor.png",
-      this.scene
-    );
-
-    const mazeWidth = mazeMatrix[0].length; // Largeur de la matrice
-    const mazeHeight = mazeMatrix.length; // Hauteur de la matrice
-    let ground = BABYLON.MeshBuilder.CreateGround(
-      "ground",
-      { width: mazeWidth * 2, height: mazeHeight * 2 },
-      this.scene
-    );
-    ground.position = new BABYLON.Vector3(mazeWidth - 1, 0, mazeHeight - 1); // Ajuster la position du sol
-    ground.material = groundMaterial;
-    ground.parent = mazeParent;
-    ground.checkCollisions = true;
-
-    // Créer un matériau avec une texture pour les murs
-    let wallMaterial = new BABYLON.StandardMaterial("wallMaterial", this.scene);
-    wallMaterial.diffuseTexture = new BABYLON.Texture(
-      "assets/Texture/wall.png",
-      this.scene
-    );
-
-    // Utiliser une fonction fléchée pour conserver le contexte de `this`
-    const createWall = (x, z, width, depth) => {
-      let wall = BABYLON.MeshBuilder.CreateBox(
-        "wall",
-        { height: 4, width: width, depth: depth },
-        this.scene
-      );
-      wall.position = new BABYLON.Vector3(x, 2.5, z);
-      wall.material = wallMaterial; // Appliquer la texture
-      wall.checkCollisions = true;
-      wall.parent = mazeParent;
-      return wall;
-    };
-
-    // Générer les murs en fonction de la matrice
-    for (let z = 0; z < mazeHeight; z++) {
-      for (let x = 0; x < mazeWidth; x++) {
-        if (mazeMatrix[z][x] === 1) {
-          createWall(x * 2, z * 2, 2, 2); // Création de murs collés avec dimensions ajustées
-        }
-      }
+      updateIndicateur();
     }
 
-    mazeParent.scaling = new BABYLON.Vector3(1, 1, 1);
+    // Vérification de l'interaction avec la flamme olympique
+    const flame = this.scene.getTransformNodeByName("Torch");
+    if (flame) {
+      const distanceToFlame = BABYLON.Vector3.Distance(
+        this.heroBox.position,
+        flame.getAbsolutePosition()
+      );
 
-    // Positionner la caméra en hauteur pour une vue d'en haut
-    this.camera.heightOffset = 30;
-    this.camera.radius = 15;
+      if (distanceToFlame < 3 && !this.guiManager.isReading) {
+        this.guiManager.setNotif(this.interactionNotification, true);
+        this.closetoFlame = true;
+        if (inputMap["e"] || inputMap["E"]) {
+          this.audioManager.playSound("collect");
+          
+        }
+      } else {
+        this.closetoFlame = false;
+      }
+    }
+  }
 
-    // Créer un effet de post-traitement pour limiter la vision autour du personnage
-    var postProcess = new BABYLON.ImageProcessingPostProcess(
-      "processing",
-      1.0,
-      this.camera
-    );
-    postProcess.vignetteWeight = 100;
-    postProcess.vignetteStretch = 0;
-    postProcess.vignetteColor = new BABYLON.Color4(0, 0, 0, 1); // Couleur noire pour la vignette
-    postProcess.vignetteEnabled = true;
 
-    hideLoadingScreen();
+
+  isCloseToFlame() {
+    return this.closetoFlame;
   }
 
   interactWithCar(carHitbox) {
@@ -666,9 +521,5 @@ function hideLoadingScreen() {
   }
 }
 
-function showLoadingScreen() {
-  const loadingScreen = document.getElementById("loadingScreen");
-  if (loadingScreen) {
-    loadingScreen.style.display = "flex";
-  }
-}
+
+

@@ -1,54 +1,83 @@
 html, body {
-    padding:0px;
-    margin:0px;
-    height:100vh;
-    overflow: hidden;
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
 }
 
 #renderCanvas {
-    width:100%;
-    height:100%;
+  width: 100%;
+  height: 100%;
 }
-
 
 #loadingScreen {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: #f2d1d1;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-size: 2em;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #282c34;
+  color: #61dafb;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
 }
 
-#fps {
-    position: absolute;
-    background-color: rgb(130, 6, 212);
-    text-align: center;
-    font-size: 16px;
-    color: white;
-    top: 15px;
-    right: 10px;
-    width: 60px;
-    height: 20px;
+#loadingText {
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  color: #61dafb;
+  animation: pulse 1.5s infinite;
 }
 
 #loadingBar {
-    border: 1px solid #000;
-    width: 50%;
-    height: 20px;
+  width: 50%;
+  height: 20px;
+  border-radius: 10px;
+  border: 1px solid #61dafb;
+  overflow: hidden;
+  margin-top: 10px;
 }
 
 #loadingBarFill {
-    background: greenyellow;
-    width: 100%;
-    height: 100%;
+  background: linear-gradient(to right, #61dafb, #21a1f1);
+  width: 0;
+  height: 100%;
+  border-radius: 10px;
+  animation: loading 3s ease-in-out infinite;
 }
 
-  
+@keyframes pulse {
+  0%, 100% {
+      opacity: 1;
+  }
+  50% {
+      opacity: 0.5;
+  }
+}
+
+@keyframes loading {
+  0%, 100% {
+      width: 0;
+  }
+  50% {
+      width: 100%;
+  }
+}
+
+#fps {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
+  text-align: center;
+  font-size: 16px;
+  color: white;
+  top: 15px;
+  right: 10px;
+  width: 60px;
+  height: 20px;
+}
+
 .logo {
   position: absolute;
   right: 50%;
@@ -101,7 +130,6 @@ html, body {
   0% {
       opacity: 0.3;
       transform: none;
-
   }
   50% {
       top: 50%;
@@ -137,7 +165,6 @@ html, body {
 
 .collected {
   opacity: 1 !important;
-
 }
 
 .nonCollected {
@@ -192,11 +219,6 @@ html, body {
 .graphic-options button {
   margin: 10px;
   font-size: 1.2em;
-}
-
-
-.graphic-options {
-  display: none;
 }
 
 .graphic-options button {

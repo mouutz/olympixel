@@ -120,8 +120,40 @@ export class GameAudioManager {
     );
     this.sounds.caridle.setVolume(0.1);
 
+    //collect sound 
+  this.sounds.collect = new BABYLON.Sound(
+    "collect",
+    "assets/audio/collect.mp3",
+    this.scene,
+    () => {},
+    { loop: false, autoplay: false }
+    );
+    this.sounds.collect.setVolume(0.5);
+
+    //endgame sound
+    this.sounds.endgame = new BABYLON.Sound(
+      "endgame",
+      "assets/audio/endgame.mp3",
+      this.scene,
+      () => {},
+      { loop: false, autoplay: false }
+    );
+    this.sounds.collect.setVolume(0.5);
+
+    //maze sound
+    this.sounds.maze = new BABYLON.Sound(
+      "maze",
+      "assets/audio/maze.mp3",
+      this.scene,
+      () => {},
+      { loop: true, autoplay: false }
+    );
+    this.sounds.maze.setVolume(0.1);
+
     this.attachSoundsToMesh();
   }
+
+  
 
   playSound(name, isDriving = false) {
     if(!isDriving){
@@ -170,4 +202,13 @@ export class GameAudioManager {
     this.sounds.ambulance.attachToMesh(ambulance);
 
   }
+
+  stopAllSounds() {
+    for (const sound in this.sounds) {
+      if (this.sounds[sound].isPlaying) {
+        this.sounds[sound].stop();
+      }
+    }
+  }
+  
 }
