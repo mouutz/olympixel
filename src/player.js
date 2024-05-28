@@ -233,8 +233,13 @@ export class Player {
         this.guiManager.setNotif(this.interactionNotification, true);
         this.closetoFlame = true;
         if (inputMap["e"] || inputMap["E"]) {
-          this.audioManager.playSound("collect");
-          
+          this.audioManager.playSound("endgame");
+          //redirection vers la scene de fin page html apres 5 secondes
+          setTimeout(() => {
+            window.location.href = "outro.html";
+          }
+          , 5000);
+
         }
       } else {
         this.closetoFlame = false;
@@ -362,7 +367,8 @@ export class Player {
     }
     this.raycast(this.heroBox);
     // Rotation du personnage avec Q et D
-    if (inputMap["q"] || inputMap["Q"]) {
+    
+    if (inputMap["q"] || inputMap["Q"] || inputMap["a"] || inputMap["A"]) {
       this.heroBox.rotation.y -= 5.3 * deltaTime;
     }
     if (inputMap["d"] || inputMap["D"]) {
@@ -370,7 +376,7 @@ export class Player {
     }
 
     // gestoin du mouvement et des animations de course
-    if (inputMap["s"] || inputMap["S"] || inputMap["z"] || inputMap["Z"]) {
+    if (inputMap["s"] || inputMap["S"] || inputMap["z"] || inputMap["Z"] || inputMap["w"] || inputMap["W"]) {
       let directionMultiplier = inputMap["s"] || inputMap["S"] ? 1 : -1;
       this.heroBox.moveWithCollisions(
         forward.scale(this.speed * directionMultiplier * deltaTime)

@@ -1,58 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="stylesheet" href="styles/main.css">
-    <script src="https://cdn.babylonjs.com/babylon.js"></script>
-    <script src="https://cdn.babylonjs.com/babylon.max.js"></script>
-    <script src="https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.js"></script>
-    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.js"></script>
-    <script src="https://cdn.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.js"></script>
-    <script src="https://cdn.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.js"></script>
-    <script src="https://cdn.babylonjs.com/serializers/babylonjs.serializers.js"></script>
-    <script src="https://cdn.babylonjs.com/gui/babylon.gui.js"></script>
-    <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
-    <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.max.js"></script>
-    <script src="https://cdn.babylonjs.com/viewer/babylon.viewer.js"></script>
-    <script src="https://cdn.babylonjs.com/viewer/babylon.viewer.max.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ammo.js/2.0.2/ammo.js"></script>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Olympixel</title>
-    
+    <link rel="stylesheet" href="/styles/intro.css">
+
 </head>
 <body>
-    <div id="fps">0</div>
-    <div class="logo">
-        <div class="ring blue nonCollected"></div>
-        <div class="ring yellow nonCollected"></div>
-        <div class="ring black nonCollected"></div>
-        <div class="ring green nonCollected"></div>
-        <div class="ring red nonCollected"></div>
-    </div>
-    <div id="loadingScreen">
-        <div id="logo"><img src="/assets/OLMPIXEL.png" alt=""></div>
-        <div id="loadingScreenText">
-            <p id="numero"> 1/2 </p>
-        </div>
-        <div id="loadingBar">
-            <div id="loadingBarFill"></div>
+    <video id="video" autoplay>
+        <source src="/assets/video/intro.mp4" type="video/mp4">
+        Votre navigateur ne supporte pas la vidéo.
+    </video>
+    <div class="skip-button" id="skipButton">
+        <img src="/assets/images/ESC.png" alt="Logo">
+        <span>Skip</span>
+        <div class="progress-circle">
+            <svg viewBox="0 0 36 36">
+                <circle cx="18" cy="18" r="16"></circle>
+            </svg>
         </div>
     </div>
-    <canvas id="renderCanvas" class="menu-active"></canvas>
-    <!-- Menu -->
-    <div id="menu" class="menu">
-        <div id="logo"><img src="/assets/OLMPIXEL.png" alt=""></div>
-        <div class="button-container">
-            <button id="playButton">Play</button>
-            <button id="graphicOptionsButton">Graphic Options</button>
-        </div>
-        <div id="graphicOptions" class="graphic-options">
-            <button id="lowQualityButton">Low Quality</button>
-            <button id="highQualityButton">High Quality</button>
-            <button id="backButton">Back</button>
-        </div>
-    </div>
-    <script src="src/main.js" type="module"></script>
-</body>
+    <script>
+        const video = document.getElementById('video');
+        const skipButton = document.getElementById('skipButton');
+        const progressCircle = document.querySelector('.progress-circle circle');
 
+        let timeout;
+
+        skipButton.addEventListener('mousedown', () => {
+            progressCircle.style.strokeDashoffset = '0';
+            timeout = setTimeout(() => {
+                window.location.href = 'game.html';
+            }, 3000);
+        });
+
+        skipButton.addEventListener('mouseup', () => {
+            progressCircle.style.transition = 'none';
+            progressCircle.style.strokeDashoffset = '100';
+            setTimeout(() => {
+                progressCircle.style.transition = 'stroke-dashoffset 3s linear';
+            }, 10);
+            clearTimeout(timeout);c
+        });
+
+        video.addEventListener('ended', () => {
+            window.location.href = 'game.html';
+        });
+    </script>
+</body>
 </html>

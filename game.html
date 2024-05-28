@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/babylon.max.js"></script>
+    <script src="https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.js"></script>
+    <script src="https://cdn.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.js"></script>
+    <script src="https://cdn.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.js"></script>
+    <script src="https://cdn.babylonjs.com/serializers/babylonjs.serializers.js"></script>
+    <script src="https://cdn.babylonjs.com/gui/babylon.gui.js"></script>
+    <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+    <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.max.js"></script>
+    <script src="https://cdn.babylonjs.com/viewer/babylon.viewer.js"></script>
+    <script src="https://cdn.babylonjs.com/viewer/babylon.viewer.max.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ammo.js/2.0.2/ammo.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olympixel</title>
+    
+</head>
+<body>
+    <div id="fps">0</div>
+    <div class="logo">
+        <div class="ring blue nonCollected"></div>
+        <div class="ring yellow nonCollected"></div>
+        <div class="ring black nonCollected"></div>
+        <div class="ring green nonCollected"></div>
+        <div class="ring red nonCollected"></div>
+    </div>
+    <div id="loadingScreen">
+        <div id="logo"><img src="/assets/images/OLMPIXEL.png" alt=""></div>
+        <div id="loadingScreenText">
+            <p id="numero"> 1/2 </p>
+        </div>
+        <div id="loadingBar">
+            <div id="loadingBarFill"></div>
+        </div>
+    </div>
+    <canvas id="renderCanvas" class="menu-active"></canvas>
+    <!-- Menu -->
+    <div id="menu" class="menu">
+        <div id="logo"><img src="/assets/images/OLMPIXEL.png" alt=""></div>
+        <div class="button-container">
+            <button id="playButton">Play</button>
+            <button id="graphicOptionsButton">Graphic Options</button>
+        </div>
+        <div id="graphicOptions" class="graphic-options">
+            <button id="lowQualityButton">Low Quality</button>
+            <button id="highQualityButton">High Quality</button>
+            <button id="backButton">Back</button>
+        </div>
+    </div>
+    <script src="src/main.js" type="module"></script>
+</body>
+
+</html>

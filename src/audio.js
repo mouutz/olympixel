@@ -150,6 +150,16 @@ export class GameAudioManager {
     );
     this.sounds.maze.setVolume(0.1);
 
+    //endgame sound
+    this.sounds.endgame = new BABYLON.Sound(
+      "endgame",
+      "assets/audio/endgame.mp3",
+      this.scene,
+      () => {},
+      { loop: false, autoplay: false }
+    );
+    this.sounds.endgame.setVolume(0.5);
+
     this.attachSoundsToMesh();
   }
 

@@ -78,7 +78,7 @@ export class Car {
             this.speed = Math.min(this.speed + this.acceleration, this.maxSpeed);
             
             
-        } else if (inputMap["z"] || inputMap["Z"]) {
+        } else if (inputMap["z"] || inputMap["Z"]|| inputMap["w"] || inputMap["W"]) {
             this.speed = Math.max(this.speed - this.acceleration, -this.maxSpeed);
         }
     }
@@ -87,7 +87,7 @@ export class Car {
         if (this.speed !== 0) {
             //si on avance
             if(this.speed < 0) {
-            if (inputMap["q"] || inputMap["Q"]) {
+            if (inputMap["q"] || inputMap["Q"] || inputMap["a"] || inputMap["A"]) {
                 this.carHitbox.rotation.y -= this.rotationRate;
                 if(this.rotationVelocity > -this.rotationRate*1.5){
                     this.rotationVelocity += -this.rotationAcceleration;
@@ -101,7 +101,7 @@ export class Car {
         }
         //si on recule
         else{
-            if (inputMap["q"] || inputMap["Q"]) {
+            if (inputMap["q"] || inputMap["Q"] || inputMap["a"] || inputMap["A"]) {
                 this.carHitbox.rotation.y += this.rotationRate;
                 if(this.rotationVelocity < this.rotationRate*1.5){
                     this.rotationVelocity += this.rotationAcceleration;
