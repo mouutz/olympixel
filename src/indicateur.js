@@ -30,6 +30,9 @@ function createIndicateur(scene, hero) {
     cylinder.parent = arrow;
     line.parent = arrow;
 
+    //scale
+    arrow.scaling = new BABYLON.Vector3(0.4, 0.4, 0.4);
+
     // Position initiale de la flèche
     arrow.position = new BABYLON.Vector3(hero.getAbsolutePosition().x, hero.getAbsolutePosition().y + 2, hero.getAbsolutePosition().z);
 

@@ -81,4 +81,47 @@ set isReading(value) {
 
       return letterPanel;
   }
+
+  showCommandsLetter() {
+    if (this.commandsPanel) {
+      this.commandsPanel.dispose();
+      this.commandsPanel = null;
+      this._isReading = false;
+      return;
+    }
+
+    const commandsText = `
+      Commandes du jeu :
+      - Z (W) : Avancer
+      - S : Reculer
+      - Q (A) : Tourner à gauche
+      - D : Tourner à droite
+      - E : Interagir
+      - E : Entrer & Sortir de la voiture
+      - Espace : Sauter
+      - M : Agrandir/Réduire la minimap
+      - I : Afficher cette aide
+      - B+N : teleportation si vous etes bloqué
+    `;
+    this._isReading = true;
+    this.commandsPanel = new BABYLON.GUI.Rectangle();
+    this.commandsPanel.width = 0.5;
+    this.commandsPanel.height = 0.75;
+    this.commandsPanel.cornerRadius = 20;
+    this.commandsPanel.color = "black";
+    this.commandsPanel.thickness = 2;
+    this.commandsPanel.background = "white";
+    this.advancedTexture.addControl(this.commandsPanel);
+
+    const textBlock = new BABYLON.GUI.TextBlock();
+    textBlock.text = commandsText;
+    textBlock.color = "black";
+    textBlock.fontSize = 24;
+    this.commandsPanel.addControl(textBlock);
+
+   
+
+   
+
+  }
 }

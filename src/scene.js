@@ -74,7 +74,7 @@ export const createCamera = async function (scene, canvas, hero) {
   );
   camera.lockedTarget = hero;
   camera.heightOffset = 5;
-  camera.radius = 10;
+  camera.radius = 12;
   camera.rotationOffset = 0;
   camera.cameraAcceleration = 0.05;
   camera.maxCameraSpeed = 20;

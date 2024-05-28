@@ -25,6 +25,8 @@ export class Player {
     this.hideMinimap = hideMinimap;
     this.readedLetter = false;
     this.closetoFlame = false;
+    this.lastToggleTime = 0;
+    this.carInteractionLock = false;
   }
 
   async createHero() {
@@ -68,6 +70,16 @@ export class Player {
   checkInteraction(inputMap) {
     // Réinitialisation de la notification
     this.guiManager.setNotif(this.interactionNotification, false);
+    const currentTime = Date.now();
+    const toggleCooldown = 500;
+
+
+    if (inputMap["i"] || inputMap["I"]) {
+      if (currentTime - this.lastToggleTime > toggleCooldown) {
+        this.guiManager.showCommandsLetter();
+        this.lastToggleTime = currentTime;
+      }
+    }
     if (this.isDriving) return;
 
     var interactableObject = this.scene.getMeshByName("square");
@@ -99,8 +111,12 @@ export class Player {
       );
       if (distanceToCar < 5) {
         this.guiManager.setNotif(this.interactionNotification, true);
-        if (inputMap["e"] || inputMap["E"]) {
+        if ((inputMap["e"] || inputMap["E"]) && !this.carInteractionLock) {
+          this.carInteractionLock = true; // Verrouiller l'interaction avec la voiture
           this.interactWithCar(carHitbox);
+          setTimeout(() => {
+            this.carInteractionLock = false; // Déverrouiller après un court délai
+          }, 500); // Délai de 500 ms pour éviter les doubles interactions
         }
       }
     }
@@ -220,6 +236,8 @@ export class Player {
     if (this.readedLetter) {
       updateIndicateur();
     }
+
+    
 
     // Vérification de l'interaction avec la flamme olympique
     const flame = this.scene.getTransformNodeByName("Torch");
@@ -354,8 +372,12 @@ export class Player {
     this.checkInteraction(inputMap);
 
     if (this.isDriving) {
-      if (inputMap["f"] || inputMap["F"]) {
+      if ((inputMap["e"] || inputMap["E"]) && !this.carInteractionLock) {
         this.exitCar();
+        this.carInteractionLock = true; // Activer le verrouillage
+        setTimeout(() => {
+          this.carInteractionLock = false; // Désactiver le verrouillage après un délai
+        }, 500); // Ajustez le délai selon vos besoins
       }
       this.car.move(inputMap, this.isDriving);
       return;
