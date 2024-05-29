@@ -43,9 +43,12 @@ set isReading(value) {
   showLetter(text) {
     if (this._isReading) return;
     this._isReading = true;
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
       const letterPanel = new BABYLON.GUI.Rectangle();
-      letterPanel.width = 0.5;
-      letterPanel.height = 0.80;
+      letterPanel.width = screenWidth > 800 ? "50%" : "90%";
+      letterPanel.height = screenHeight > 600 ? "80%" : "90%";
       letterPanel.cornerRadius = 20;
       letterPanel.color = "black";
       letterPanel.thickness = 2;
@@ -72,13 +75,13 @@ set isReading(value) {
       
       Bonne chance et que l'esprit des Jeux Olympiques te guide!`;
       textBlock.color = "black";
-      textBlock.fontSize = 20;
+      textBlock.fontSize = screenWidth > 800 ? "20px" : "16px";
       textBlock.textWrapping = true;
       textBlock.resizeToFit = true;
       letterPanel.addControl(textBlock);
 
       const closeButton = BABYLON.GUI.Button.CreateSimpleButton("closeButton", "Fermer");
-      closeButton.width = 0.2;
+      closeButton.width = screenWidth > 800 ? "20%" : "30%";
       closeButton.height = "40px";
       closeButton.color = "white";
       closeButton.cornerRadius = 20;
