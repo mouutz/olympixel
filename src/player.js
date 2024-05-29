@@ -40,7 +40,7 @@ export class Player {
       { width: 1, height: 2, depth: 1 },
       this.scene
     );
-    this.heroBox.position = new BABYLON.Vector3(45.8, 1.74, 48.26);
+    this.heroBox.position = new BABYLON.Vector3(26.8, 1.74, 56.48);
     this.heroBox.isVisible = false;
     this.heroBox.checkCollisions = true;
 
@@ -95,7 +95,6 @@ export class Player {
         this.heroBox.position,
         Portal.getAbsolutePosition()
       );
-      //console.log(distanceToObject);
       if (distanceToObject < 5 && this.rings.length === 5) {
         this.guiManager.setNotif(this.interactionNotification, true);
         if (inputMap["e"] || inputMap["E"]) {

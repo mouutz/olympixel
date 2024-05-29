@@ -23,7 +23,7 @@ export class Car {
 
         carObject.checkCollisions = false;
         this.carHitbox = BABYLON.MeshBuilder.CreateBox("carHitbox", { width: 2, height: 2, depth:5 }, this.scene);
-        this.carHitbox.position = new BABYLON.Vector3(19, 1.5, 10);
+        this.carHitbox.position = new BABYLON.Vector3(20.03, 1.74, 34);
         this.carHitbox.isVisible = false;
         this.carHitbox.checkCollisions = true;
         carObject.setParent(this.carHitbox);

@@ -75,7 +75,7 @@ export const createCamera = async function (scene, canvas, hero) {
   camera.ellipsoid = new BABYLON.Vector3(1, 1, 1);
   camera.ellipsoidOffset = new BABYLON.Vector3(0, 0, 0);
 
-  //camera.inputs.clear();
+  camera.inputs.clear();
   return camera;
 };
 

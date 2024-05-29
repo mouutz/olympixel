@@ -84,6 +84,7 @@ html, body {
   top: 2.5vh;
 }
 
+
 .ring {
   width: 3vh;
   height: 3vh;
@@ -181,9 +182,14 @@ html, body {
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
+  
   z-index: 100;
   display: none;
 }
+#logo img {
+  max-width: 100%;
+  height: auto;
+} 
 
 .menu h1 {
   font-size: 3em;

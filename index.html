@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OLYMPIXEL</title>
+    <title>Vidéo en plein écran avec bouton Skip</title>
     <style>
         body, html {
             margin: 0;
@@ -66,6 +66,12 @@
             stroke-dashoffset: 100;
             transition: stroke-dashoffset 3s linear;
         }
+        .Skiptext {
+            font-weight: bold;
+            -webkit-user-select: none;
+            user-select: none;
+
+        }
     </style>
 </head>
 <body>
@@ -74,8 +80,8 @@
         Votre navigateur ne supporte pas la vidéo.
     </video>
     <div class="skip-button" id="skipButton">
-        <img src="/assets/images/ESC.png" alt="Logo">
-        <span>Skip</span>
+        <img src="assets/images/skip.png" alt="Logo">
+        <span id="Skiptext">Skip</span>
         <div class="progress-circle">
             <svg viewBox="0 0 36 36">
                 <circle cx="18" cy="18" r="16"></circle>
@@ -83,30 +89,32 @@
         </div>
     </div>
     <script>
-        const video = document.getElementById('video');
-        const skipButton = document.getElementById('skipButton');
-        const progressCircle = document.querySelector('.progress-circle circle');
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const video = document.getElementById('video');
+            const skipButton = document.getElementById('skipButton');
+            const progressCircle = document.querySelector('.progress-circle circle');
 
-        let timeout;
+            let timeout;
 
-        skipButton.addEventListener('mousedown', () => {
-            progressCircle.style.strokeDashoffset = '0';
-            timeout = setTimeout(() => {
+            skipButton.addEventListener('mousedown', () => {
+                progressCircle.style.strokeDashoffset = '0';
+                timeout = setTimeout(() => {
+                    window.location.href = 'game.html';
+                }, 3000);
+            });
+
+            skipButton.addEventListener('mouseup', () => {
+                progressCircle.style.transition = 'none';
+                progressCircle.style.strokeDashoffset = '100';
+                setTimeout(() => {
+                    progressCircle.style.transition = 'stroke-dashoffset 3s linear';
+                }, 10);
+                clearTimeout(timeout);
+            });
+
+            video.addEventListener('ended', () => {
                 window.location.href = 'game.html';
-            }, 3000);
-        });
-
-        skipButton.addEventListener('mouseup', () => {
-            progressCircle.style.transition = 'none';
-            progressCircle.style.strokeDashoffset = '100';
-            setTimeout(() => {
-                progressCircle.style.transition = 'stroke-dashoffset 3s linear';
-            }, 10);
-            clearTimeout(timeout);
-        });
-
-        video.addEventListener('ended', () => {
-            window.location.href = 'game.html';
+            });
         });
     </script>
 </body>
