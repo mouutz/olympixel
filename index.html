@@ -3,85 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vidéo en plein écran avec bouton Skip</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: black;
-        }
-        video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .skip-button {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            width: 80px;
-            height: 80px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid white;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 14px;
-            cursor: pointer;
-            overflow: hidden;
-        }
-        .skip-button img {
-            width: 20px;
-            height: 20px;
-            margin-right: 5px;
-        }
-        .progress-circle {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        .progress-circle svg {
-            width: 100%;
-            height: 100%;
-            transform: rotate(-90deg);
-        }
-        .progress-circle circle {
-            fill: none;
-            stroke-width: 6;
-            stroke: white;
-            stroke-linecap: round;
-            stroke-dasharray: 100;
-            stroke-dashoffset: 100;
-            transition: stroke-dashoffset 3s linear;
-        }
-        .Skiptext {
-            font-weight: bold;
-            -webkit-user-select: none;
-            user-select: none;
-
-        }
-    </style>
+    <title>Olympixel</title>
+    <link rel="stylesheet" href="styles/intro.css">
 </head>
 <body>
-    <video id="video" autoplay>
-        <source src="assets/video/intro.mp4" type="video/mp4">
-        Votre navigateur ne supporte pas la vidéo.
-    </video>
+    <div class="video-container" >
+        <video id="video" preload="auto">
+            <source src="assets/video/intro.mp4" type="video/mp4">
+            Votre navigateur ne supporte pas la vidéo.
+        </video>
+        <div class="background-blur" id="backgroundBlur"></div>
+    </div>
+    <div class="overlay" id="overlay">
+        <div class="logo">
+            <img src="assets/images/OLMPIXEL.png" alt="Logo du jeu">
+        </div>
+        <div class="play-button" id="playButton">Play</div>
+    </div>
     <div class="skip-button" id="skipButton">
         <img src="assets/images/skip.png" alt="Logo">
-        <span id="Skiptext">Skip</span>
+        <span>Skip</span>
         <div class="progress-circle">
             <svg viewBox="0 0 36 36">
                 <circle cx="18" cy="18" r="16"></circle>
@@ -91,10 +32,20 @@
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             const video = document.getElementById('video');
+            const playButton = document.getElementById('playButton');
+            const overlay = document.getElementById('overlay');
+            const backgroundBlur = document.getElementById('backgroundBlur');
             const skipButton = document.getElementById('skipButton');
             const progressCircle = document.querySelector('.progress-circle circle');
 
             let timeout;
+
+            playButton.addEventListener('click', () => {
+                overlay.style.display = 'none';
+                backgroundBlur.style.filter = 'none';
+                video.play();
+                skipButton.style.display = 'flex';
+            });
 
             skipButton.addEventListener('mousedown', () => {
                 progressCircle.style.strokeDashoffset = '0';
