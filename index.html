@@ -3,13 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Olympixel</title>
-    <link rel="stylesheet" href="/styles/intro.css">
-
+    <title>OLYMPIXEL</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: black;
+        }
+        video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .skip-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        .skip-button img {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+        .progress-circle {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .progress-circle svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+        .progress-circle circle {
+            fill: none;
+            stroke-width: 6;
+            stroke: white;
+            stroke-linecap: round;
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            transition: stroke-dashoffset 3s linear;
+        }
+    </style>
 </head>
 <body>
     <video id="video" autoplay>
-        <source src="/assets/video/intro.mp4" type="video/mp4">
+        <source src="assets/video/intro.mp4" type="video/mp4">
         Votre navigateur ne supporte pas la vidéo.
     </video>
     <div class="skip-button" id="skipButton">
@@ -41,7 +102,7 @@
             setTimeout(() => {
                 progressCircle.style.transition = 'stroke-dashoffset 3s linear';
             }, 10);
-            clearTimeout(timeout);c
+            clearTimeout(timeout);
         });
 
         video.addEventListener('ended', () => {

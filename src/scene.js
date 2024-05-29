@@ -16,7 +16,7 @@ export const createScene = async function (engine) {
     map = "heigh_map.glb";
   }
   else if (quality === "low") {
-    map = "city_low.glb";
+    map = "city_low2.glb";
   }
 
   console.log(quality);
@@ -37,16 +37,6 @@ export const createScene = async function (engine) {
     mesh.checkCollisions = true;
   });
 
-
-
-  var square = BABYLON.MeshBuilder.CreateBox("square", { size: 4 }, scene);
-  square.position = new BABYLON.Vector3(42, 3, 49);
-  square.rotation.x = Math.PI / 2;
-
-  var redMaterial = new BABYLON.StandardMaterial("redMat", scene);
-  redMaterial.diffuseColor = new BABYLON.Color3(1, 0, 0); // Red
-  square.material = redMaterial;
-  square.isInteractable = true;
 
   //debug layer pour voir les collisions
   //scene.debugLayer.show();
@@ -85,7 +75,7 @@ export const createCamera = async function (scene, canvas, hero) {
   camera.ellipsoid = new BABYLON.Vector3(1, 1, 1);
   camera.ellipsoidOffset = new BABYLON.Vector3(0, 0, 0);
 
-  camera.inputs.clear();
+  //camera.inputs.clear();
   return camera;
 };
 

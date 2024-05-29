@@ -45,7 +45,7 @@ set isReading(value) {
     this._isReading = true;
       const letterPanel = new BABYLON.GUI.Rectangle();
       letterPanel.width = 0.5;
-      letterPanel.height = 0.75;
+      letterPanel.height = 0.80;
       letterPanel.cornerRadius = 20;
       letterPanel.color = "black";
       letterPanel.thickness = 2;
@@ -53,9 +53,28 @@ set isReading(value) {
       this.advancedTexture.addControl(letterPanel);
 
       const textBlock = new BABYLON.GUI.TextBlock();
-      textBlock.text = text;
+      textBlock.text = `Cher Héros,
+
+      Nous avons des informations cruciales concernant la mission qui t'attend. 
+      D'après nos sources, la flamme olympique a été cachée dans une pièce secrète. 
+      Apparemment, le portail pour accéder à cette pièce secrète se trouve dans 
+      l'une des nouvelles statues des JO 2024, située à "la place".
+      
+      Cependant, pour accéder à la pièce secrète, 
+      tu devras avoir en ta possession les cinq anneaux des Jeux Olympiques. 
+      Selon nos renseignements, les anneaux sont dissimulés un peu partout dans Paris.
+      
+      Nous savons qu'un coffre contenant le premier anneau se trouve dans un parc. 
+      Pour les autres anneaux, tu devras explorer la ville pour les trouver.
+      
+      Une fois que tu auras tous les anneaux, 
+      tu pourras accéder à la pièce secrète où la flamme olympique est cachée.
+      
+      Bonne chance et que l'esprit des Jeux Olympiques te guide!`;
       textBlock.color = "black";
-      textBlock.fontSize = 24;
+      textBlock.fontSize = 20;
+      textBlock.textWrapping = true;
+      textBlock.resizeToFit = true;
       letterPanel.addControl(textBlock);
 
       const closeButton = BABYLON.GUI.Button.CreateSimpleButton("closeButton", "Fermer");
@@ -103,6 +122,7 @@ set isReading(value) {
       - I : Afficher cette aide
       - B+N : teleportation si vous etes bloqué
     `;
+
     this._isReading = true;
     this.commandsPanel = new BABYLON.GUI.Rectangle();
     this.commandsPanel.width = 0.5;
@@ -117,6 +137,8 @@ set isReading(value) {
     textBlock.text = commandsText;
     textBlock.color = "black";
     textBlock.fontSize = 24;
+    textBlock.textWrapping = true;
+    textBlock.resizeToFit = true;
     this.commandsPanel.addControl(textBlock);
 
    
@@ -124,4 +146,6 @@ set isReading(value) {
    
 
   }
+
+  
 }

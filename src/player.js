@@ -3,6 +3,7 @@ import { GUIManager } from "./guiManager.js";
 import { Car } from "./car.js";
 import { audioManager, hideMinimap } from "./main.js";
 import { playLabyrinthe } from "./labyrinthe.js"; // Importer playLabyrinthe
+import { createCarIndicator } from './indicateur.js';
 
 export class Player {
   constructor(scene, camera) {
@@ -27,6 +28,9 @@ export class Player {
     this.closetoFlame = false;
     this.lastToggleTime = 0;
     this.carInteractionLock = false;
+    this.carIndicator = createCarIndicator(scene, this.car);
+    this.carIndicator.isVisible = true;
+
   }
 
   async createHero() {
@@ -82,17 +86,17 @@ export class Player {
     }
     if (this.isDriving) return;
 
-    var interactableObject = this.scene.getMeshByName("square");
-    var carHitbox = this.car.carHitbox;
-    // Vérification de l'interaction avec l'objet "square"
-    if (interactableObject && interactableObject.isInteractable) {
+    var Portal = this.scene.getMeshByName("Object_4.005");
+    Portal.isInteractable = true;
+    
+    // Vérification de l'interaction avec l'objet "portal"
+    if (Portal && Portal.isInteractable) {
       var distanceToObject = BABYLON.Vector3.Distance(
         this.heroBox.position,
-        interactableObject.position
+        Portal.getAbsolutePosition()
       );
-      //console.log(this.heroBox.position);
       //console.log(distanceToObject);
-      if (distanceToObject < 5 ) {
+      if (distanceToObject < 5 && this.rings.length === 5) {
         this.guiManager.setNotif(this.interactionNotification, true);
         if (inputMap["e"] || inputMap["E"]) {
           this.indicateur.setEnabled(false);
@@ -102,7 +106,7 @@ export class Player {
         }
       }
     }
-
+    var carHitbox = this.car.carHitbox;
     // Vérification de l'interaction avec la voiture "carHitbox"
     if (carHitbox) {
       var distanceToCar = BABYLON.Vector3.Distance(
@@ -114,6 +118,7 @@ export class Player {
         if ((inputMap["e"] || inputMap["E"]) && !this.carInteractionLock) {
           this.carInteractionLock = true; // Verrouiller l'interaction avec la voiture
           this.interactWithCar(carHitbox);
+          this.carIndicator.isVisible = false;
           setTimeout(() => {
             this.carInteractionLock = false; // Déverrouiller après un court délai
           }, 500); // Délai de 500 ms pour éviter les doubles interactions
@@ -141,7 +146,7 @@ export class Player {
       ) {
         this.guiManager.setNotif(this.interactionNotification, true);
         if (inputMap["e"] || inputMap["E"]) {
-          this.guiManager.showLetter("this.letterText");
+          this.guiManager.showLetter();
           this.readedLetter = true;
         }
       }
@@ -166,10 +171,10 @@ export class Player {
       );
 
       if (allRingsCollected) {
-        // Si tous les anneaux ont été récupérés, pointer vers "square"
-        const squareMesh = this.scene.getMeshByName("square");
-        if (squareMesh) {
-          this.indicateur.setTarget(squareMesh.getAbsolutePosition());
+        // Si tous les anneaux ont été récupérés, pointer vers "portal"
+        const portalMesh = this.scene.getMeshByName("Object_4.005");
+        if (portalMesh) {
+          this.indicateur.setTarget(portalMesh.getAbsolutePosition());
         }
       } else {
         // Sinon, pointer vers le prochain coffre non récupéré
@@ -203,7 +208,7 @@ export class Player {
           }
         });
 
-        if (distanceToSketchfab < 3 && !this.guiManager.isReading) {
+        if (distanceToSketchfab < 3 && !this.guiManager.isReading && this.readedLetter && !this.isDriving) {
           // Si on a déjà récupéré l'anneau de la couleur du coffre, on ne peut plus interagir
           if (this.rings.includes(coffre.color)) return;
 
@@ -301,6 +306,7 @@ export class Player {
     this.heroBox.rotation.y = 0;
 
     this.heroBox.checkCollisions = true;
+    this.carIndicator.isVisible = true;
 
     // Positionner le héros à côté de la voiture
     var carHitbox = this.car.carHitbox;
