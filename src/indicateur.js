@@ -61,7 +61,7 @@ function updateArrowColor(cylinder, line, targetPosition, arrowPosition) {
         var color = new BABYLON.Color3(1, 0, 0); 
         cylinder.isVisible = true;
         line.isVisible = true;
-    } else if (distance > 22) {
+    } else if (distance > 40) {
         var color = new BABYLON.Color3(1, 0.647, 0); 
         cylinder.isVisible = true;
         line.isVisible = true;

@@ -95,8 +95,9 @@ export class Player {
         this.heroBox.position,
         Portal.getAbsolutePosition()
       );
+
       if (distanceToObject < 5 && this.rings.length === 5) {
-        this.guiManager.setNotif(this.interactionNotification, true);
+        this.guiManager.setNotif(this.interactionNotification, true, "'E' pour entrer dans le portail");
         if (inputMap["e"] || inputMap["E"]) {
           this.indicateur.setEnabled(false);
           
@@ -113,7 +114,7 @@ export class Player {
         carHitbox.position
       );
       if (distanceToCar < 5) {
-        this.guiManager.setNotif(this.interactionNotification, true);
+        this.guiManager.setNotif(this.interactionNotification, true, "'E' pour entrer dans la voiture");
         if ((inputMap["e"] || inputMap["E"]) && !this.carInteractionLock) {
           this.carInteractionLock = true; // Verrouiller l'interaction avec la voiture
           this.interactWithCar(carHitbox);
@@ -143,7 +144,7 @@ export class Player {
         !this.isDriving &&
         !this.guiManager.isReading
       ) {
-        this.guiManager.setNotif(this.interactionNotification, true);
+        this.guiManager.setNotif(this.interactionNotification, true , "'E' pour lire la lettre");
         if (inputMap["e"] || inputMap["E"]) {
           this.guiManager.showLetter();
           this.readedLetter = true;
@@ -211,7 +212,7 @@ export class Player {
           // Si on a déjà récupéré l'anneau de la couleur du coffre, on ne peut plus interagir
           if (this.rings.includes(coffre.color)) return;
 
-          this.guiManager.setNotif(this.interactionNotification, true);
+          this.guiManager.setNotif(this.interactionNotification, true, "'E' pour ouvrir le coffre");
           if (inputMap["e"] || inputMap["E"]) {
             // Vérifier si la lettre a été lue
             if (this.readedLetter) {
@@ -252,7 +253,7 @@ export class Player {
       );
 
       if (distanceToFlame < 3 && !this.guiManager.isReading) {
-        this.guiManager.setNotif(this.interactionNotification, true);
+        this.guiManager.setNotif(this.interactionNotification, true, "'E' pour récupérer la Flamme olympique");
         this.closetoFlame = true;
         if (inputMap["e"] || inputMap["E"]) {
           this.audioManager.playSound("endgame");
@@ -379,6 +380,7 @@ export class Player {
     this.checkInteraction(inputMap);
 
     if (this.isDriving) {
+      this.guiManager.setNotif(this.interactionNotification, true, "'E' pour sortir de la voiture");
       if ((inputMap["e"] || inputMap["E"]) && !this.carInteractionLock) {
         this.exitCar();
         this.carInteractionLock = true; // Activer le verrouillage

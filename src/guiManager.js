@@ -14,7 +14,7 @@ set isReading(value) {
     this._isReading = value;
 }
 
-  createNotif() {
+  createNotif(str="Appuyez sur 'E' pour interagir") {
       var rect = new BABYLON.GUI.Rectangle();
       rect.width = 0.3;
       rect.height = "60px";
@@ -27,8 +27,10 @@ set isReading(value) {
       this.advancedTexture.addControl(rect);
 
       var text1 = new BABYLON.GUI.TextBlock();
-      text1.text = "Appuyez sur 'E' pour interagir";
+      text1.text = str;
       text1.color = "white";
+      text1.textWrapping = true;
+      text1.resizeToFit = true;
       text1.fontSize = 24;
       rect.addControl(text1);
 
@@ -36,9 +38,10 @@ set isReading(value) {
       return rect;
   }
 
-  setNotif(notification, isVisible) {
-      notification.isVisible = isVisible;
-  }
+  setNotif(notification, isVisible, message = "Appuyez sur 'E' pour interagir") {
+    notification.children[0].text = message;
+    notification.isVisible = isVisible;
+}
 
   showLetter(text) {
     if (this._isReading) return;
