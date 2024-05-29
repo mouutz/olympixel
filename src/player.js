@@ -118,7 +118,7 @@ export class Player {
         if ((inputMap["e"] || inputMap["E"]) && !this.carInteractionLock) {
           this.carInteractionLock = true; // Verrouiller l'interaction avec la voiture
           this.interactWithCar(carHitbox);
-          this.carIndicator.isVisible = false;
+          this.carIndicator.setEnabled(false)
           setTimeout(() => {
             this.carInteractionLock = false; // Déverrouiller après un court délai
           }, 500); // Délai de 500 ms pour éviter les doubles interactions
@@ -306,7 +306,9 @@ export class Player {
     this.heroBox.rotation.y = 0;
 
     this.heroBox.checkCollisions = true;
+    this.carIndicator.setEnabled(true)
     this.carIndicator.isVisible = true;
+    
 
     // Positionner le héros à côté de la voiture
     var carHitbox = this.car.carHitbox;
@@ -391,7 +393,7 @@ export class Player {
 
     if (this.car.speed !== 0) {
       this.car.applyMovement();
-      this.car.updateRotation2(inputMap);
+      this.car.updateRotation(inputMap);
     }
     this.raycast(this.heroBox);
     // Rotation du personnage avec Q et D

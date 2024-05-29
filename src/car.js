@@ -76,12 +76,15 @@ export class Car {
         const fps = engine.getFps();
         
         if (fps > 80) {
-            this.maxSpeed = 0.3;
+            this.maxSpeed = 0.25;
+            this.rotationRate = 0.015;
             console.log(this.maxSpeed);
         } else if (fps > 30 && fps <= 80) {
             this.maxSpeed = 0.6;
+            this.rotationRate = 0.03;
         } else {
             this.maxSpeed = 0.6;
+            this.rotationRate = 0.03;
         }
     }
     
@@ -104,7 +107,7 @@ export class Car {
             if(this.speed < 0) {
             if (inputMap["q"] || inputMap["Q"] || inputMap["a"] || inputMap["A"]) {
                 this.carHitbox.rotation.y -= this.rotationRate;
-                if(this.rotationVelocity > -this.rotationRate*10){
+                if(this.rotationVelocity > -this.rotationRate*1.5){
                     this.rotationVelocity += -this.rotationAcceleration;
                 }
             } else if (inputMap["d"] || inputMap["D"]) {

@@ -84,15 +84,12 @@ function createCarIndicator(scene, car) {
     material.diffuseColor = new BABYLON.Color3(1, 0, 0)
     arrow.material = material;
 
-    // Ajouter une animation pour le mouvement de la flèche
-    var animation = new BABYLON.Animation("arrowAnimation", "position.y", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-    var keys = [];
-    keys.push({ frame: 0, value: 5 }); // Position de départ
-    keys.push({ frame: 30, value: 4 }); // Position d'arrivée après 1 seconde
-    keys.push({ frame: 60, value: 5 }); // Retour à la position de départ
+    //collisions
+    arrow.checkCollisions = false;
+    arrow.isPickable = false;
 
-    animation.setKeys(keys);
-    arrow.animations = [animation];
+
+
 
     scene.beginAnimation(arrow, 0, 60, true); // Démarrer l'animation en boucle
 
@@ -101,7 +98,7 @@ function createCarIndicator(scene, car) {
         if (car && car.carHitbox) {
             arrow.position.x = car.carHitbox.position.x;
             arrow.position.z = car.carHitbox.position.z;
-            // Ajuster la hauteur de la flèche pour qu'elle soit visible au-dessus de la voiture
+            arrow.position.y = car.carHitbox.position.y + 3 + Math.sin(performance.now() / 500) * 0.5;
         }
     });
 
