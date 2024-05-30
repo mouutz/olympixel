@@ -96,7 +96,7 @@ export class Player {
         Portal.getAbsolutePosition()
       );
 
-      if (distanceToObject < 5 ) {
+      if (distanceToObject < 5 && this.rings.length === 5) {
         this.guiManager.setNotif(this.interactionNotification, true, "'E' pour entrer dans le portail");
         if (inputMap["e"] || inputMap["E"]) {
           this.indicateur.setEnabled(false);
