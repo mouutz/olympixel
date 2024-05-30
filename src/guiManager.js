@@ -117,6 +117,7 @@ set isReading(value) {
 
     const commandsText = `
       Commandes du jeu :
+      
       - Z (W) : Avancer
       - S : Reculer
       - Q (A) : Tourner à gauche
