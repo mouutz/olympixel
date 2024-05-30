@@ -78,13 +78,19 @@ export class Car {
         if (fps > 80) {
             this.maxSpeed = 0.25;
             this.rotationRate = 0.015;
-            console.log(this.maxSpeed);
+            this.acceleration = 0.005;
+            this.deceleration = 0.002;
+            //console.log(this.maxSpeed);
         } else if (fps > 30 && fps <= 80) {
             this.maxSpeed = 0.6;
             this.rotationRate = 0.03;
+            this.acceleration = 0.01;
+            this.deceleration = 0.005;
         } else {
             this.maxSpeed = 0.6;
             this.rotationRate = 0.03;
+            this.acceleration = 0.01;
+            this.deceleration = 0.005;
         }
     }
     
