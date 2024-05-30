@@ -87,10 +87,10 @@ export class Car {
             this.acceleration = 0.01;
             this.deceleration = 0.005;
         } else {
-            this.maxSpeed = 1.5;
-            this.rotationRate = 0.04;
-            this.acceleration = 0.03;
-            this.deceleration = 0.02;
+            this.maxSpeed = 2;
+            this.rotationRate = 0.05;
+            this.acceleration = 0.04;
+            this.deceleration = 0.03;
         }
     }
     
