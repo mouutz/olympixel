@@ -42,7 +42,7 @@ video {
     margin-bottom: 20px;
 }
 .logo img {
-    max-width: 100%;
+    max-width: 300px;
     height: auto;
 }
 .play-button {

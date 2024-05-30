@@ -81,7 +81,7 @@ function createCarIndicator(scene, car) {
 
     var material = new BABYLON.StandardMaterial("indicatorMaterial", scene);
     //coueluir jeune 
-    material.diffuseColor = new BABYLON.Color3(1, 0, 0)
+    material.diffuseColor = new BABYLON.Color3(1, 0.647, 0)
     arrow.material = material;
 
     //collisions

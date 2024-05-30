@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   padding: 0;
   margin: 0;
   height: 100vh;
@@ -49,20 +50,26 @@ html, body {
 }
 
 @keyframes pulse {
-  0%, 100% {
-      opacity: 1;
+
+  0%,
+  100% {
+    opacity: 1;
   }
+
   50% {
-      opacity: 0.5;
+    opacity: 0.5;
   }
 }
 
 @keyframes loading {
-  0%, 100% {
-      width: 0;
+
+  0%,
+  100% {
+    width: 0;
   }
+
   50% {
-      width: 100%;
+    width: 100%;
   }
 }
 
@@ -129,34 +136,39 @@ html, body {
 
 @keyframes animateRing {
   0% {
-      opacity: 0.3;
-      transform: none;
+    opacity: 0.3;
+    transform: none;
   }
+
   50% {
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, 500%) scale(3) rotate3d(1, 1, 0, 180deg);
-      opacity: 1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 500%) scale(3) rotate3d(1, 1, 0, 180deg);
+    opacity: 1;
   }
+
   75% {
-      transform: translate(-50%, 500%) scale(3) rotate3d(1, 1, 0, 360deg);
-      opacity: 1;
+    transform: translate(-50%, 500%) scale(3) rotate3d(1, 1, 0, 360deg);
+    opacity: 1;
   }
+
   100% {
-      transform: none;
-      opacity: 1;
+    transform: none;
+    opacity: 1;
   }
 }
 
 @keyframes pulsate {
   0% {
-      box-shadow: 0px 0px 5px 1px rgba(255, 255, 255, 0.5);
+    box-shadow: 0px 0px 5px 1px rgba(255, 255, 255, 0.5);
   }
+
   50% {
-      box-shadow: 0px 0px 10px 3px rgba(255, 255, 255, 1);
+    box-shadow: 0px 0px 10px 3px rgba(255, 255, 255, 1);
   }
+
   100% {
-      box-shadow: 0px 0px 5px 1px rgba(255, 255, 255, 0.5);
+    box-shadow: 0px 0px 5px 1px rgba(255, 255, 255, 0.5);
   }
 }
 
@@ -182,14 +194,18 @@ html, body {
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  
+
   z-index: 100;
   display: none;
+
+  margin-bottom: 5%;
 }
+
 #logo img {
-  max-width: 100%;
+  max-width: 70%;
   height: auto;
-} 
+}
+
 
 .menu h1 {
   font-size: 3em;
@@ -200,7 +216,9 @@ html, body {
   margin-top: 40px;
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  gap: 30px;
+  max-width: 100%;
+  height: auto;
 }
 
 .button-container button {

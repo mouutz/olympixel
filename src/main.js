@@ -130,7 +130,12 @@ export function hideMinimap() {
   if (minimapCanvas) {
     minimapCanvas.style.display = 'none';
   }
+  if (scene.activeCameras.includes(minimap)) {
+    const index = scene.activeCameras.indexOf(minimap);
+    scene.activeCameras.splice(index, 1);
+  }
 }
+
 
 
 hideLoadingScreen();
