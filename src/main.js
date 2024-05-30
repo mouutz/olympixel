@@ -95,6 +95,39 @@ adjustSkyboxSetting("inclination", 0); // jour
 export const audioManager = new GameAudioManager(scene);
 audioManager.loadSounds();
 
+
+
+/* ---------------------------
+---------Ajout du logo "i"-------
+-----------------------------*/
+const advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI", true, scene);
+
+const container = new BABYLON.GUI.StackPanel();
+container.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+container.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+container.width = "200px";
+container.isVertical = false;
+container.paddingTop = "0px";
+container.paddingLeft = "10px";
+const textBlock = new BABYLON.GUI.TextBlock();
+textBlock.text = "Contrôles";
+textBlock.color = "white";
+textBlock.fontSize = "20px";
+textBlock.paddingright = "10px";
+container.addControl(textBlock);
+
+const iKeyIndicator = new BABYLON.GUI.Image("iKey", "assets/images/key_i.png");
+iKeyIndicator.width = "50px";
+iKeyIndicator.height = "50px";
+container.addControl(iKeyIndicator);
+
+
+
+advancedTexture.addControl(container);
+
+
+
+
 /* ---------------------------
 ---------Creation joueur-------
 -----------------------------*/
@@ -300,6 +333,8 @@ function hideLoadingScreen() {
   }
   menu.style.display = "block";
 }
+
+
 
 
 

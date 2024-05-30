@@ -213,6 +213,8 @@ export class GameAudioManager {
 
   }
 
+  
+
   stopAllSounds() {
     for (const sound in this.sounds) {
       if (this.sounds[sound].isPlaying) {
