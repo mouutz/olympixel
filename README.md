@@ -32,10 +32,10 @@ Prêt à relever ce défi épique ? Alors préparez-vous à plonger au cœur de 
 
 ## Démo
 
-Découvrez le gameplay et l'atmosphère de Olympixel dans notre vidéo de démonstration disponible sur [https://www.youtube.com/watch?v=D-PhccMq3rA](https://www.youtube.com/watch?v=D-PhccMq3rA)
+Découvrez le gameplay et l'atmosphère de Olympixel dans notre vidéo de démonstration disponible sur [https://www.youtube.com/watch?v=Z8IXKI3Ebo4](https://www.youtube.com/watch?v=Z8IXKI3Ebo4)
 
 
-##  tester en ligne 
+##  Tester en ligne 
 ***Utiliser de préférence le navigateur Chrome ou tout navigateur basé sur Chromium***
 [https://www.minuteanime.com/play/olympixel/](https://www.minuteanime.com/play/olympixel/)
 ou 
@@ -44,7 +44,7 @@ ou
 ## Options Graphiques Disponibles
 
 - **High** : Plus de bâtiments et meilleure qualité, avec plus de détails.
-- **Low** : Mode optimisé avec une map moins detailé , recommandé en cas de problème de performance.
+- **Low** : Mode optimisé avec une map moins détaillé , recommandé en cas de problème de performance.
 
 ## Performances
 
