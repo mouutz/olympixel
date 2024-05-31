@@ -1,5 +1,9 @@
 # OLYMPIXEL
 
+![logo](https://i.ibb.co/LDwbHBw/Design-sans-titre.png)
+
+--------------------------------------------------------------
+
 Bienvenue dans Paris, la ville de l'amour, de l'art et maintenant des Jeux Olympiques de 2024 ! Préparez-vous à une aventure palpitante où vous incarnez un héros appelé à l'aide par la mairie de Paris pour restaurer l'ordre dans la ville.
 
 ## Contexte :
