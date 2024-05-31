@@ -19,9 +19,9 @@ Prêt à relever ce défi épique ? Alors préparez-vous à plonger au cœur de 
 
 ## Commandes
 
-- **Z** : Avancer
+- **Z** || **W** : Avancer
 - **S** : Reculer
-- **Q** : Aller à gauche
+- **Q** || **A** : Aller à gauche
 - **D** : Aller à droite
 - **Barre d'Espace** : Sauter
 - **E** : Interagir
@@ -32,7 +32,12 @@ Prêt à relever ce défi épique ? Alors préparez-vous à plonger au cœur de 
 
 ## Démo
 
-Découvrez le gameplay et l'atmosphère de Olympixel dans notre vidéo de démonstration disponible sur [YouTube](lien_youtube).
+Découvrez le gameplay et l'atmosphère de Olympixel dans notre vidéo de démonstration disponible sur [YouTube]([lien_youtube](https://www.youtube.com/watch?v=D-PhccMq3rA)lw).
+
+
+**tester en ligne **
+***Utiliser de préférence le navigateur Chrome ou tout navigateur basé sur Chromium***
+[Olympixel](https://www.minuteanime.com/play/olympixel/).
 
 ## Solutions
 
