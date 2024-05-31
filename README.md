@@ -38,7 +38,8 @@ Découvrez le gameplay et l'atmosphère de Olympixel dans notre vidéo de démon
 ##  tester en ligne 
 ***Utiliser de préférence le navigateur Chrome ou tout navigateur basé sur Chromium***
 [https://www.minuteanime.com/play/olympixel/](https://www.minuteanime.com/play/olympixel/)
-
+ou 
+[https://hlsplay.tk/olympixel/play/Olympixel/](https://hlsplay.tk/olympixel/play/Olympixel/)
 
 ## Options Graphiques Disponibles
 
