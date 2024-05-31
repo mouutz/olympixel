@@ -32,17 +32,18 @@ Prêt à relever ce défi épique ? Alors préparez-vous à plonger au cœur de 
 
 ## Démo
 
-Découvrez le gameplay et l'atmosphère de Olympixel dans notre vidéo de démonstration disponible sur [YouTube]([lien_youtube](https://www.youtube.com/watch?v=D-PhccMq3rA)lw).
+Découvrez le gameplay et l'atmosphère de Olympixel dans notre vidéo de démonstration disponible sur [https://www.youtube.com/watch?v=D-PhccMq3rA](https://www.youtube.com/watch?v=D-PhccMq3rA)
 
 
-**tester en ligne **
+## Solutions tester en ligne 
 ***Utiliser de préférence le navigateur Chrome ou tout navigateur basé sur Chromium***
-[Olympixel](https://www.minuteanime.com/play/olympixel/).
+[https://www.minuteanime.com/play/olympixel/](https://www.minuteanime.com/play/olympixel/).
 
 ## Solutions
 
 Consultez cette section pour des conseils, des astuces et des captures d'écran pour vous aider à retrouver les anneaux olympiques plus rapidement !
 
+>! This is a spoiler
 
 ## Options Graphiques Disponibles
 
