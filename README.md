@@ -124,3 +124,8 @@ L'année précédente, nous avons déjà participé et avons obtenu la 10ème pl
 - Prenez le temps d'explorer chaque recoin de Paris.
 - N'oubliez pas de vous amuser et de profiter de cette aventure unique !
 
+Ressources
+Modèles 3D : Réalisés avec Blender
+Map pricnipal asset : https://sketchfab.com/3d-models/low-poly-industrial-city-4bda942e29b84d2485c82d786a1bde93 , enormement de modification apporté a la map avec des models 3d realise par nous meme sur blender 
+Coffre : https://sketchfab.com/3d-models/low-poly-chest-animated-316371144ed44e28a84fa34efe903b41
+Musiques : Libres de droit sur youtube.
