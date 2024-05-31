@@ -25,15 +25,14 @@ Prêt à relever ce défi épique ? Alors préparez-vous à plonger au cœur de 
 - **D** : Aller à droite
 - **Barre d'Espace** : Sauter
 - **E** : Interagir
-- **F** : Sortir de la voiture
 - **B + N** : Téléporter le joueur dans une zone aléatoire (à utiliser lorsque le joueur est bloqué entre des collisions)
-- **I** : Afficher la lettre
+- **I** : Afficher les Commandes
 - **M** : Ouvrir/fermer la carte. (vous êtes entouré en rouge dessus pour vous reperer plus facilement)
 
 ## Options Graphiques Disponibles
 
 - **High** : Plus de bâtiments et meilleure qualité, avec plus de détails.
-- **Low** : Mode optimisé, recommandé en cas de problème de performance.
+- **Low** : Mode optimisé avec une map moins detailé , recommandé en cas de problème de performance.
 
 ## Démo
 
