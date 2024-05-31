@@ -34,6 +34,34 @@ Prêt à relever ce défi épique ? Alors préparez-vous à plonger au cœur de 
 - **High** : Plus de bâtiments et meilleure qualité, avec plus de détails.
 - **Low** : Mode optimisé avec une map moins detailé , recommandé en cas de problème de performance.
 
+## Performances
+
+### Optimisation des Performances
+
+Pour améliorer les performances du jeu, plusieurs optimisations ont été mises en place par rapport à la première version. Voici un aperçu des principales stratégies employées :
+
+1. **Utilisation de Modèles Low Poly :**
+   - Notre jeu utilise exclusivement des modèles low poly. Cela signifie que chaque objet 3D est composé d'un nombre minimal de polygones, ce qui réduit la complexité des calculs nécessaires pour le rendu.
+   - **Avantage :** Les modèles low poly nécessitent moins de ressources pour être rendus, ce qui permet au jeu de fonctionner de manière fluide même sur des machines moins puissantes.
+
+2. **Regroupement des Objets dans Blender :**
+   - Une des astuces qui nous a énormément aidés a été le regroupement des objets dans Blender. Plutôt que de laisser chaque petit objet séparé, nous avons regroupé plusieurs objets en un seul. Par exemple, une place entière composée de nombreux petits objets a été regroupée en un seul objet.
+   - **Avantage :** Réduction significative du nombre de calculs nécessaires pour le rendu, ce qui améliore les performances globales.
+   - **Limite :** Cette astuce ne doit pas être utilisée de manière excessive. Si nous regroupions toute la carte en un seul objet, cela provoquerait des problèmes de performances majeurs car cela entraînerait un énorme nombre de calculs. De plus, le chargement de toute la carte en une seule fois irait à l'encontre de notre stratégie de chargement dynamique.
+
+3. **Optimisation des Textures :**
+   - Les textures ont été optimisées pour réduire leur taille sans sacrifier la qualité visuelle. Cela inclut la réduction de la résolution des textures et l'utilisation de formats de compression efficaces.
+   - **Avantage :** Réduction de l'utilisation de la mémoire et des temps de chargement des textures, ce qui améliore les performances.
+
+4. **Gestion Efficace des Lumières :**
+   - Le nombre de sources lumineuses actives a été optimisé. Nous avons réduit le nombre de lumières dynamiques et utilisé des lumières statiques lorsque cela était possible.
+   - **Avantage :** Réduction de la charge de calcul pour le rendu des lumières, ce qui améliore les performances globales.
+
+5. **Animations Optimisées :**
+   - Les animations ont été optimisées pour être moins gourmandes en ressources, en ajustant les interpolations et en réduisant le nombre de clés d'animation.
+   - **Avantage :** Réduction de l'utilisation de la CPU et de la mémoire pour les animations, ce qui améliore les performances.
+
+
 ## Démo
 
 Découvrez le gameplay et l'atmosphère de Olympixel dans notre vidéo de démonstration disponible sur [YouTube](lien_youtube).
