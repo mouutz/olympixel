@@ -35,25 +35,10 @@ Prêt à relever ce défi épique ? Alors préparez-vous à plonger au cœur de 
 Découvrez le gameplay et l'atmosphère de Olympixel dans notre vidéo de démonstration disponible sur [https://www.youtube.com/watch?v=D-PhccMq3rA](https://www.youtube.com/watch?v=D-PhccMq3rA)
 
 
-## Solutions tester en ligne 
+##  tester en ligne 
 ***Utiliser de préférence le navigateur Chrome ou tout navigateur basé sur Chromium***
 [https://www.minuteanime.com/play/olympixel/](https://www.minuteanime.com/play/olympixel/).
 
-## Solutions
-
-Consultez cette section pour des conseils, des astuces et des captures d'écran pour vous aider à retrouver les anneaux olympiques plus rapidement !
-
-###Normalement, vous n'aurez pas besoin des solutions pour trouver les anneaux puisque dans le jeu, il y a une flèche qui va vous guider et qui va disparaître quand vous êtes à 25 mètres de l'objectif.
-Cependant, si vous avez du mal à retrouver les anneaux, vous pouvez consulter les solutions en images ci-dessous :
-
->! ATTTENTION SPOILER
->![anneaux ](https://hlsplay.tk/olympixel/images/solution2.png)
->![anneaux ](https://hlsplay.tk/olympixel/images/solution5.png)
->![anneaux ](https://hlsplay.tk/olympixel/images/solution4.png)
->![anneaux ](https://hlsplay.tk/olympixel/images/solution3.png)
->![anneaux ](https://hlsplay.tk/olympixel/images/solution%20.png)
->![maze](https://hlsplay.tk/olympixel/images/map%20ilmustration4%20.png)
->![maze](https://hlsplay.tk/olympixel/images/maze%20solution.png)
 
 ## Options Graphiques Disponibles
 
@@ -107,6 +92,23 @@ Pour améliorer les performances du jeu, plusieurs optimisations ont été mises
 **Low Quality Map :**
 ![map](https://hlsplay.tk/olympixel/images/map3.png)
 ![map](https://hlsplay.tk/olympixel/images/low%20map1.png)
+
+## Solutions
+
+Consultez cette section pour des conseils, des astuces et des captures d'écran pour vous aider à retrouver les anneaux olympiques plus rapidement !
+
+### Normalement, vous n'aurez pas besoin des solutions pour trouver les anneaux puisque dans le jeu, il y a une flèche qui va vous guider et qui va disparaître quand vous êtes à 25 mètres de l'objectif.
+Cependant, si vous avez du mal à retrouver les anneaux, vous pouvez consulter les solutions en images ci-dessous :
+
+>! ATTTENTION SPOILER
+>![anneaux ](https://hlsplay.tk/olympixel/images/solution2.png)
+>![anneaux ](https://hlsplay.tk/olympixel/images/solution5.png)
+>![anneaux ](https://hlsplay.tk/olympixel/images/solution4.png)
+>![anneaux ](https://hlsplay.tk/olympixel/images/solution3.png)
+>![anneaux ](https://hlsplay.tk/olympixel/images/solution%20.png)
+>![maze](https://hlsplay.tk/olympixel/images/map%20ilmustration4%20.png)
+>![maze](https://hlsplay.tk/olympixel/images/maze%20solution.png)
+
 
 ## Auteurs
 
