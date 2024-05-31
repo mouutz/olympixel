@@ -54,29 +54,43 @@ Pour améliorer les performances du jeu, plusieurs optimisations ont été mises
    - Notre jeu utilise exclusivement des modèles low poly. Cela signifie que chaque objet 3D est composé d'un nombre minimal de polygones, ce qui réduit la complexité des calculs nécessaires pour le rendu.
    - **Avantage :** Les modèles low poly nécessitent moins de ressources pour être rendus, ce qui permet au jeu de fonctionner de manière fluide même sur des machines moins puissantes.
 
-    ![Low Poly Model Example](https://hlsplay.tk/olympixel/images/map%20ilmustration5%20.png)
+   ![Low Poly Model Example](https://hlsplay.tk/olympixel/images/map%20ilmustration5%20.png)
+   ![Low Poly Model Example](https://hlsplay.tk/olympixel/images/map%20ilmustration4%20.png)
    
-2. **Regroupement des Objets dans Blender :**
+   
+3. **Regroupement des Objets dans Blender :**
    - Une des astuces qui nous a énormément aidés a été le regroupement des objets dans Blender. Plutôt que de laisser chaque petit objet séparé, nous avons regroupé plusieurs objets en un seul. Par exemple, une place entière composée de nombreux petits objets a été regroupée en un seul objet.
    - **Avantage :** Réduction significative du nombre de calculs nécessaires pour le rendu, ce qui améliore les performances globales.
    - **Limite :** Cette astuce ne doit pas être utilisée de manière excessive. Si nous regroupions toute la carte en un seul objet, cela provoquerait des problèmes de performances majeurs car cela entraînerait un énorme nombre de calculs. De plus, le chargement de toute la carte en une seule fois irait à l'encontre de notre stratégie de chargement dynamique.
+  
+        ![Grouped Objects Example](https://hlsplay.tk/olympixel/images/optimistaion1.png)
+        ![Grouped Objects Example](https://hlsplay.tk/olympixel/images/optimistaion3.png)
+        ![Grouped Objects Example](https://hlsplay.tk/olympixel/images/optimistaion2.png)
+        ![Grouped Objects Example](https://hlsplay.tk/olympixel/images/optimistaion4.png)
 
-3. **Optimisation des Textures :**
+
+4. **Optimisation des Textures :**
    - Les textures ont été optimisées pour réduire leur taille sans sacrifier la qualité visuelle. Cela inclut la réduction de la résolution des textures et l'utilisation de formats de compression efficaces.
    - **Avantage :** Réduction de l'utilisation de la mémoire et des temps de chargement des textures, ce qui améliore les performances.
 
-4. **Gestion Efficace des Lumières :**
+5. **Gestion Efficace des Lumières :**
    - Le nombre de sources lumineuses actives a été optimisé. Nous avons réduit le nombre de lumières dynamiques et utilisé des lumières statiques lorsque cela était possible.
    - **Avantage :** Réduction de la charge de calcul pour le rendu des lumières, ce qui améliore les performances globales.
 
-5. **Animations Optimisées :**
+6. **Animations Optimisées :**
    - Les animations ont été optimisées pour être moins gourmandes en ressources, en ajustant les interpolations et en réduisant le nombre de clés d'animation.
    - **Avantage :** Réduction de l'utilisation de la CPU et de la mémoire pour les animations, ce qui améliore les performances.
 
-6. **Deux Versions de la Carte :**
+7. **Deux Versions de la Carte :**
    - Nous avons créé deux versions de la carte du jeu : une version détaillée avec de nombreux objets et une version simplifiée avec beaucoup moins d'objets.
    - **Avantage :** La version simplifiée permet aux joueurs ayant des machines moins puissantes de profiter d'une expérience de jeu fluide, tandis que la version détaillée offre une immersion plus riche pour ceux disposant de configurations plus robustes.
 
+**Hight Quality Map :**
+![map](https://hlsplay.tk/olympixel/images/map2.png)
+![map](https://hlsplay.tk/olympixel/images/heigh%20map.png)
+**Low Quality Map :**
+![map](https://hlsplay.tk/olympixel/images/map3.png)
+![map](https://hlsplay.tk/olympixel/images/low%20map1.png)
 
 ## Auteurs
 
