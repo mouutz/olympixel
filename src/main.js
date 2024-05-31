@@ -306,7 +306,7 @@ const removePlayerMarker = function () {
 const handleMinimap = function () {
 
 
-  if (inputMap["m"] || inputMap["M"]) {
+  if (inputMap["m"] || inputMap["M"] || inputMap[","] || inputMap[";"]) {
     if (!minimapAgrandie) {
         minimap.viewport = viewportAgrandi;
         minimapAgrandie = true;
@@ -323,6 +323,8 @@ const handleMinimap = function () {
 
     inputMap["m"] = false;
     inputMap["M"] = false;
+    inputMap[","] = false;
+    inputMap[";"] = false;
 }
 
 }

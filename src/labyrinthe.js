@@ -98,7 +98,7 @@ export async function playLabyrinthe(scene, camera, heroBox, audioManager,player
   camera.heightOffset = 30;
   camera.radius = 15;
 
-  console.log(player.isCloseToFlame())
+ /// console.log(player.isCloseToFlame())
 
   postProcess = new BABYLON.ImageProcessingPostProcess(
     "processing",
