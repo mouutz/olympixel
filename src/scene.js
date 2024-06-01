@@ -11,9 +11,9 @@ export const createScene = async function (engine) {
   light.intensity = 1;
 
   let quality = localStorage.getItem("quality");
-  let map = "animeted map.glb"; //HIGH PAR DEFAUT
+  let map = "heigh_map.glb"; //HIGH PAR DEFAUT
   if (quality === "high") {
-    map = "animeted map.glb";
+    map = "heigh_map.glb";
   }
   else if (quality === "low") {
     map = "city_low2.glb";
