@@ -11,15 +11,20 @@ export const createScene = async function (engine) {
   light.intensity = 1;
 
   let quality = localStorage.getItem("quality");
-  let map = "heigh_map.glb"; //HIGH PAR DEFAUT
+  let map = "animated_map.glb"; //HIGH PAR DEFAUT
   if (quality === "high") {
-    map = "heigh_map.glb";
+    map = "animated_map.glb";
   }
-  else if (quality === "low") {
+  else if (quality === "meduim") {
+    map = "heigh_map.glb";
+  } else {
     map = "city_low2.glb";
   }
 
+
+
   console.log(quality);
+  console.log(map);
   // Chargement de la scène (ville) et activation des collisions
   const result = await BABYLON.SceneLoader.ImportMeshAsync(
     "",
@@ -36,6 +41,7 @@ export const createScene = async function (engine) {
   result.meshes.forEach((mesh) => {
     mesh.checkCollisions = true;
   });
+  
 
 
   //debug layer pour voir les collisions

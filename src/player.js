@@ -32,6 +32,7 @@ export class Player {
     this.carIndicator.isVisible = true;
     this.indicatorVisible = true;
     this.isInLabyrinth = false;
+    this.animationsToStart = ["ambu_anime", "bus.002", "Camion_ar", "Pompier", "taxi", "Taxi_ar", "VoitureBlue", "VoiturePolice"];
   }
 
   async createHero() {
@@ -93,6 +94,12 @@ export class Player {
         this.lastToggleTime = currentTime;
       }
     }
+
+    this.scene.animationGroups.forEach((anim) => {
+      if (this.animationsToStart.includes(anim.name)) {
+          anim.start(false, 1, anim.from, anim.to, false);
+      }
+    });
 
     if (this.isDriving) return;
 
@@ -254,6 +261,8 @@ export class Player {
       updateIndicateur();
     }
 
+    
+    
     
 
     // Vérification de l'interaction avec la flamme olympique

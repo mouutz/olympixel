@@ -361,21 +361,26 @@ function initMainMenu() {  const menu = document.getElementById("menu");
 
   const highQualityButton = document.getElementById("highQualityButton");
   const lowQualityButton = document.getElementById("lowQualityButton");
+  const meduimQualityButton = document.getElementById("meduimQualityButton");
 
 
   const quality = localStorage.getItem("quality");
 
 
-  const defaultQuality = quality && (quality === "low" || quality === "high") ? quality : "high";
+  const defaultQuality = quality && (quality === "low" || quality === "high" || quality === "meduim") ? quality : "high";
 
 
   lowQualityButton.classList.remove("selected");
   highQualityButton.classList.remove("selected");
+  meduimQualityButton.classList.remove("selected");
 
 
   if (defaultQuality === "low") {
       lowQualityButton.classList.add("selected");
-  } else {
+  } else if (defaultQuality === "meduim") {
+      meduimQualityButton.classList.add("selected");
+  }
+  else {
       highQualityButton.classList.add("selected");
   }
 
@@ -404,13 +409,23 @@ function initMainMenu() {  const menu = document.getElementById("menu");
 
   lowQualityButton.addEventListener("click", () => {
       highQualityButton.classList.remove("selected");
+      meduimQualityButton.classList.remove("selected");
       lowQualityButton.classList.add("selected");
       localStorage.setItem("quality", "low");
       window.location.reload();
   });
 
+  meduimQualityButton.addEventListener("click", () => {
+      lowQualityButton.classList.remove("selected");
+      highQualityButton.classList.remove("selected");
+      meduimQualityButton.classList.add("selected");
+      localStorage.setItem("quality", "meduim");
+      window.location.reload();
+  });
+
   highQualityButton.addEventListener("click", () => {
       lowQualityButton.classList.remove("selected");
+      meduimQualityButton.classList.remove("selected");
       highQualityButton.classList.add("selected");
       localStorage.setItem("quality", "high");
       window.location.reload();

@@ -301,6 +301,7 @@ body {
   height: auto;
 }
 
+
 .button-container button {
   padding: 20px 40px;
   margin: 0 20px;
@@ -311,6 +312,8 @@ body {
   border-radius: 8px;
   cursor: pointer;
 }
+
+
 
 .button-container button:hover {
   background-color: #0056b3;
@@ -325,7 +328,7 @@ body {
   font-size: 1.2em;
 }
 
-.graphic-options button {
+.graphic-options button  {
   padding: 10px 20px;
   margin: 0 10px;
   font-size: 1.2em;
