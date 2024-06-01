@@ -16,6 +16,10 @@ export async function playLabyrinthe(scene, camera, heroBox, audioManager,player
 
   hideMinimap();
 
+  player.indicatorVisible = false;
+  player.indicateur.setEnabled(false);
+  
+
   // Créer un mesh parent pour contenir tous les meshes du labyrinthe
   let mazeParent = new BABYLON.Mesh("mazeParent", scene);
   mazeParent.position = new BABYLON.Vector3(100, 0, 100); // Position du parent
@@ -55,8 +59,7 @@ export async function playLabyrinthe(scene, camera, heroBox, audioManager,player
   let flame = await BABYLON.SceneLoader.ImportMeshAsync("", "assets/models/", "Torch.glb", scene);
   flame.meshes[0].position = new BABYLON.Vector3(136.80610995966498, 1, 128.77082909029104);
   flame.meshes[0].scaling = new BABYLON.Vector3(3, 3, 3);
-
-
+  
   // Créer un sol
   let groundMaterial = new BABYLON.StandardMaterial("groundMaterial", scene);
   groundMaterial.diffuseTexture = new BABYLON.Texture("assets/Texture/floor.png", scene);
@@ -91,6 +94,8 @@ export async function playLabyrinthe(scene, camera, heroBox, audioManager,player
       }
     }
   }
+
+  
 
   mazeParent.scaling = new BABYLON.Vector3(1, 1, 1);
 

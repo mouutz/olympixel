@@ -32,7 +32,7 @@ Prêt à relever ce défi épique ? Alors préparez-vous à plonger au cœur de 
 
 ## Démo
 
-Découvrez le gameplay et l'atmosphère de Olympixel dans notre vidéo de démonstration disponible sur [https://www.youtube.com/watch?v=D-PhccMq3rA](https://www.youtube.com/watch?v=D-PhccMq3rA)
+Découvrez le gameplay et l'atmosphère de Olympixel dans notre vidéo de démonstration disponible sur [https://youtu.be/waSOKBbxc50](https://youtu.be/waSOKBbxc50)
 
 
 ##  tester en ligne 

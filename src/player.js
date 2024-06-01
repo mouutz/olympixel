@@ -30,7 +30,8 @@ export class Player {
     this.carInteractionLock = false;
     this.carIndicator = createCarIndicator(scene, this.car);
     this.carIndicator.isVisible = true;
-
+    this.indicatorVisible = true;
+    this.isInLabyrinth = false;
   }
 
   async createHero() {
@@ -84,6 +85,15 @@ export class Player {
         this.lastToggleTime = currentTime;
       }
     }
+
+    if (inputMap["o"] || inputMap["O"]) {
+      if (currentTime - this.lastToggleTime > toggleCooldown && !this.isInLabyrinth) {
+        this.indicatorVisible = !this.indicatorVisible;
+        this.indicateur.setEnabled(this.indicatorVisible);
+        this.lastToggleTime = currentTime;
+      }
+    }
+
     if (this.isDriving) return;
 
     var Portal = this.scene.getMeshByName("Object_4.005");
@@ -96,10 +106,10 @@ export class Player {
         Portal.getAbsolutePosition()
       );
 
-      if (distanceToObject < 5 && this.rings.length === 5) {
+      if (distanceToObject < 5 ) {
         this.guiManager.setNotif(this.interactionNotification, true, "'E' pour entrer dans le portail");
         if (inputMap["e"] || inputMap["E"]) {
-          this.indicateur.setEnabled(false);
+          this.isInLabyrinth = true;
           
           playLabyrinthe(this.scene, this.camera, this.heroBox, this.audioManager,this);
           hideLoadingScreen();
@@ -136,7 +146,9 @@ export class Player {
         this.postBox.getAbsolutePosition()
       );
       if (this.readedLetter == false) {
-        this.indicateur.setEnabled(true);
+        if(this.indicatorVisible == true){
+         this.indicateur.setEnabled(true);
+        }
         this.indicateur.setTarget(this.postBox_position);
       }
       if (
@@ -512,6 +524,32 @@ export class Player {
     if (ring) {
       ring.classList.add("animate");
       ring.classList.remove("nonCollected");
+
+      // Définir la couleur collectée pour l'anneau
+      let collectedColor;
+      switch(color) {
+        case 'blue':
+          collectedColor = '#0078d0';
+          break;
+        case 'yellow':
+          collectedColor = '#FFB114';
+          break;
+        case 'black':
+          collectedColor = 'black';
+          break;
+        case 'green':
+          collectedColor = '#00A651';
+          break;
+        case 'red':
+          collectedColor = '#F0282D';
+          break;
+        default:
+          collectedColor = '#5f5f5f'; // Couleur par défaut si non collecté
+      }
+
+      // Appliquer la couleur collectée en tant que variable CSS
+      document.documentElement.style.setProperty(`--ring-${color}-color`, collectedColor);
+
       // Remove the animation class and add the collected class after the animation is complete
       ring.addEventListener(
         "animationend",
@@ -525,6 +563,7 @@ export class Player {
       console.error(`No ring found with the color: ${color}`);
     }
   }
+
 
   teleportRandomly() {
     const currentTime = Date.now();

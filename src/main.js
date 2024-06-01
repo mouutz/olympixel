@@ -333,7 +333,7 @@ const handleMinimap = function () {
 function hideLoadingScreen() {
   const loadingScreen = document.getElementById("loadingScreen");
   if (loadingScreen) {
-    console.log("Hiding loading screen");
+    //console.log("Hiding loading screen");
     loadingScreen.style.display = 'none'
   }
   menu.style.display = "block";

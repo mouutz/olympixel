@@ -123,8 +123,8 @@ set isReading(value) {
       - Q (A) : Tourner à gauche
       - D : Tourner à droite
       - E : Interagir
-      - E : Entrer & Sortir de la voiture
       - Espace : Sauter
+      - O : Afficher / Cacher  l'indicateur 
       - M : Agrandir/Réduire la minimap
       - I : Afficher cette aide
       - B+N : teleportation si vous etes bloqué

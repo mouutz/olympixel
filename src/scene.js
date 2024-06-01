@@ -11,9 +11,9 @@ export const createScene = async function (engine) {
   light.intensity = 1;
 
   let quality = localStorage.getItem("quality");
-  let map = "heigh_map.glb"; //HIGH PAR DEFAUT
+  let map = "animeted map.glb"; //HIGH PAR DEFAUT
   if (quality === "high") {
-    map = "heigh_map.glb";
+    map = "animeted map.glb";
   }
   else if (quality === "low") {
     map = "city_low2.glb";
@@ -75,7 +75,8 @@ export const createCamera = async function (scene, canvas, hero) {
   camera.ellipsoid = new BABYLON.Vector3(1, 1, 1);
   camera.ellipsoidOffset = new BABYLON.Vector3(0, 0, 0);
 
-  camera.inputs.clear();
+  //lock camera
+  //camera.inputs.clear();
   return camera;
 };
 

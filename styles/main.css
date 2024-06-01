@@ -92,6 +92,14 @@ body {
 }
 
 
+:root {
+  --ring-blue-color: #5f5f5f;
+  --ring-yellow-color: #5f5f5f;
+  --ring-black-color: #5f5f5f;
+  --ring-green-color: #5f5f5f;
+  --ring-red-color: #5f5f5f;
+}
+
 .ring {
   width: 3vh;
   height: 3vh;
@@ -99,37 +107,37 @@ body {
   border: solid 0.5vh;
   position: absolute;
   background: transparent;
-  opacity: 0.3;
-  transition: opacity 2s;
+  opacity: 1;
+  transition: opacity 2s, border-color 2s;
 }
 
-.blue {
-  border-color: #0085c7;
+.ring.blue {
+  border-color: var(--ring-blue-color);
   transform: rotateX(-45deg) scaleY(1.4142);
 }
 
-.yellow {
-  border-color: #f4c300;
+.ring.yellow {
+  border-color: var(--ring-yellow-color);
   left: 2.1vh;
   top: 1.35vh;
   transform: rotateX(0deg);
 }
 
-.black {
-  border-color: black;
+.ring.black {
+  border-color: var(--ring-black-color);
   left: 4.2vh;
   transform: rotateX(45deg) scaleY(1.4142);
 }
 
-.green {
-  border-color: #009f3d;
+.ring.green {
+  border-color: var(--ring-green-color);
   top: 1.35vh;
   left: 6.3vh;
   transform: translateZ(20vh) rotateX(70deg) scaleY(2.9238);
 }
 
-.red {
-  border-color: #df0024;
+.ring.red {
+  border-color: var(--ring-red-color);
   left: 8.4vh;
   transform: translateZ(-32vh) rotateX(80deg) scaleY(5.7588);
 }
@@ -156,6 +164,78 @@ body {
     transform: none;
     opacity: 1;
   }
+}
+
+@keyframes pulsate {
+  0% {
+    box-shadow: 0px 0px 5px 1px rgba(255, 255, 255, 0.5);
+  }
+
+  50% {
+    box-shadow: 0px 0px 10px 3px rgba(255, 255, 255, 1);
+  }
+
+  100% {
+    box-shadow: 0px 0px 5px 1px rgba(255, 255, 255, 0.5);
+  }
+}
+
+.animate {
+  animation: animateRing 2s ease-in-out forwards;
+}
+
+.collected {
+  opacity: 1 !important;
+}
+
+.nonCollected {
+  animation: pulsate 3s infinite ease-in-out;
+}
+
+
+.ring.blue.collected {
+  border-color: #0078d0;
+}
+
+.ring.yellow.collected {
+  border-color: #FFB114;
+}
+
+.ring.black.collected {
+  border-color: black;
+}
+
+.ring.green.collected {
+  border-color: #00A651;
+}
+
+.ring.red.collected {
+  border-color: #F0282D;
+}
+
+@keyframes animateRing {
+  0% {
+    opacity: 0.3;
+    transform: none;
+  }
+
+  50% {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 500%) scale(3) rotate3d(1, 1, 0, 180deg);
+    opacity: 1;
+  }
+
+  75% {
+    transform: translate(-50%, 500%) scale(3) rotate3d(1, 1, 0, 360deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+  
 }
 
 @keyframes pulsate {
