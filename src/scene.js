@@ -23,8 +23,9 @@ export const createScene = async function (engine) {
 
 
 
-  console.log(quality);
-  console.log(map);
+  
+  //console.log(quality);
+  //console.log(map);
   // Chargement de la scène (ville) et activation des collisions
   const result = await BABYLON.SceneLoader.ImportMeshAsync(
     "",
@@ -82,7 +83,7 @@ export const createCamera = async function (scene, canvas, hero) {
   camera.ellipsoidOffset = new BABYLON.Vector3(0, 0, 0);
 
   //lock camera
-  //camera.inputs.clear();
+  camera.inputs.clear();
   return camera;
 };
 
