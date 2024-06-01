@@ -50,8 +50,8 @@ set isReading(value) {
     const screenHeight = window.innerHeight;
 
       const letterPanel = new BABYLON.GUI.Rectangle();
-      letterPanel.width = screenWidth > 800 ? "50%" : "90%";
-      letterPanel.height = screenHeight > 600 ? "80%" : "90%";
+      letterPanel.width = screenWidth > 1300 ? "50%" : "70%";
+      letterPanel.height = screenHeight > 800 ? "80%" : "90%";
       letterPanel.cornerRadius = 20;
       letterPanel.color = "black";
       letterPanel.thickness = 2;
