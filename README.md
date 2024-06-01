@@ -22,16 +22,16 @@ Prêt à relever ce défi épique ? Alors préparez-vous à plonger au cœur de 
 
 
 ## Commandes
-
 - **Z** || **W** : Avancer
 - **S** : Reculer
-- **Q** || **A** : Aller à gauche
-- **D** : Aller à droite
-- **Barre d'Espace** : Sauter
+- **Q** || **A** : Tourner à gauche
+- **D** : Tourner à droite
 - **E** : Interagir
-- **B + N** : Téléporter le joueur dans une zone aléatoire (à utiliser lorsque le joueur est bloqué entre des collisions)
-- **I** : Afficher les Commandes
+- **Espace** : Sauter
+- **O** : Afficher / Cacher  l'indicateur 
 - **M** : Ouvrir/fermer la carte. (vous êtes entouré en rouge dessus pour vous reperer plus facilement)
+- **I** : Afficher cette aide
+- **B+N** : Téléporter le joueur dans une zone aléatoire (à utiliser lorsque le joueur est bloqué entre des collisions)
 
 
 ## Démo
@@ -45,10 +45,51 @@ Découvrez le gameplay et l'atmosphère de Olympixel dans notre vidéo de démon
 ou 
 [https://hlsplay.tk/olympixel/play/Olympixel/](https://hlsplay.tk/olympixel/play/Olympixel/)
 
+## Tester en Local
+
+1. Clonez le dépôt :
+   ```bash
+   git clone https://github.com/mouutz/olympixel.git
+   ```
+2. Téléchargez et installez l'extension Live Server.
+3. Lancez `index.html` en utilisant Live Server.
+
+
 ## Options Graphiques Disponibles
 
-- **High** : Plus de bâtiments et meilleure qualité, avec plus de détails.
-- **Low** : Mode optimisé avec une map moins détaillé , recommandé en cas de problème de performance.
+- **High** : Qualité maximale avec un grand nombre de bâtiments, des détails enrichis et des animations complexes, offrant une expérience visuelle immersive.
+- **Medium** : Qualité intermédiaire similaire à la version haute, mais sans animations, pour un bon compromis entre qualité visuelle et performance.
+- **Low** : Mode optimisé avec une carte moins détaillée, recommandé pour les configurations matérielles moins puissantes ou en cas de problèmes de performance.
+
+
+
+### Animation des Voitures pour une Ville Vivante
+
+1. **Animation de Chemin (Path Animation) :**
+   - Les voitures  suivent des chemins définis par une série de points, créant des mouvements fluides et naturels. Cette technique permet de simuler un trafic réaliste, ajoutant de la vitalité à la ville.
+
+2. **Mouvements Réalistes :**
+   - Grâce à la "Path Animation", les voitures se déplacent de manière réaliste le long des routes, tournant aux intersections et évitant les obstacles. Cela contribue à créer une atmosphère immersive et crédible.
+
+### Illustrations
+
+Voici quelques illustrations montrant les animations des voitures dans la carte de haute qualité :
+
+- **Voitures Animées dans la Ville :**
+  ![Voitures Animées](https://hlsplay.tk/olympixel/images/path.gif)
+  ![Voitures Animées](https://hlsplay.tk/olympixel/images/path2.gif)
+  
+- **Chemin des Voitures :**
+  ![Chemin des Voitures](https://hlsplay.tk/olympixel/images/path.png)
+### Avantages des Animations de Voitures
+
+- **Ville Dynamique :**
+  - Les animations des voitures ajoutent du mouvement et de l'activité à la ville, la rendant plus vivante et dynamique.
+  
+- **Immersion Accrue :**
+  - Les déplacements réalistes des voitures améliorent l'immersion du joueur, offrant une expérience de jeu plus riche.
+
+
 
 ## Performances
 
@@ -87,8 +128,8 @@ Pour améliorer les performances du jeu, plusieurs optimisations ont été mises
    - Les animations ont été optimisées pour être moins gourmandes en ressources, en ajustant les interpolations et en réduisant le nombre de clés d'animation.
    - **Avantage :** Réduction de l'utilisation de la CPU et de la mémoire pour les animations, ce qui améliore les performances.
 
-7. **Deux Versions de la Carte :**
-   - Nous avons créé deux versions de la carte du jeu : une version détaillée avec de nombreux objets et une version simplifiée avec beaucoup moins d'objets.
+7. **Trois  Versions de la Carte :**
+   - Nous avons créé trois versions de la carte du jeu : une version détaillée avec de nombreux objets avec des animation , ne version détaillée avec de nombreux objets et une version simplifiée avec beaucoup moins d'objets.
    - **Avantage :** La version simplifiée permet aux joueurs ayant des machines moins puissantes de profiter d'une expérience de jeu fluide, tandis que la version détaillée offre une immersion plus riche pour ceux disposant de configurations plus robustes.
 
 **Hight Quality Map :**
@@ -111,7 +152,7 @@ Cependant, si vous avez du mal à retrouver les anneaux, vous pouvez consulter l
 >![anneaux ](https://hlsplay.tk/olympixel/images/solution4.png)
 >![anneaux ](https://hlsplay.tk/olympixel/images/solution3.png)
 >![anneaux ](https://hlsplay.tk/olympixel/images/solution%20.png)
->![maze](https://hlsplay.tk/olympixel/images/map%20ilmustration4%20.png)
+>![maze](https://hlsplay.tk/olympixel/images/solution6.png)
 >![maze](https://hlsplay.tk/olympixel/images/maze%20solution.png)
 
 
