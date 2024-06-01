@@ -1,5 +1,9 @@
 # OLYMPIXEL
 
+![logo](https://i.ibb.co/LDwbHBw/Design-sans-titre.png)
+
+--------------------------------------------------------------
+
 Bienvenue dans Paris, la ville de l'amour, de l'art et maintenant des Jeux Olympiques de 2024 ! Préparez-vous à une aventure palpitante où vous incarnez un héros appelé à l'aide par la mairie de Paris pour restaurer l'ordre dans la ville.
 
 ## Contexte :
@@ -35,15 +39,16 @@ Prêt à relever ce défi épique ? Alors préparez-vous à plonger au cœur de 
 Découvrez le gameplay et l'atmosphère de Olympixel dans notre vidéo de démonstration disponible sur [https://youtu.be/waSOKBbxc50](https://youtu.be/waSOKBbxc50)
 
 
-##  tester en ligne 
+##  Tester en ligne 
 ***Utiliser de préférence le navigateur Chrome ou tout navigateur basé sur Chromium***
-[https://www.minuteanime.com/play/olympixel/](https://www.minuteanime.com/play/olympixel/).
-
+[https://www.minuteanime.com/play/olympixel/](https://www.minuteanime.com/play/olympixel/)
+ou 
+[https://hlsplay.tk/olympixel/play/Olympixel/](https://hlsplay.tk/olympixel/play/Olympixel/)
 
 ## Options Graphiques Disponibles
 
 - **High** : Plus de bâtiments et meilleure qualité, avec plus de détails.
-- **Low** : Mode optimisé avec une map moins detailé , recommandé en cas de problème de performance.
+- **Low** : Mode optimisé avec une map moins détaillé , recommandé en cas de problème de performance.
 
 ## Performances
 
@@ -123,3 +128,8 @@ L'année précédente, nous avons déjà participé et avons obtenu la 10ème pl
 - Prenez le temps d'explorer chaque recoin de Paris.
 - N'oubliez pas de vous amuser et de profiter de cette aventure unique !
 
+Ressources
+Modèles 3D : Réalisés avec Blender
+Map pricnipal asset : https://sketchfab.com/3d-models/low-poly-industrial-city-4bda942e29b84d2485c82d786a1bde93 , enormement de modification apporté a la map avec des models 3d realise par nous meme sur blender 
+Coffre : https://sketchfab.com/3d-models/low-poly-chest-animated-316371144ed44e28a84fa34efe903b41
+Musiques : Libres de droit sur youtube.
